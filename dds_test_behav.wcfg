@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="dds_test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="dds_test" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="541.667 ns"></ZoomStartTime>
+      <ZoomEndTime time="3,321.668 ns"></ZoomEndTime>
+      <Cursor1Time time="1,005.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="214"></NameColumnWidth>
+      <ValueColumnWidth column_width="159"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="35" />
+   <wvobject fp_name="divider12" type="divider">
+      <obj_property name="label">dds_test</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/freqs">
+      <obj_property name="ElementShortName">freqs[0:3][31:0]</obj_property>
+      <obj_property name="ObjectShortName">freqs[0:3][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/phase_inc">
+      <obj_property name="ElementShortName">phase_inc[23:0]</obj_property>
+      <obj_property name="ObjectShortName">phase_inc[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/phase">
+      <obj_property name="ElementShortName">phase[23:0]</obj_property>
+      <obj_property name="ObjectShortName">phase[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/cos_dout">
+      <obj_property name="ElementShortName">cos_dout[3:0][17:0]</obj_property>
+      <obj_property name="ObjectShortName">cos_dout[3:0][17:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject fp_name="divider30" type="divider">
+      <obj_property name="label">dut</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/dut_i/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/dut_i/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/phase_inc">
+      <obj_property name="ElementShortName">phase_inc[3:0][23:0]</obj_property>
+      <obj_property name="ObjectShortName">phase_inc[3:0][23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/cycle_phase">
+      <obj_property name="ElementShortName">cycle_phase[23:0]</obj_property>
+      <obj_property name="ObjectShortName">cycle_phase[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/sample_phase">
+      <obj_property name="ElementShortName">sample_phase[3:0][23:0]</obj_property>
+      <obj_property name="ObjectShortName">sample_phase[3:0][23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/lfsr">
+      <obj_property name="ElementShortName">lfsr[3:0][15:0]</obj_property>
+      <obj_property name="ObjectShortName">lfsr[3:0][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/phase_dithered">
+      <obj_property name="ElementShortName">phase_dithered[3:0][23:0]</obj_property>
+      <obj_property name="ObjectShortName">phase_dithered[3:0][23:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/phase_quant">
+      <obj_property name="ElementShortName">phase_quant[3:0][15:0]</obj_property>
+      <obj_property name="ObjectShortName">phase_quant[3:0][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/data_valid">
+      <obj_property name="ElementShortName">data_valid[3:0]</obj_property>
+      <obj_property name="ObjectShortName">data_valid[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale">
+      <obj_property name="ElementShortName">data_out_full_scale[0:3][17:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out_full_scale[0:3][17:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale[3]">
+         <obj_property name="ElementShortName">[3][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][17:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale[2]">
+         <obj_property name="ElementShortName">[2][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][17:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale[1]">
+         <obj_property name="ElementShortName">[1][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][17:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale[0]">
+         <obj_property name="ElementShortName">[0][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][17:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled">
+      <obj_property name="ElementShortName">data_out_scaled[0:3][17:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out_scaled[0:3][17:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled[3]">
+         <obj_property name="ElementShortName">[3][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][17:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled[2]">
+         <obj_property name="ElementShortName">[2][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][17:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled[1]">
+         <obj_property name="ElementShortName">[1][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][17:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled[0]">
+         <obj_property name="ElementShortName">[0][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][17:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/dut_i/cos_scale">
+      <obj_property name="ElementShortName">cos_scale[4:0]</obj_property>
+      <obj_property name="ObjectShortName">cos_scale[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider42" type="divider">
+      <obj_property name="label">phase_inc_in</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/phase_inc_in/data">
+      <obj_property name="ElementShortName">data[23:0]</obj_property>
+      <obj_property name="ObjectShortName">data[23:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/phase_inc_in/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/phase_inc_in/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/phase_inc_in/last">
+      <obj_property name="ElementShortName">last</obj_property>
+      <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider47" type="divider">
+      <obj_property name="label">cos_scale_in</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/cos_scale_in/data">
+      <obj_property name="ElementShortName">data[4:0]</obj_property>
+      <obj_property name="ObjectShortName">data[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/cos_scale_in/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/cos_scale_in/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/cos_scale_in/last">
+      <obj_property name="ElementShortName">last</obj_property>
+      <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider52" type="divider">
+      <obj_property name="label">cos_out</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/dds_test/cos_out/data">
+      <obj_property name="ElementShortName">data[71:0]</obj_property>
+      <obj_property name="ObjectShortName">data[71:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/cos_out/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/cos_out/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/cos_out/last">
+      <obj_property name="ElementShortName">last</obj_property>
+      <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+</wave_config>

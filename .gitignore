@@ -1,0 +1,10 @@
+*.cache/
+*.hw/
+*.runs/
+*.ip_user_files/
+*.sim/
+*.gen/
+*.srcs/sources_1/bd/
+**.swp
+*.xpr
+**.dcp

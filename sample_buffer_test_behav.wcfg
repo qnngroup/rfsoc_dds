@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="sample_buffer_test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="sample_buffer_test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="209,890.500 ns"></ZoomStartTime>
+      <ZoomEndTime time="210,224.001 ns"></ZoomEndTime>
+      <Cursor1Time time="210,035.000 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="187"></NameColumnWidth>
+      <ValueColumnWidth column_width="82"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="36" />
+   <wvobject fp_name="divider55" type="divider">
+      <obj_property name="label">sample_buffer_test</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/data_out">
+      <obj_property name="ElementShortName">data_out[127:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_out_valid">
+      <obj_property name="ElementShortName">data_out_valid</obj_property>
+      <obj_property name="ObjectShortName">data_out_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_out_last">
+      <obj_property name="ElementShortName">data_out_last</obj_property>
+      <obj_property name="ObjectShortName">data_out_last</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_out_ready">
+      <obj_property name="ElementShortName">data_out_ready</obj_property>
+      <obj_property name="ObjectShortName">data_out_ready</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/data_in">
+      <obj_property name="ElementShortName">data_in[31:0][15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[31:0][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_in_valid">
+      <obj_property name="ElementShortName">data_in_valid</obj_property>
+      <obj_property name="ObjectShortName">data_in_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_in_ready">
+      <obj_property name="ElementShortName">data_in_ready</obj_property>
+      <obj_property name="ObjectShortName">data_in_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/capture">
+      <obj_property name="ElementShortName">capture</obj_property>
+      <obj_property name="ObjectShortName">capture</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider56" type="divider">
+      <obj_property name="label">dut</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/buffer_i/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/buffer_i/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/buffer_i/capture">
+      <obj_property name="ElementShortName">capture</obj_property>
+      <obj_property name="ObjectShortName">capture</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/buffer_i/state">
+      <obj_property name="ElementShortName">state[31:0]</obj_property>
+      <obj_property name="ObjectShortName">state[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/buffer_i/write_addr">
+      <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+      <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/buffer_i/read_addr">
+      <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+      <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/buffer_i/transfer_to_idle">
+      <obj_property name="ElementShortName">transfer_to_idle</obj_property>
+      <obj_property name="ObjectShortName">transfer_to_idle</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/buffer_i/transfer_to_idle_d">
+      <obj_property name="ElementShortName">transfer_to_idle_d</obj_property>
+      <obj_property name="ObjectShortName">transfer_to_idle_d</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/buffer_i/data_out_full_width">
+      <obj_property name="ElementShortName">data_out_full_width[511:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out_full_width[511:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/buffer_i/data_out_valid">
+      <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/buffer_i/buffer_data_in">
+      <obj_property name="ElementShortName">buffer_data_in[511:0]</obj_property>
+      <obj_property name="ObjectShortName">buffer_data_in[511:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/buffer_i/capture_d">
+      <obj_property name="ElementShortName">capture_d</obj_property>
+      <obj_property name="ObjectShortName">capture_d</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/buffer_i/read_word_select">
+      <obj_property name="ElementShortName">read_word_select[1:0]</obj_property>
+      <obj_property name="ObjectShortName">read_word_select[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/buffer_i/read_word_select_d">
+      <obj_property name="ElementShortName">read_word_select_d[1:0]</obj_property>
+      <obj_property name="ObjectShortName">read_word_select_d[1:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider81" type="divider">
+      <obj_property name="label">data_in_if</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/data_in_if/data">
+      <obj_property name="ElementShortName">data[511:0]</obj_property>
+      <obj_property name="ObjectShortName">data[511:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_in_if/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_in_if/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_in_if/last">
+      <obj_property name="ElementShortName">last</obj_property>
+      <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider82" type="divider">
+      <obj_property name="label">data_out_if</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_buffer_test/data_out_if/data">
+      <obj_property name="ElementShortName">data[127:0]</obj_property>
+      <obj_property name="ObjectShortName">data[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_out_if/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_out_if/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_buffer_test/data_out_if/last">
+      <obj_property name="ElementShortName">last</obj_property>
+      <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+</wave_config>
