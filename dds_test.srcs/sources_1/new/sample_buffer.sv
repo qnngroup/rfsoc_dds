@@ -16,27 +16,20 @@ assign data_in.ready = 1'b1; // always accept data
 
 // buffer and trigger logic
 enum {IDLE, CAPTURE, TRANSFER} state;
+logic capture_d;
 logic [PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH-1:0] buffer [BUFFER_DEPTH];
 logic [$clog2(BUFFER_DEPTH)-1:0] write_addr, read_addr;
-logic transfer_to_idle, transfer_to_idle_d;
-logic [PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH-1:0] data_out_full_width;
-logic [3:0] data_out_valid;
 logic [PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH-1:0] buffer_data_in;
-logic capture_d;
+logic [PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH-1:0] data_out_full_width;
+logic data_out_valid;
+logic data_out_last;
 
 localparam bit UNEQUAL_RW_WIDTH = PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH != AXI_MM_WIDTH;
 localparam int WORD_SELECT_BITS = $clog2(PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH)-$clog2(AXI_MM_WIDTH);
 localparam int WORD_SELECT_MAX = 2**WORD_SELECT_BITS - 1;
 logic [WORD_SELECT_BITS-1:0] read_word_select, read_word_select_d;
 
-generate
-  if (UNEQUAL_RW_WIDTH) begin
-    assign transfer_to_idle = (read_addr == {$clog2(BUFFER_DEPTH){1'b1}} && read_word_select == WORD_SELECT_MAX);
-  end else begin
-    assign transfer_to_idle = (read_addr == {$clog2(BUFFER_DEPTH){1'b1}});
-  end
-endgenerate
-
+// state transitions
 always @(posedge clk) begin
   if (reset) begin
     state <= IDLE;
@@ -44,34 +37,33 @@ always @(posedge clk) begin
     unique case (state)
       IDLE: if (capture && !capture_d) state <= CAPTURE;
       CAPTURE: if (write_addr == {$clog2(BUFFER_DEPTH){1'b1}}) state <= TRANSFER;
-      TRANSFER: if (transfer_to_idle) state <= IDLE;
+      TRANSFER: if (data_out_last) state <= IDLE;
     endcase
   end
 end
 
 always @(posedge clk) begin
   capture_d <= capture;
-  read_word_select_d <= read_word_select;
-  data_out.last <= transfer_to_idle_d;
-  transfer_to_idle_d <= transfer_to_idle;
-  data_out.valid <= data_out_valid[3];
   if (reset) begin
     write_addr <= '0;
     read_addr <= '0;
     read_word_select <= '0;
+    read_word_select_d <= '0;
     data_out_valid <= '0;
+    data_out_last <= 1'b0;
   end else begin
     unique case (state)
       IDLE: begin
         write_addr <= '0;
         read_addr <= '0;
         read_word_select <= '0;
+        read_word_select_d <= '0;
         data_out_valid <= 1'b0;
+        data_out.valid <= 1'b0;
+        data_out_last <= 1'b0;
+        data_out.last <= 1'b0;
       end
       CAPTURE: begin
-        data_out_valid <= '0;
-        read_word_select <= '0;
-        read_addr <= '0;
         if (data_in.valid) begin
           buffer[write_addr] <= buffer_data_in;
           write_addr <= write_addr + 1'b1;
@@ -79,20 +71,32 @@ always @(posedge clk) begin
       end
       TRANSFER: begin
         if (data_out.ready) begin
-          data_out_valid[0] <= 1'b1;
-          for (int i = 1; i < 4; i++) begin
-            data_out_valid[i] <= data_out_valid[i-1];
-          end
+          data_out_valid <= 1'b1;
+          data_out.valid <= data_out_valid;
+          data_out.last <= data_out_last;
           data_out_full_width <= buffer[read_addr];
+          read_word_select_d <= read_word_select;
           if (UNEQUAL_RW_WIDTH) begin
+            data_out.data <= data_out_full_width[AXI_MM_WIDTH*read_word_select_d+:AXI_MM_WIDTH];
             if (read_word_select == WORD_SELECT_MAX) begin
               read_word_select <= '0;
-              read_addr <= read_addr + 1'b1;
+              if (read_addr == {$clog2(BUFFER_DEPTH){1'b1}}) begin
+                data_out_last <= 1'b1;
+                read_addr <= '0;
+              end else begin
+                read_addr <= read_addr + 1'b1;
+              end
             end else begin
               read_word_select <= read_word_select + 1'b1;
             end
           end else begin
-            read_addr <= read_addr + 1'b1;
+            data_out.data <= data_out_full_width;
+            if (read_addr == {$clog2(BUFFER_DEPTH){1'b1}}) begin
+              data_out_last <= 1'b1;
+              read_addr <= '0;
+            end else begin
+              read_addr <= read_addr + 1'b1;
+            end
           end
         end
       end
@@ -105,11 +109,6 @@ always @(posedge clk) begin
   for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
     // only take OUTPUT_SAMPLE_WIDTH MSBs of each parallel sample of input data
     buffer_data_in[OUTPUT_SAMPLE_WIDTH*i+:OUTPUT_SAMPLE_WIDTH] <= data_in.data[(i+1)*INPUT_SAMPLE_WIDTH-OUTPUT_SAMPLE_WIDTH+:OUTPUT_SAMPLE_WIDTH];
-    if (UNEQUAL_RW_WIDTH) begin
-      data_out.data <= data_out_full_width[AXI_MM_WIDTH*read_word_select_d+:AXI_MM_WIDTH];
-    end else begin
-      data_out.data <= data_out_full_width;
-    end
   end
 end
 
