@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="541.667 ns"></ZoomStartTime>
-      <ZoomEndTime time="3,321.668 ns"></ZoomEndTime>
-      <Cursor1Time time="1,005.000 ns"></Cursor1Time>
+      <ZoomStartTime time="42,593.500 ns"></ZoomStartTime>
+      <ZoomEndTime time="42,916.001 ns"></ZoomEndTime>
+      <Cursor1Time time="42,675.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="214"></NameColumnWidth>
-      <ValueColumnWidth column_width="159"></ValueColumnWidth>
+      <ValueColumnWidth column_width="155"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="35" />
    <wvobject fp_name="divider12" type="divider">
@@ -60,6 +60,10 @@
    <wvobject type="logic" fp_name="/dds_test/dut_i/reset">
       <obj_property name="ElementShortName">reset</obj_property>
       <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/dds_test/dut_i/phase_change">
+      <obj_property name="ElementShortName">phase_change</obj_property>
+      <obj_property name="ObjectShortName">phase_change</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/dds_test/dut_i/phase_inc">
       <obj_property name="ElementShortName">phase_inc[3:0][23:0]</obj_property>
@@ -110,27 +114,21 @@
          <obj_property name="ElementShortName">[0][17:0]</obj_property>
          <obj_property name="ObjectShortName">[0][17:0]</obj_property>
       </wvobject>
-   </wvobject>
-   <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled">
-      <obj_property name="ElementShortName">data_out_scaled[0:3][17:0]</obj_property>
-      <obj_property name="ObjectShortName">data_out_scaled[0:3][17:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
-      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled[3]">
-         <obj_property name="ElementShortName">[3][17:0]</obj_property>
-         <obj_property name="ObjectShortName">[3][17:0]</obj_property>
-         <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale[0]">
+         <obj_property name="ElementShortName">[0][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][17:0]</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled[2]">
-         <obj_property name="ElementShortName">[2][17:0]</obj_property>
-         <obj_property name="ObjectShortName">[2][17:0]</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled[1]">
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale[1]">
          <obj_property name="ElementShortName">[1][17:0]</obj_property>
          <obj_property name="ObjectShortName">[1][17:0]</obj_property>
       </wvobject>
-      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_scaled[0]">
-         <obj_property name="ElementShortName">[0][17:0]</obj_property>
-         <obj_property name="ObjectShortName">[0][17:0]</obj_property>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale[2]">
+         <obj_property name="ElementShortName">[2][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[2][17:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/dds_test/dut_i/data_out_full_scale[3]">
+         <obj_property name="ElementShortName">[3][17:0]</obj_property>
+         <obj_property name="ObjectShortName">[3][17:0]</obj_property>
       </wvobject>
    </wvobject>
    <wvobject type="array" fp_name="/dds_test/dut_i/cos_scale">

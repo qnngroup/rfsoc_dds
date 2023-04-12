@@ -101,7 +101,17 @@ initial begin
   reset <= 0;
   repeat (5000) @(posedge clk);
   capture <= 1;
+  @(posedge clk);
+  capture <= 0;
+  repeat (5000) @(posedge clk);
+  data_out_ready <= 1;
+  repeat (50) @(posedge clk);
+  data_out_ready <= 0;
+  repeat (100) @(posedge clk);
+  data_out_ready <= 1;
   repeat (10000) @(posedge clk);
+  capture <= 1;
+  repeat (1000) @(posedge clk);
   capture <= 0;
   repeat (1000) @(posedge clk);
   data_out_ready <= 1;

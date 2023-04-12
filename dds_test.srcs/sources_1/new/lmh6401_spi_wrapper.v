@@ -5,8 +5,7 @@ module lmh6401_spi_wrapper (
   output data_in_ready,
   output cs_n,
   output sck,
-  output sdi_o,
-  output sdi_t
+  output sdi
 );
 
 lmh6401_spi #(
@@ -20,7 +19,6 @@ lmh6401_spi #(
   .data_in_ready(data_in_ready),
   .cs_n(cs_n),
   .sck(sck),
-  .sdi(sdi_o),
-  .sdi(sdi_t)
+  .sdi(sdi)
 );
 endmodule

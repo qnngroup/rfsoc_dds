@@ -8,8 +8,7 @@ module lmh6401_spi #(
   output data_in_ready,
   output logic cs_n,
   output logic sck,
-  output logic sdi_o,
-  output logic sdi_t
+  output logic sdi
 );
 
 localparam int CLK_DIV = int'(AXIS_CLK_FREQ/SPI_CLK_FREQ);
@@ -48,7 +47,7 @@ always_ff @(posedge clk) begin
     state <= IDLE;
     bits_sent <= '0;
     cs_n <= 1'b1;
-    sdi_o <= 1'b0;
+    sdi <= 1'b0;
   end else begin
     if (data_in_valid && data_in_ready) begin
       state <= SENDING;
@@ -56,12 +55,12 @@ always_ff @(posedge clk) begin
     unique case (state)
       IDLE: if (data_in_valid && data_in_ready) begin 
         state <= SENDING;
-        data <= {1'b1, data_in[14:0]};
+        data <= {1'b0, data_in[14:0]};
       end
       SENDING: begin
         if (sck_negedge) begin
           cs_n <= 1'b0;
-          sdi_o <= data[15];
+          sdi <= data[15];
           data <= {data[14:0], 1'b1};
           bits_sent <= bits_sent + 1'b1;
           if (bits_sent == 15) begin
