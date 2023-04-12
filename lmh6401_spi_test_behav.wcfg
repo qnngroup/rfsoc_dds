@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="lmh6401_spi_test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="lmh6401_spi_test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.495000 us"></ZoomStartTime>
+      <ZoomEndTime time="374.995001 us"></ZoomEndTime>
+      <Cursor1Time time="91.995000 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="187"></NameColumnWidth>
+      <ValueColumnWidth column_width="78"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="28" />
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/data_in">
+      <obj_property name="ElementShortName">data_in[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/data_in_valid">
+      <obj_property name="ElementShortName">data_in_valid</obj_property>
+      <obj_property name="ObjectShortName">data_in_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/data_in_ready">
+      <obj_property name="ElementShortName">data_in_ready</obj_property>
+      <obj_property name="ObjectShortName">data_in_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/cs_n">
+      <obj_property name="ElementShortName">cs_n</obj_property>
+      <obj_property name="ObjectShortName">cs_n</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/sck">
+      <obj_property name="ElementShortName">sck</obj_property>
+      <obj_property name="ObjectShortName">sck</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/sdi">
+      <obj_property name="ElementShortName">sdi</obj_property>
+      <obj_property name="ObjectShortName">sdi</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/CLK_RATE_HZ">
+      <obj_property name="ElementShortName">CLK_RATE_HZ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLK_RATE_HZ[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider10" type="divider">
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/data_in">
+      <obj_property name="ElementShortName">data_in[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/data_in_valid">
+      <obj_property name="ElementShortName">data_in_valid</obj_property>
+      <obj_property name="ObjectShortName">data_in_valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/data_in_ready">
+      <obj_property name="ElementShortName">data_in_ready</obj_property>
+      <obj_property name="ObjectShortName">data_in_ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/cs_n">
+      <obj_property name="ElementShortName">cs_n</obj_property>
+      <obj_property name="ObjectShortName">cs_n</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/sck">
+      <obj_property name="ElementShortName">sck</obj_property>
+      <obj_property name="ObjectShortName">sck</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/sdi">
+      <obj_property name="ElementShortName">sdi</obj_property>
+      <obj_property name="ObjectShortName">sdi</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/sck_last">
+      <obj_property name="ElementShortName">sck_last</obj_property>
+      <obj_property name="ObjectShortName">sck_last</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/clk_counter">
+      <obj_property name="ElementShortName">clk_counter[6:0]</obj_property>
+      <obj_property name="ObjectShortName">clk_counter[6:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/state">
+      <obj_property name="ElementShortName">state[31:0]</obj_property>
+      <obj_property name="ObjectShortName">state[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/data">
+      <obj_property name="ElementShortName">data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/bits_sent">
+      <obj_property name="ElementShortName">bits_sent[3:0]</obj_property>
+      <obj_property name="ObjectShortName">bits_sent[3:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/lmh6401_spi_test/dut_i/sck_negedge">
+      <obj_property name="ElementShortName">sck_negedge</obj_property>
+      <obj_property name="ObjectShortName">sck_negedge</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/AXIS_CLK_FREQ">
+      <obj_property name="ElementShortName">AXIS_CLK_FREQ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">AXIS_CLK_FREQ[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/SPI_CLK_FREQ">
+      <obj_property name="ElementShortName">SPI_CLK_FREQ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SPI_CLK_FREQ[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/CLK_DIV">
+      <obj_property name="ElementShortName">CLK_DIV[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLK_DIV[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/lmh6401_spi_test/dut_i/CLK_COUNTER_BITS">
+      <obj_property name="ElementShortName">CLK_COUNTER_BITS[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLK_COUNTER_BITS[31:0]</obj_property>
+   </wvobject>
+</wave_config>

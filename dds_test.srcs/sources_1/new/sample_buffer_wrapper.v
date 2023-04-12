@@ -4,7 +4,7 @@ module sample_buffer_wrapper (
   output data_out_valid, data_out_last,
   input data_out_ready,
   output [15:0] data_out_keep,
-  input [511:0] data_in,
+  input [1023:0] data_in,
   input data_in_valid,
   output data_in_ready,
   input wire capture
@@ -13,8 +13,8 @@ module sample_buffer_wrapper (
 assign data_out_keep = 16'hffff;
 
 sample_buffer_sv_wrapper #(
-  .BUFFER_DEPTH(65536),
-  .PARALLEL_SAMPLES(32),
+  .BUFFER_DEPTH(32768),
+  .PARALLEL_SAMPLES(64),
   .INPUT_SAMPLE_WIDTH(16),
   .OUTPUT_SAMPLE_WIDTH(16),
   .AXI_MM_WIDTH(128)

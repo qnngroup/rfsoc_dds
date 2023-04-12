@@ -1,0 +1,1 @@
+../../dds_test.srcs/sim_1/new/lmh6401_spi_test.sv
