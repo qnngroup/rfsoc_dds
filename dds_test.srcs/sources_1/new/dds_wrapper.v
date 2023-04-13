@@ -1,6 +1,6 @@
 module dds_wrapper (
   input wire clk, reset_n,
-  output phase_change,
+  output pinc_change,
   output [1023:0] cos_out_data,
   output cos_out_valid,
   input cos_out_ready,
@@ -20,7 +20,7 @@ dds_sv_wrapper #(
 ) dds_sv_wrapper_i (
   .clk(clk),
   .reset(~reset_n),
-  .phase_change(phase_change),
+  .pinc_change(pinc_change),
   .cos_out_data(cos_out_data),
   .cos_out_valid(cos_out_valid),
   .cos_out_ready(cos_out_ready),

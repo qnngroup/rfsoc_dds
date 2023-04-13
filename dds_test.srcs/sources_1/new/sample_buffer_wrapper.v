@@ -7,7 +7,9 @@ module sample_buffer_wrapper (
   input [1023:0] data_in,
   input data_in_valid,
   output data_in_ready,
-  input wire capture
+  input wire capture,
+  input wire pinc_change,
+  input wire trigger_select
 );
 
 assign data_out_keep = 16'hffff;
@@ -28,7 +30,9 @@ sample_buffer_sv_wrapper #(
   .data_in(data_in),
   .data_in_valid(data_in_valid),
   .data_in_ready(data_in_ready),
-  .capture(capture)
+  .capture(capture),
+  .pinc_change(pinc_change),
+  .trigger_select(trigger_select)
 );
 
 endmodule

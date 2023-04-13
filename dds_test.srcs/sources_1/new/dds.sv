@@ -5,7 +5,7 @@ module dds #(
   parameter int PARALLEL_SAMPLES = 4
 ) (
   input wire clk, reset,
-  output logic phase_change,
+  output logic pinc_change,
   Axis_If.Master_Simple cos_out,
   Axis_If.Slave_Simple phase_inc_in,
   Axis_If.Slave_Simple cos_scale_in
@@ -37,16 +37,16 @@ always @(posedge clk) begin
     phase_inc <= '0;
     cycle_phase <= '0;
     sample_phase <= '0;
-    phase_change <= 1'b0;
+    pinc_change <= 1'b0;
   end else begin
     // load new phase_inc
     if (phase_inc_in.ready && phase_inc_in.valid) begin
-      phase_change <= 1'b1;
+      pinc_change <= 1'b1;
       for (int i = 0; i < PARALLEL_SAMPLES; i = i + 1) begin
         phase_inc[i] <= phase_inc_in.data * (i + 1);
       end
     end else begin
-      phase_change <= 1'b0;
+      pinc_change <= 1'b0;
     end
     if (cos_out.ready) begin
       cycle_phase <= cycle_phase + phase_inc[PARALLEL_SAMPLES-1];
@@ -122,7 +122,7 @@ module dds_sv_wrapper #(
   parameter int PARALLEL_SAMPLES = 4
 ) (
   input wire clk, reset,
-  output logic phase_change,
+  output logic pinc_change,
   output logic [PARALLEL_SAMPLES*OUTPUT_WIDTH-1:0] cos_out_data,
   output logic cos_out_valid,
   input logic cos_out_ready,
@@ -153,7 +153,7 @@ assign cos_out_if.ready = cos_out_ready;
 dds #(.PHASE_BITS(PHASE_BITS), .OUTPUT_WIDTH(OUTPUT_WIDTH), .QUANT_BITS(QUANT_BITS), .PARALLEL_SAMPLES(PARALLEL_SAMPLES)) dds_i (
   .clk,
   .reset,
-  .phase_change,
+  .pinc_change,
   .cos_out(cos_out_if),
   .phase_inc_in(phase_inc_if),
   .cos_scale_in(cos_scale_if)

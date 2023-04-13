@@ -9,21 +9,27 @@ module sample_buffer # (
   input wire clk, reset,
   Axis_If.Master_Full data_out, // packed pair of samples
   Axis_If.Slave_Simple data_in,
-  input wire capture // trigger capture of samples in buffer
+  input wire capture, // trigger capture of samples in buffer
+  input wire pinc_change, // trigger capture when pinc of the DDS is changed
+  input wire trigger_select // choose which trigger is active (0: capture, 1: pinc_change)
 );
 
 assign data_in.ready = 1'b1; // always accept data
 
-// buffer and trigger logic
+// trigger logic
 enum {IDLE, CAPTURE, TRANSFER} state;
-logic capture_d;
+logic capture_d, pinc_change_d;
+logic triggered;
+assign triggered = trigger_select ? (pinc_change && !pinc_change_d) : (capture && !capture_d);
+
+// buffer
 logic [PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH-1:0] buffer [BUFFER_DEPTH];
 logic [$clog2(BUFFER_DEPTH)-1:0] write_addr, read_addr;
 logic [PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH-1:0] buffer_data_in;
 logic [PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH-1:0] data_out_full_width;
 logic data_out_valid;
 logic data_out_last;
-
+// handling of mismatched read/write widths
 localparam bit UNEQUAL_RW_WIDTH = PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH != AXI_MM_WIDTH;
 localparam int WORD_SELECT_BITS = $clog2(PARALLEL_SAMPLES*OUTPUT_SAMPLE_WIDTH)-$clog2(AXI_MM_WIDTH);
 localparam int WORD_SELECT_MAX = 2**WORD_SELECT_BITS - 1;
@@ -35,7 +41,7 @@ always @(posedge clk) begin
     state <= IDLE;
   end else begin
     unique case (state)
-      IDLE: if (capture && !capture_d) state <= CAPTURE;
+      IDLE: if (triggered) state <= CAPTURE;
       CAPTURE: if (write_addr == {$clog2(BUFFER_DEPTH){1'b1}}) state <= TRANSFER;
       TRANSFER: if (data_out_last) state <= IDLE;
     endcase
@@ -44,6 +50,7 @@ end
 
 always @(posedge clk) begin
   capture_d <= capture;
+  pinc_change_d <= pinc_change;
   if (reset) begin
     write_addr <= '0;
     read_addr <= '0;
@@ -129,7 +136,9 @@ module sample_buffer_sv_wrapper #(
   input [INPUT_SAMPLE_WIDTH*PARALLEL_SAMPLES:0] data_in,
   input data_in_valid,
   output data_in_ready,
-  input wire capture
+  input wire capture,
+  input wire pinc_change,
+  input wire trigger_select
 );
 
 Axis_If #(.DWIDTH(INPUT_SAMPLE_WIDTH*PARALLEL_SAMPLES)) data_in_if();
@@ -146,7 +155,9 @@ sample_buffer #(
   .reset,
   .data_out(data_out_if),
   .data_in(data_in_if),
-  .capture
+  .capture,
+  .pinc_change,
+  .trigger_select
 );
 
 assign data_out = data_out_if.data;
