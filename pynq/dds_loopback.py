@@ -49,36 +49,76 @@ class DDSOverlay(Overlay):
         # having a single AXI-slave device with multiple registers instead of
         # separate AXI GPIOs should prevent issues arising from transaction reordering
 
-    def measure_phase(self, tones, OSR1=4, OSR2=1024):
-        n_intersect = self._coarse_delay_n(tones)
+    def measure_phase(self, source, tones, OSR1=4, OSR2=1024, N_fft=64, N_overlap=32):
+        n_intersect = self._coarse_delay_n(source, tones, N_fft, N_overlap)
         fine_delay_n_crossover = self._fine_delay_n_crossover(tones, n_intersect, OSR1)
         fine_delay_n_corrected = self._fine_delay_n_correction(tones, fine_delay_n_crossover, OSR1, OSR2)
-        # resample final 3 periods of test tone
-        N_samp = round(7*self.f_samp/tones[1])
+        if self.plot:
+            # upsample middle of data (transition point) and shift by corrected delay
+            mean = np.mean(self.dma_buffers[0][:1000,:]*[-1,1], axis=0)
+            std = np.std(self.dma_buffers[0][:1000,:]*[-1,1], axis=0)
+            N_samp_left = round(4*self.f_samp/tones[0])
+            N_samp_right = round(7*self.f_samp/tones[1])
+            n_min = round(n_intersect[1])
+            middle = np.zeros((N_samp_left + N_samp_right, 2))
+            middle[:,0] = -1*self.dma_buffers[0][n_min-N_samp_left+fine_delay_n_corrected//OSR2:n_min+N_samp_right+fine_delay_n_corrected//OSR2,0]
+            middle[:,1] = self.dma_buffers[0][n_min-N_samp_left:n_min+N_samp_right,1]
+            middle_upsampled = scipy.signal.resample_poly(middle,OSR2,1,axis=0)
+            shift = fine_delay_n_corrected % OSR2
+            if shift > 0:
+                middle_upsampled_shifted = np.zeros((len(middle_upsampled)-shift,2))
+                middle_upsampled_shifted[:,0] = middle_upsampled[shift:,0]
+                middle_upsampled_shifted[:,1] = middle_upsampled[:-shift,1]
+            else:
+                middle_upsampled_shifted = middle_upsampled
+            middle_upsampled_shifted = (middle_upsampled_shifted - mean)/std
+            plt.figure()
+            plt.plot(np.arange(len(middle_upsampled_shifted))/OSR2, middle_upsampled_shifted, '-')
+            plt.axhline(y=0, color='k', linestyle='-')
+        # resample final periods of test tone
+        # depending on how close test tone is to f_samp, number of periods needs to be adjusted to get an accurate upsampled copy
+        beat_freq = self.f_samp/2 - tones[1]
+        #freq = beat_freq if beat_freq < tones[1] else tones[1]
+        freq = tones[1]
+        N_samp = round(11*self.f_samp/freq)
         test = np.zeros((N_samp, 2))
         test[:,0] = -1*self.dma_buffers[0][-N_samp:,0]
         test[:,1] = self.dma_buffers[0][-N_samp-(fine_delay_n_corrected//OSR2):-(fine_delay_n_corrected//OSR2),1]
         test_upsampled = scipy.signal.resample_poly(test,OSR2,1,axis=0)
+        # shift again by residual of correction
+        shift = fine_delay_n_corrected % OSR2
+        if shift > 0:
+            test_upsampled_shifted = np.zeros((len(test_upsampled)-shift,2))
+            test_upsampled_shifted[:,0] = test_upsampled[shift:,0]
+            test_upsampled_shifted[:,1] = test_upsampled[:-shift,1]
+        else:
+            test_upsampled_shifted = test_upsampled
         if self.plot:
             plt.figure()
-            plt.plot(np.arange(0,N_samp), test, '.')
-            plt.plot(np.arange(0,N_samp*OSR2)/OSR2, test_upsampled, '-')
+            plt.plot(np.transpose([np.arange(0,N_samp) - shift/OSR2, np.arange(0,N_samp)]), (test - np.mean(test, axis=0))/np.std(test, axis=0), '.')
+            #plt.plot(np.arange(0,N_samp), (test - np.mean(test, axis=0))/np.std(test, axis=0), '.')
+            plt.plot(np.arange(0,len(test_upsampled_shifted))/OSR2, (test_upsampled_shifted - np.mean(test_upsampled_shifted, axis=0))/np.std(test_upsampled_shifted, axis=0), '-')
+            plt.xlim([N_samp//2-N_samp//8,N_samp//2+N_samp//8])
         # get phase using covariance method with middle samples
-        N_samp = round(2*self.f_samp/tones[1]*OSR2)
-        sectioned = test_upsampled[len(test_upsampled)//2-N_samp:len(test_upsampled)//2+N_samp,:]
+        N_samp = round(2*self.f_samp/freq*OSR2)
+        sectioned = test_upsampled_shifted[len(test_upsampled_shifted)//2-N_samp:len(test_upsampled_shifted)//2+N_samp,:]
         cov = np.cov(np.transpose((sectioned - np.mean(sectioned, axis=0))/np.std(sectioned, axis=0)))
         phi = np.arccos(np.clip(cov[0,1],-1,1))
         if self.dbg:
+            print(f'cov = {cov}')
             print(f'phi = {phi} ({phi*180/np.pi} deg)')
+        if self.plot:
+            plt.figure()
+            plt.plot(np.arange(0,2*N_samp), (sectioned- np.mean(sectioned, axis=0))/np.std(sectioned, axis=0), '-')
         return phi
 
-    def _coarse_delay_n(self, tones):
+    def _coarse_delay_n(self, source, tones, N_fft, N_overlap):
         if self.dbg:
             print(f'measuring phase delay of frequency {round(tones[1]/1e6)}MHz with reference {round(tones[0]/1e6)}MHz')
         # get coarse phase delay with spectrogram
         self.set_vga_atten_dB(18)
         self.set_dac_atten_dB(12)
-        self.set_adc_source('afe')
+        self.set_adc_source(source)
         self.set_sample_buffer_trigger_source('manual')
         self.set_freq_hz(tones[0])
         self.set_sample_buffer_trigger_source('dds_auto')
@@ -86,10 +126,11 @@ class DDSOverlay(Overlay):
         self.dma(0)
         # only need first 4096 samples
         raw = self.dma_buffers[0][:4096,:]*[-1, 1]
-        # these parameters seem to give good results
-        N_fft = 64
-        N_overlap = 32
         f, t, Sxx = scipy.signal.spectrogram(raw, self.f_samp, axis=0, nfft=N_fft, nperseg=N_fft, noverlap=N_overlap)
+        # get overlap location in time
+        bin_idx = np.zeros(2, dtype=np.uint16)
+        for i in range(2):
+            bin_idx[i] = (np.abs(f - tones[i])).argmin()
         # plot raw data and spectrogram
         if self.plot:
             plt.figure()
@@ -103,13 +144,9 @@ class DDSOverlay(Overlay):
             plt.pcolormesh(t, f, Sxx[:,0,:], shading='nearest')
             plt.colorbar()
             plt.ylim([0,200e6])
-        # get overlap location in time
-        bin_idx = np.zeros(2, dtype=np.uint16)
-        for i in range(2):
-            bin_idx[i] = (np.abs(f - tones[i])).argmin()
-        plt.figure()
-        plt.plot(t, np.transpose(Sxx[bin_idx,0,:]), '.')
-        plt.plot(t, np.transpose(Sxx[bin_idx,1,:]), '.')
+            plt.figure()
+            plt.plot(t, np.transpose(Sxx[bin_idx,0,:]), '.')
+            plt.plot(t, np.transpose(Sxx[bin_idx,1,:]), '.')
         n_intersect = np.zeros(2)
         for i in range(2):
             S_lo_last = Sxx[bin_idx[0],i,0]
@@ -131,8 +168,8 @@ class DDSOverlay(Overlay):
 
     def _fine_delay_n_crossover(self, tones, n_intersect, OSR):
         # get fine delay by oversampling and measuring cross-correlation of reference/alignment tone
-        n_min = round((n_intersect[0] - 2*self.f_samp/tones[0])*OSR)
-        n_max = round((n_intersect[0] + 2*self.f_samp/tones[0])*OSR)
+        n_min = round((n_intersect[0] - 5*self.f_samp/tones[0])*OSR)
+        n_max = round((n_intersect[0] + 5*self.f_samp/tones[0])*OSR)
         upsampled = scipy.signal.resample_poly(np.array(self.dma_buffers[0][:4096,:],dtype=np.float32),OSR,1,axis=0)*[-1,1]
         xcorr = scipy.signal.correlate(upsampled[n_min:n_max,0], upsampled[:4096*OSR,1])
         lags = scipy.signal.correlation_lags(n_max-n_min,4096*OSR)
@@ -149,21 +186,32 @@ class DDSOverlay(Overlay):
 
     def _fine_delay_n_correction(self, tones, fine_delay_n_crossover, OSR1, OSR2):
         # first shift by fine_delay_n_crossover//OSR1, then resample 3 periods of the reference tone at OSR2 >> OSR1
-        N_samp = round(3*self.f_samp/tones[0])
+        N_samp = round(11*self.f_samp/tones[0])
         reference = np.zeros((N_samp, 2))
         reference[:,0] = -1*self.dma_buffers[0][fine_delay_n_crossover//OSR1:fine_delay_n_crossover//OSR1+N_samp,0]
         reference[:,1] = self.dma_buffers[0][:N_samp,1]
         reference_upsampled = scipy.signal.resample_poly(reference,OSR2,1,axis=0)
-        xcorr = scipy.signal.correlate(reference_upsampled[:,0], reference_upsampled[:,1])
-        lags = scipy.signal.correlation_lags(N_samp*OSR2, N_samp*OSR2)
+        # crop out tails to get a more pure sinusoid
+        N_tail = round(2*self.f_samp/tones[0]*OSR2)
+        reference_upsampled_cropped = reference_upsampled[N_tail:-N_tail,:]
+        mean = np.mean(reference_upsampled_cropped,axis=0)
+        std = np.std(reference_upsampled_cropped,axis=0)
+        reference_upsampled_cropped = (reference_upsampled_cropped - mean)/std
+        xcorr = scipy.signal.correlate(reference_upsampled_cropped[:,0], reference_upsampled_cropped[:,1])
+        lags = scipy.signal.correlation_lags(len(reference_upsampled_cropped), len(reference_upsampled_cropped))
         fine_delay_n_correction = round(fine_delay_n_crossover*OSR2/OSR1) + lags[np.argmax(xcorr)]
         if self.plot:
+            N_period = round(self.f_samp/tones[0])
+            N_tail_trunc = (N_tail//OSR2)
             plt.figure()
-            plt.plot(np.arange(0,N_samp), reference, '.')
-            plt.plot(np.arange(0,N_samp*OSR2)/OSR2, reference_upsampled, '-')
+            ref_sliced = reference[N_tail_trunc:N_tail_trunc+N_period]
+            ref_upsampled_sliced = reference_upsampled[N_tail_trunc*OSR2:N_tail_trunc*OSR2+N_period*OSR2] 
+            plt.plot(np.arange(0,N_period), (ref_sliced - np.mean(ref_sliced, axis=0))/np.std(ref_sliced, axis=0), '.')
+            plt.plot(np.arange(0,N_period*OSR2)/OSR2, (ref_upsampled_sliced - np.mean(ref_upsampled_sliced, axis=0))/np.std(ref_upsampled_sliced, axis=0), '-')
             plt.figure()
             plt.plot(lags/OSR2, xcorr)
         if self.dbg:
+            print(f'lags[np.argmax(xcorr)] = {lags[np.argmax(xcorr)]} = {lags[np.argmax(xcorr)]/OSR2}*{OSR2}')
             print(f'fine_delay_n_correction = {fine_delay_n_correction} = {fine_delay_n_correction/OSR2}*{OSR2}')
         return fine_delay_n_correction
 
