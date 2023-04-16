@@ -42,7 +42,7 @@ class DDSOverlay(Overlay):
         self.dma_buffers = [allocate(shape=self.dma_frame_shape, dtype=np.int16) for i in range(n_buffers)]
         self.dbg = dbg
         self.plot = plot
-        self.t_sleep = 0.005
+        self.t_sleep = 0.008
         # need sleeps around AXI transactions, or data isn't captured correctly
         # i.e. there are frequency changes in data that is manually triggered
         # (which should not have frequency changes)
@@ -54,6 +54,27 @@ class DDSOverlay(Overlay):
     
     def _period_samples(self, freq, OSR):
         return round(self.f_samp/freq*OSR)
+
+    def sfdr_dBc(self, buffer_idx):
+        with np.errstate(divide='ignore'):
+            fft = 20*np.log10(abs(np.fft.rfft(self.dma_buffers[buffer_idx], axis=0))[1:-1,:])
+        geo_mean = np.mean(fft,axis=0) + 20
+        # never will have issues with distortion on digital signal, but check if we've saturated the AFE signal-chain
+        peaks1,_ = scipy.signal.find_peaks(fft[:,1], distance=1000, height=geo_mean[1])
+        spurs1 = np.sort(fft[peaks1,1])[-2:]
+        if np.max(fft, axis=0)[0] < geo_mean[0] + 20:
+            if self.dbg:
+                print('saturation detected in AFE')
+            return np.array([0, spurs1[1]-spurs1[0]])
+        peaks0,_ = scipy.signal.find_peaks(fft[:,0], distance=1000, height=geo_mean[0])
+        spurs0 = np.sort(fft[peaks0,0])[-2:]
+        if self.plot:
+            plt.figure()
+            plt.plot(fft[:,0])
+            plt.plot(peaks0,fft[peaks0,0],'x')
+        if self.dbg:
+            print(f'spurs = {np.array([spurs0, spurs1])}')
+        return np.array([spurs0[1]-spurs0[0], spurs1[1]-spurs1[0]])
 
     def measure_phase(self, source, tones, OSR=1024, vga_atten_dB=18, dac_atten_dB=12):
         n_intersect, uncertainty = self._coarse_delay_n(source, tones, vga_atten_dB, dac_atten_dB)
