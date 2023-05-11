@@ -1,0 +1,20 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: rfsoc_dds
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Reed
+    family-names: Foster
+    email: reedf@mit.edu
+    orcid: 'https://orcid.org/0000-0002-3100-2127'
+    affiliation: Massachusetts Institute of Technology
+identifiers:
+  - type: doi
+    value: 10.5281/zenodo.7927065
+repository-code: 'https://github.com/reed-foster/rfsoc_dds'
+license: MIT
