@@ -48,6 +48,10 @@ class DDSOverlay(Overlay):
         # (which should not have frequency changes)
         # having a single AXI-slave device with multiple registers instead of
         # separate AXI GPIOs should prevent issues arising from transaction reordering
+    
+    def shutdown_dac(self):
+        self.set_dac_atten_dB(90)
+        time.sleep(0.5)
 
     def _actual_freq(self, freq):
         return int((freq/self.f_samp)*(2**self.phase_bits))*self.f_samp/2**self.phase_bits

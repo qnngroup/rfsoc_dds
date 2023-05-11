@@ -15,7 +15,7 @@ module sample_buffer_wrapper (
 assign data_out_keep = 16'hffff;
 
 sample_buffer_sv_wrapper #(
-  .BUFFER_DEPTH(32768),
+  .BUFFER_DEPTH(16384),
   .PARALLEL_SAMPLES(64),
   .INPUT_SAMPLE_WIDTH(16),
   .OUTPUT_SAMPLE_WIDTH(16),
