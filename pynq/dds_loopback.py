@@ -74,11 +74,44 @@ class DDSOverlay(Overlay):
         spurs0 = np.sort(fft[peaks0,0])[-2:]
         if self.plot:
             plt.figure()
-            plt.plot(fft[:,0])
-            plt.plot(peaks0,fft[peaks0,0],'x')
+            freqs = np.linspace(0,self.f_samp/2,fft.shape[0])
+            plt.plot(freqs, fft[:,0])
+            plt.plot(freqs[peaks0],fft[peaks0,0],'x')
         if self.dbg:
             print(f'spurs = {np.array([spurs0, spurs1])}')
         return np.array([spurs0[1]-spurs0[0], spurs1[1]-spurs1[0]])
+    
+    def sinad_dBc(self, buffer_idx):
+        # based on matlab's snr()
+        # only removes the fundamental and DC (so distortion is included)
+        [f, Pxx_den] = scipy.signal.periodogram(self.dma_buffers[buffer_idx], self.f_samp, window=('kaiser', 38), axis=0)
+        # set DC component to 0
+        Pxx_den[0,:] = 0
+        if self.plot:
+            fig, ax = plt.subplots(3,2)
+            for i in range(2):
+                ax[0,i].semilogy(f, Pxx_den[:,i])
+                ax[0,i].set_ylabel('PSD [V**2/Hz]')
+        # find fundamental
+        k0 = np.argmax(Pxx_den[:,1])
+        # spectral width of kaiser window
+        width = int(np.ceil(2*(1+(28*np.pi)**2)**0.5))
+        # get power in fundamental
+        Pxx_den_fund = np.zeros(Pxx_den.shape)
+        Pxx_den_fund[k0-width//2:k0+width//2,:] = Pxx_den[k0-width//2:k0+width//2,:]
+        # remove fundamental
+        Pxx_den[k0-width//2:k0+width//2,:] = 0
+        if self.plot:
+            for i in range(2):
+                ax[1,i].semilogy(f, Pxx_den[:,i])
+                ax[2,i].semilogy(f, Pxx_den_fund[:,i])
+                ax[2,i].set_xlabel('freq [Hz]')
+                ax[1,i].set_ylabel('PSD [V**2/Hz]')
+                ax[2,i].set_ylabel('PSD [V**2/Hz]')
+        pnoise = np.trapz(Pxx_den, f, axis=0)
+        psignal = np.trapz(Pxx_den_fund, f, axis=0)
+        sinad = psignal/pnoise
+        return 10*np.log10(sinad), psignal, pnoise
 
     def measure_phase(self, source, tones, OSR=1024, vga_atten_dB=18, dac_atten_dB=12):
         n_intersect, uncertainty = self._coarse_delay_n(source, tones, vga_atten_dB, dac_atten_dB)
