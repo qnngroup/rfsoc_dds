@@ -95,12 +95,12 @@ class DDSOverlay(Overlay):
         # find fundamental
         k0 = np.argmax(Pxx_den[:,1])
         # spectral width of kaiser window
-        width = int(np.ceil(2*(1+(28*np.pi)**2)**0.5))
+        width = int(np.ceil(2*(1+(38/np.pi)**2)**0.5))
         # get power in fundamental
         Pxx_den_fund = np.zeros(Pxx_den.shape)
-        Pxx_den_fund[k0-width//2:k0+width//2,:] = Pxx_den[k0-width//2:k0+width//2,:]
+        Pxx_den_fund[k0-width:k0+width,:] = Pxx_den[k0-width:k0+width,:]
         # remove fundamental
-        Pxx_den[k0-width//2:k0+width//2,:] = 0
+        Pxx_den[k0-width:k0+width,:] = 0
         if self.plot:
             for i in range(2):
                 ax[1,i].semilogy(f, Pxx_den[:,i])
