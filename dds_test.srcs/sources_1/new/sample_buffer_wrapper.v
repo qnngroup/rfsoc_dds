@@ -1,18 +1,18 @@
 module sample_buffer_wrapper (
   input wire clk, reset_n,
-  output [127:0] data_out,
-  output data_out_valid, data_out_last,
-  input data_out_ready,
-  output [15:0] data_out_keep,
-  input [1023:0] data_in,
-  input data_in_valid,
-  output data_in_ready,
+  output [127:0] data_out_tdata,
+  output data_out_tvalid, data_out_tlast,
+  input data_out_tready,
+  output [15:0] data_out_tkeep,
+  input [1023:0] data_in_tdata,
+  input data_in_tvalid,
+  output data_in_tready,
   input wire capture,
   input wire pinc_change,
   input wire trigger_select
 );
 
-assign data_out_keep = 16'hffff;
+assign data_out_tkeep = 16'hffff;
 
 sample_buffer_sv_wrapper #(
   .BUFFER_DEPTH(16384),
@@ -23,13 +23,13 @@ sample_buffer_sv_wrapper #(
 ) sample_buffer_sv_wrapper_i (
   .clk(clk),
   .reset(~reset_n),
-  .data_out(data_out),
-  .data_out_valid(data_out_valid),
-  .data_out_last(data_out_last),
-  .data_out_ready(data_out_ready),
-  .data_in(data_in),
-  .data_in_valid(data_in_valid),
-  .data_in_ready(data_in_ready),
+  .data_out(data_out_tdata),
+  .data_out_valid(data_out_tvalid),
+  .data_out_last(data_out_tlast),
+  .data_out_ready(data_out_tready),
+  .data_in(data_in_tdata),
+  .data_in_valid(data_in_tvalid),
+  .data_in_ready(data_in_tready),
   .capture(capture),
   .pinc_change(pinc_change),
   .trigger_select(trigger_select)

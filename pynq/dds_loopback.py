@@ -19,23 +19,28 @@ class DDSOverlay(Overlay):
         if dbg:
             print(f'loading bitfile {bitfile_name}')
         super().__init__(bitfile_name, **kwargs)
+        if dbg:
+            print('loaded bitstream')
+            time.sleep(0.5)
         # get IPs
         self.dma_recv = self.axi_dma_0.recvchannel
         self.capture_trig = self.axi_gpio_capture.channel1[0]
         self.trigger_mode = self.axi_gpio_trigger_sel.channel1[0]
         self.adc_select = self.axi_gpio_adc_sel.channel1[0]
-        self.pinc = self.axi_fifo_pinc
-        self.cos_scale = self.axi_fifo_scale
+        self.pinc = [self.dds_hier_0.axi_fifo_pinc_0, self.dds_hier_1.axi_fifo_pinc_1]
+        self.cos_scale = [self.dds_hier_0.axi_fifo_scale_0, self.dds_hier_1.axi_fifo_scale_1]
         self.timer = self.axi_timer_0
-        self.lmh6401 = self.axi_fifo_lmh6401
+        self.lmh6401 = self.lmh6401_hier.axi_fifo_lmh6401
         
         xrfclk.set_ref_clks(lmk_freq=122.88, lmx_freq=409.6)
+        if dbg:
+            print('set clocks')
         
         self.f_samp = 4.096e9 # Hz
         self.phase_bits = 24
         self.timer.start_tmr()
-        self.dma_frame_shape = (32*32768, 2)
-        self.dma_frame_size = self.dma_frame_shape[0]*self.dma_frame_shape[1]
+        self.dma_frame_shape = (32*32768,)
+        self.dma_frame_size = 32*32768#self.dma_frame_shape[0]*self.dma_frame_shape[1]
         alloc_bytes = n_buffers * self.dma_frame_size * 2 
         if (alloc_bytes > 3e9):
             raise ValueError(f"refusing to allocate {round(alloc_bytes/(2**20))}MiB of DMA buffer, try again with smaller n_buffers")
@@ -50,7 +55,8 @@ class DDSOverlay(Overlay):
         # separate AXI GPIOs should prevent issues arising from transaction reordering
     
     def shutdown_dac(self):
-        self.set_dac_atten_dB(90)
+        self.set_dac_atten_dB(90,0)
+        self.set_dac_atten_dB(90,1)
         time.sleep(0.5)
 
     def _actual_freq(self, freq):
@@ -61,53 +67,49 @@ class DDSOverlay(Overlay):
 
     def sfdr_dBc(self, buffer_idx):
         with np.errstate(divide='ignore'):
-            fft = 20*np.log10(abs(np.fft.rfft(self.dma_buffers[buffer_idx], axis=0))[1:-1,:])
-        geo_mean = np.mean(fft,axis=0) + 20
+            fft = 20*np.log10(abs(np.fft.rfft(self.dma_buffers[buffer_idx],axis=0))[1:-1])
+        geo_mean = np.mean(fft) + 20
         # never will have issues with distortion on digital signal, but check if we've saturated the AFE signal-chain
-        peaks1,_ = scipy.signal.find_peaks(fft[:,1], distance=1000, height=geo_mean[1])
-        spurs1 = np.sort(fft[peaks1,1])[-2:]
-        if np.max(fft, axis=0)[0] < geo_mean[0] + 20:
+        peaks,_ = scipy.signal.find_peaks(fft, distance=1000, height=geo_mean)
+        spurs = np.sort(fft[peaks])[-2:]
+        if np.max(fft) < geo_mean + 20:
             if self.dbg:
                 print('saturation detected in AFE')
-            return np.array([0, spurs1[1]-spurs1[0]])
-        peaks0,_ = scipy.signal.find_peaks(fft[:,0], distance=1000, height=geo_mean[0])
-        spurs0 = np.sort(fft[peaks0,0])[-2:]
+            return np.array([0, spurs[1]-spurs[0]])
         if self.plot:
             plt.figure()
             freqs = np.linspace(0,self.f_samp/2,fft.shape[0])
-            plt.plot(freqs, fft[:,0])
-            plt.plot(freqs[peaks0],fft[peaks0,0],'x')
+            plt.plot(freqs, fft)
+            plt.plot(freqs[peaks],fft[peaks],'x')
         if self.dbg:
-            print(f'spurs = {np.array([spurs0, spurs1])}')
-        return np.array([spurs0[1]-spurs0[0], spurs1[1]-spurs1[0]])
+            print(f'spurs = {spurs}')
+        return spurs[1]-spurs[0]
     
     def sinad_dBc(self, buffer_idx):
         # based on matlab's snr()
         # only removes the fundamental and DC (so distortion is included)
         [f, Pxx_den] = scipy.signal.periodogram(self.dma_buffers[buffer_idx], self.f_samp, window=('kaiser', 38), axis=0)
         # set DC component to 0
-        Pxx_den[0,:] = 0
+        Pxx_den[0] = 0
         if self.plot:
-            fig, ax = plt.subplots(3,2)
-            for i in range(2):
-                ax[0,i].semilogy(f, Pxx_den[:,i])
-                ax[0,i].set_ylabel('PSD [V**2/Hz]')
+            fig, ax = plt.subplots(3,1)
+            ax[0].semilogy(f, Pxx_den)
+            ax[0].set_ylabel('PSD [V**2/Hz]')
         # find fundamental
-        k0 = np.argmax(Pxx_den[:,1])
+        k0 = np.argmax(Pxx_den)
         # spectral width of kaiser window
         width = int(np.ceil(2*(1+(38/np.pi)**2)**0.5))
         # get power in fundamental
         Pxx_den_fund = np.zeros(Pxx_den.shape)
-        Pxx_den_fund[k0-width:k0+width,:] = Pxx_den[k0-width:k0+width,:]
+        Pxx_den_fund[k0-width:k0+width] = Pxx_den[k0-width:k0+width]
         # remove fundamental
-        Pxx_den[k0-width:k0+width,:] = 0
+        Pxx_den[k0-width:k0+width] = 0
         if self.plot:
-            for i in range(2):
-                ax[1,i].semilogy(f, Pxx_den[:,i])
-                ax[2,i].semilogy(f, Pxx_den_fund[:,i])
-                ax[2,i].set_xlabel('freq [Hz]')
-                ax[1,i].set_ylabel('PSD [V**2/Hz]')
-                ax[2,i].set_ylabel('PSD [V**2/Hz]')
+            ax[1].semilogy(f, Pxx_den)
+            ax[2].semilogy(f, Pxx_den_fund)
+            ax[2].set_xlabel('freq [Hz]')
+            ax[1].set_ylabel('PSD [V**2/Hz]')
+            ax[2].set_ylabel('PSD [V**2/Hz]')
         pnoise = np.trapz(Pxx_den, f, axis=0)
         psignal = np.trapz(Pxx_den_fund, f, axis=0)
         sinad = psignal/pnoise
@@ -317,36 +319,38 @@ class DDSOverlay(Overlay):
         # 1 sample delay due to the sample-and-hold of the DAC
         return fine_delay_n_correction - 1*OSR
 
-    def set_freq_hz(self, freq_hz):
+    def set_freq_hz(self, freq_hz, channel = 0):
         pinc = int((freq_hz/self.f_samp)*(2**self.phase_bits))
         if self.dbg:
             print(f'setting pinc to {pinc} ({freq_hz:.3e}Hz)')
-        self.pinc.send_tx_pkt([pinc])
+        self.pinc[channel].send_tx_pkt([pinc])
         time.sleep(self.t_sleep)
 
-    def set_dac_atten_dB(self, atten_dB):
+    def set_dac_atten_dB(self, atten_dB, channel = 0):
         scale = round(atten_dB/6)
         if scale < 0 or scale > 15:
             raise ValueError("cannot set attenuation less than 0dB or more than 90dB")
         if self.dbg:
             print(f'setting cos_scale to {scale} ({6*scale}dB attenuation)')
-        self.cos_scale.send_tx_pkt([scale])
+        self.cos_scale[channel].send_tx_pkt([scale])
         time.sleep(self.t_sleep)
 
-    def set_vga_atten_dB(self, atten_dB):
+    def set_vga_atten_dB(self, atten_dB, channel = 0):
         atten_dB = round(atten_dB)
         if atten_dB < 0 or atten_dB > 32:
             raise ValueError("atten_dB out of range, pick a number between 0 and 32dB")
-        packet = 0x0200 | atten_dB & 0x3f # address 0x02, 6-bit data atten_dB
+        packet = 0x0200 | (atten_dB & 0x3f) # address 0x02, 6-bit data atten_dB
+        packet |= channel << 16 # address/channel ID is above 16-bit address+data
         if self.dbg:
             print(f'setting vga attenuation to {atten_dB}dB')
+            print(f'packet = {hex(packet)}')
         self.lmh6401.send_tx_pkt([packet])
         time.sleep(self.t_sleep)
 
     def set_adc_source(self, adc_source):
-        if adc_source == 'afe':
+        if (adc_source == 'afe') or (adc_source == 0):
             self.adc_select.off()
-        elif adc_source == 'balun':
+        elif (adc_source == 'balun') or (adc_source == 1):
             self.adc_select.on()
         else:
             raise ValueError(f"invalid choice of adc_source: {adc_source}, please choose one of 'afe' or 'balun'")

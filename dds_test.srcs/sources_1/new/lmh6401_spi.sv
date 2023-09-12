@@ -1,12 +1,14 @@
 module lmh6401_spi #(
   parameter int AXIS_CLK_FREQ = 150_000_000,
-  parameter int SPI_CLK_FREQ = 1_000_000
+  parameter int SPI_CLK_FREQ = 1_000_000,
+  parameter int NUM_CHANNELS = 2
 ) (
   input wire clk, reset,
+  input [$clog2(NUM_CHANNELS)-1:0] addr_in,
   input [15:0] data_in,
   input data_in_valid,
   output data_in_ready,
-  output logic cs_n,
+  output logic [NUM_CHANNELS-1:0] cs_n,
   output logic sck,
   output logic sdi
 );
@@ -35,6 +37,7 @@ end
 
 enum {IDLE, SENDING, FINISH} state;
 logic [15:0] data;
+logic [$clog2(NUM_CHANNELS)-1:0] addr;
 logic [3:0] bits_sent;
 
 logic sck_negedge;
@@ -46,7 +49,7 @@ always_ff @(posedge clk) begin
   if (reset) begin
     state <= IDLE;
     bits_sent <= '0;
-    cs_n <= 1'b1;
+    cs_n <= '1;
     sdi <= 1'b0;
   end else begin
     if (data_in_valid && data_in_ready) begin
@@ -55,11 +58,12 @@ always_ff @(posedge clk) begin
     unique case (state)
       IDLE: if (data_in_valid && data_in_ready) begin 
         state <= SENDING;
+        addr <= addr_in;
         data <= {1'b0, data_in[14:0]};
       end
       SENDING: begin
         if (sck_negedge) begin
-          cs_n <= 1'b0;
+          cs_n[addr] <= 1'b0;
           sdi <= data[15];
           data <= {data[14:0], 1'b1};
           bits_sent <= bits_sent + 1'b1;
@@ -69,7 +73,7 @@ always_ff @(posedge clk) begin
         end
       end
       FINISH: if (sck_negedge) begin
-        cs_n <= 1'b1;
+        cs_n[addr] <= 1'b1;
         state <= IDLE;
       end
     endcase
