@@ -10,7 +10,7 @@ module lmh6401_spi_wrapper (
 
 lmh6401_spi #(
   .AXIS_CLK_FREQ(150_000_000),
-  .SPI_CLK_FREQ(1_000_000),
+  .SPI_CLK_FREQ(750_000),
   .NUM_CHANNELS(2)
 ) lmh6401_spi_i (
   .clk(clk),
