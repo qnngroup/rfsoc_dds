@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
-<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Wed Sep  6 15:32:28 2023" VIVADOVERSION="2022.2">
+<EDKSYSTEM EDWVERSION="1.2" TIMESTAMP="Tue Sep 19 10:44:57 2023" VIVADOVERSION="2022.2">
 
   <SYSTEMINFO ARCH="zynquplusRFSOC" BOARD="xilinx.com:zcu111:part0:1.4" DEVICE="xczu28dr" NAME="top" PACKAGE="ffvg1517" SPEEDGRADE="-2"/>
 
@@ -12,36 +12,6 @@
     <PORT DIR="I" NAME="sysref_in_diff_p" SIGIS="undef" SIGNAME="rf_data_converter_sysref_in_p">
       <CONNECTIONS>
         <CONNECTION INSTANCE="rf_data_converter" PORT="sysref_in_p"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="I" NAME="adc0_clk_clk_n" SIGIS="undef" SIGNAME="rf_data_converter_adc0_clk_n">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="rf_data_converter" PORT="adc0_clk_n"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="I" NAME="adc0_clk_clk_p" SIGIS="undef" SIGNAME="rf_data_converter_adc0_clk_p">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="rf_data_converter" PORT="adc0_clk_p"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="I" NAME="vin0_01_v_n" SIGIS="undef" SIGNAME="rf_data_converter_vin0_01_n">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="rf_data_converter" PORT="vin0_01_n"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="I" NAME="vin0_01_v_p" SIGIS="undef" SIGNAME="rf_data_converter_vin0_01_p">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="rf_data_converter" PORT="vin0_01_p"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="I" NAME="vin0_23_v_n" SIGIS="undef" SIGNAME="rf_data_converter_vin0_23_n">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="rf_data_converter" PORT="vin0_23_n"/>
-      </CONNECTIONS>
-    </PORT>
-    <PORT DIR="I" NAME="vin0_23_v_p" SIGIS="undef" SIGNAME="rf_data_converter_vin0_23_p">
-      <CONNECTIONS>
-        <CONNECTION INSTANCE="rf_data_converter" PORT="vin0_23_p"/>
       </CONNECTIONS>
     </PORT>
     <PORT DIR="I" NAME="dac0_clk_clk_n" SIGIS="undef" SIGNAME="rf_data_converter_dac0_clk_n">
@@ -94,6 +64,26 @@
         <CONNECTION INSTANCE="lmh6401_hier_lmh6401_spi_wrapper_0" PORT="cs_n"/>
       </CONNECTIONS>
     </PORT>
+    <PORT CLKFREQUENCY="100000000" DIR="I" NAME="adc2_clk_clk_n" SIGIS="clk" SIGNAME="rf_data_converter_adc2_clk_n">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="rf_data_converter" PORT="adc2_clk_n"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT CLKFREQUENCY="100000000" DIR="I" NAME="adc2_clk_clk_p" SIGIS="clk" SIGNAME="rf_data_converter_adc2_clk_p">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="rf_data_converter" PORT="adc2_clk_p"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="I" NAME="vin2_01_v_n" SIGIS="undef" SIGNAME="rf_data_converter_vin2_01_n">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="rf_data_converter" PORT="vin2_01_n"/>
+      </CONNECTIONS>
+    </PORT>
+    <PORT DIR="I" NAME="vin2_01_v_p" SIGIS="undef" SIGNAME="rf_data_converter_vin2_01_p">
+      <CONNECTIONS>
+        <CONNECTION INSTANCE="rf_data_converter" PORT="vin2_01_p"/>
+      </CONNECTIONS>
+    </PORT>
   </EXTERNALPORTS>
 
   <EXTERNALINTERFACES>
@@ -101,26 +91,6 @@
       <PORTMAPS>
         <PORTMAP LOGICAL="diff_n" PHYSICAL="sysref_in_diff_n"/>
         <PORTMAP LOGICAL="diff_p" PHYSICAL="sysref_in_diff_p"/>
-      </PORTMAPS>
-    </BUSINTERFACE>
-    <BUSINTERFACE BUSNAME="External_Interface_adc0_clk" NAME="adc0_clk" TYPE="TARGET">
-      <PARAMETER NAME="CAN_DEBUG" VALUE="false"/>
-      <PARAMETER NAME="FREQ_HZ" VALUE="409600000.0"/>
-      <PORTMAPS>
-        <PORTMAP LOGICAL="CLK_N" PHYSICAL="adc0_clk_clk_n"/>
-        <PORTMAP LOGICAL="CLK_P" PHYSICAL="adc0_clk_clk_p"/>
-      </PORTMAPS>
-    </BUSINTERFACE>
-    <BUSINTERFACE BUSNAME="External_Interface_vin0_01" NAME="vin0_01" TYPE="TARGET">
-      <PORTMAPS>
-        <PORTMAP LOGICAL="V_N" PHYSICAL="vin0_01_v_n"/>
-        <PORTMAP LOGICAL="V_P" PHYSICAL="vin0_01_v_p"/>
-      </PORTMAPS>
-    </BUSINTERFACE>
-    <BUSINTERFACE BUSNAME="External_Interface_vin0_23" NAME="vin0_23" TYPE="TARGET">
-      <PORTMAPS>
-        <PORTMAP LOGICAL="V_N" PHYSICAL="vin0_23_v_n"/>
-        <PORTMAP LOGICAL="V_P" PHYSICAL="vin0_23_v_p"/>
       </PORTMAPS>
     </BUSINTERFACE>
     <BUSINTERFACE BUSNAME="External_Interface_dac0_clk" NAME="dac0_clk" TYPE="TARGET">
@@ -143,140 +113,23 @@
         <PORTMAP LOGICAL="V_P" PHYSICAL="vout01_v_p"/>
       </PORTMAPS>
     </BUSINTERFACE>
+    <BUSINTERFACE BUSNAME="External_Interface_adc2_clk" NAME="adc2_clk" TYPE="TARGET">
+      <PARAMETER NAME="CAN_DEBUG" VALUE="false"/>
+      <PARAMETER NAME="FREQ_HZ" VALUE="409600000.0"/>
+      <PORTMAPS>
+        <PORTMAP LOGICAL="CLK_N" PHYSICAL="adc2_clk_clk_n"/>
+        <PORTMAP LOGICAL="CLK_P" PHYSICAL="adc2_clk_clk_p"/>
+      </PORTMAPS>
+    </BUSINTERFACE>
+    <BUSINTERFACE BUSNAME="External_Interface_vin2_01" NAME="vin2_01" TYPE="TARGET">
+      <PORTMAPS>
+        <PORTMAP LOGICAL="V_N" PHYSICAL="vin2_01_v_n"/>
+        <PORTMAP LOGICAL="V_P" PHYSICAL="vin2_01_v_p"/>
+      </PORTMAPS>
+    </BUSINTERFACE>
   </EXTERNALINTERFACES>
 
   <MODULES>
-    <MODULE COREREVISION="1" FULLNAME="/adc_axis_mux_wrapper_0" HWVERSION="1.0" INSTANCE="adc_axis_mux_wrapper_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="adc_axis_mux_wrapper" VLNV="xilinx.com:module_ref:adc_axis_mux_wrapper:1.0">
-      <DOCUMENTS/>
-      <PARAMETERS>
-        <PARAMETER NAME="Component_Name" VALUE="top_adc_axis_mux_wrapper_0_0"/>
-        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
-      </PARAMETERS>
-      <PORTS>
-        <PORT CLKFREQUENCY="512000000" DIR="I" NAME="clk" SIGIS="clk" SIGNAME="adc_clk_512_gen_clk_out1">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_clk_512_gen" PORT="clk_out1"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="reset_n" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="adc_reset_peripheral_aresetn">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_reset" PORT="peripheral_aresetn"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="127" NAME="afe_adc_tdata" RIGHT="0" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_afe_adc_tdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="m00_axis_tdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="afe_adc_tvalid" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_afe_adc_tvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="m00_axis_tvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="afe_adc_tready" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_afe_adc_tready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="m00_axis_tready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="127" NAME="loopback_adc_tdata" RIGHT="0" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_loopback_adc_tdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="m02_axis_tdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="loopback_adc_tvalid" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_loopback_adc_tvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="m02_axis_tvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="loopback_adc_tready" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_loopback_adc_tready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="m02_axis_tready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="sel" SIGIS="undef" SIGNAME="adc_sel_cdc_dest_out">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_sel_cdc" PORT="dest_out"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="127" NAME="adc_tdata" RIGHT="0" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_adc_tdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_dwidth_converter" PORT="s_axis_tdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="adc_tvalid" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_adc_tvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_dwidth_converter" PORT="s_axis_tvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="adc_tready" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_adc_tready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_dwidth_converter" PORT="s_axis_tready"/>
-          </CONNECTIONS>
-        </PORT>
-      </PORTS>
-      <BUSINTERFACES>
-        <BUSINTERFACE BUSNAME="adc_axis_mux_wrapper_0_adc" NAME="adc" TYPE="INITIATOR" VLNV="xilinx.com:interface:axis:1.0">
-          <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="16"/>
-          <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="TUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="HAS_TREADY" VALUE="1"/>
-          <PARAMETER NAME="HAS_TSTRB" VALUE="0"/>
-          <PARAMETER NAME="HAS_TKEEP" VALUE="0"/>
-          <PARAMETER NAME="HAS_TLAST" VALUE="0"/>
-          <PARAMETER NAME="FREQ_HZ" VALUE="512000000"/>
-          <PARAMETER NAME="PHASE" VALUE="0.0"/>
-          <PARAMETER NAME="CLK_DOMAIN" VALUE="/adc_clk_512_gen_clk_out1"/>
-          <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
-          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
-          <PORTMAPS>
-            <PORTMAP LOGICAL="TDATA" PHYSICAL="adc_tdata"/>
-            <PORTMAP LOGICAL="TVALID" PHYSICAL="adc_tvalid"/>
-            <PORTMAP LOGICAL="TREADY" PHYSICAL="adc_tready"/>
-          </PORTMAPS>
-        </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="rf_data_converter_m00_axis" NAME="afe_adc" TYPE="TARGET" VLNV="xilinx.com:interface:axis:1.0">
-          <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="16"/>
-          <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="TUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="HAS_TREADY" VALUE="1"/>
-          <PARAMETER NAME="HAS_TSTRB" VALUE="0"/>
-          <PARAMETER NAME="HAS_TKEEP" VALUE="0"/>
-          <PARAMETER NAME="HAS_TLAST" VALUE="0"/>
-          <PARAMETER NAME="FREQ_HZ" VALUE="512000000"/>
-          <PARAMETER NAME="PHASE" VALUE="0.0"/>
-          <PARAMETER NAME="CLK_DOMAIN" VALUE="/adc_clk_512_gen_clk_out1"/>
-          <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
-          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
-          <PORTMAPS>
-            <PORTMAP LOGICAL="TDATA" PHYSICAL="afe_adc_tdata"/>
-            <PORTMAP LOGICAL="TVALID" PHYSICAL="afe_adc_tvalid"/>
-            <PORTMAP LOGICAL="TREADY" PHYSICAL="afe_adc_tready"/>
-          </PORTMAPS>
-        </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="rf_data_converter_m02_axis" NAME="loopback_adc" TYPE="TARGET" VLNV="xilinx.com:interface:axis:1.0">
-          <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="16"/>
-          <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="TUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="HAS_TREADY" VALUE="1"/>
-          <PARAMETER NAME="HAS_TSTRB" VALUE="0"/>
-          <PARAMETER NAME="HAS_TKEEP" VALUE="0"/>
-          <PARAMETER NAME="HAS_TLAST" VALUE="0"/>
-          <PARAMETER NAME="FREQ_HZ" VALUE="512000000"/>
-          <PARAMETER NAME="PHASE" VALUE="0.0"/>
-          <PARAMETER NAME="CLK_DOMAIN" VALUE="/adc_clk_512_gen_clk_out1"/>
-          <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
-          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
-          <PORTMAPS>
-            <PORTMAP LOGICAL="TDATA" PHYSICAL="loopback_adc_tdata"/>
-            <PORTMAP LOGICAL="TVALID" PHYSICAL="loopback_adc_tvalid"/>
-            <PORTMAP LOGICAL="TREADY" PHYSICAL="loopback_adc_tready"/>
-          </PORTMAPS>
-        </BUSINTERFACE>
-      </BUSINTERFACES>
-    </MODULE>
     <MODULE COREREVISION="9" FULLNAME="/adc_cdc_fifo" HWVERSION="2.0" INSTANCE="adc_cdc_fifo" IPTYPE="BUS" IS_ENABLE="1" MODCLASS="BUS" MODTYPE="axis_data_fifo" VLNV="xilinx.com:ip:axis_data_fifo:2.0">
       <DOCUMENTS>
         <DOCUMENT SOURCE="https://www.xilinx.com/cgi-bin/docs/ipdoc?c=axis_data_fifo;v=v2_0;d=pg085-axi4stream-infrastructure.pdf"/>
@@ -1000,9 +853,9 @@
             <CONNECTION INSTANCE="axi_peripheral_reset" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
         </PORT>
-        <PORT CLKFREQUENCY="256000000" DIR="I" NAME="clk_in1" SIGIS="clk" SIGNAME="rf_data_converter_clk_adc0">
+        <PORT CLKFREQUENCY="256000000" DIR="I" NAME="clk_in1" SIGIS="clk" SIGNAME="rf_data_converter_clk_adc2">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="clk_adc0"/>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="clk_adc2"/>
           </CONNECTIONS>
         </PORT>
         <PORT CLKFREQUENCY="512000000" DIR="O" NAME="clk_out1" SIGIS="clk" SIGNAME="adc_clk_512_gen_clk_out1">
@@ -1010,9 +863,7 @@
             <CONNECTION INSTANCE="adc_dwidth_converter" PORT="aclk"/>
             <CONNECTION INSTANCE="adc_reset" PORT="slowest_sync_clk"/>
             <CONNECTION INSTANCE="adc_cdc_fifo" PORT="s_axis_aclk"/>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="m0_axis_aclk"/>
-            <CONNECTION INSTANCE="adc_sel_cdc" PORT="dest_clk"/>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="clk"/>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="m2_axis_aclk"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" NAME="locked" SIGIS="undef" SIGNAME="adc_clk_512_gen_locked">
@@ -1061,19 +912,19 @@
             <CONNECTION INSTANCE="adc_reset" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="s_axis_tvalid" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_adc_tvalid">
+        <PORT DIR="I" NAME="s_axis_tvalid" SIGIS="undef" SIGNAME="adc_dwidth_converter_s_axis_tvalid">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="adc_tvalid"/>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="m20_axis_tvalid"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="s_axis_tready" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_adc_tready">
+        <PORT DIR="O" NAME="s_axis_tready" SIGIS="undef" SIGNAME="adc_dwidth_converter_s_axis_tready">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="adc_tready"/>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="m20_axis_tready"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="127" NAME="s_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_adc_tdata">
+        <PORT DIR="I" LEFT="127" NAME="s_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="adc_dwidth_converter_s_axis_tdata">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="adc_tdata"/>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="m20_axis_tdata"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" NAME="m_axis_tvalid" SIGIS="undef" SIGNAME="adc_cdc_fifo_s_axis_tvalid">
@@ -1093,7 +944,7 @@
         </PORT>
       </PORTS>
       <BUSINTERFACES>
-        <BUSINTERFACE BUSNAME="adc_axis_mux_wrapper_0_adc" NAME="S_AXIS" TYPE="TARGET" VLNV="xilinx.com:interface:axis:1.0">
+        <BUSINTERFACE BUSNAME="rf_data_converter_m20_axis" NAME="S_AXIS" TYPE="SLAVE" VLNV="xilinx.com:interface:axis:1.0">
           <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="16"/>
           <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
           <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
@@ -1180,56 +1031,7 @@
           <CONNECTIONS>
             <CONNECTION INSTANCE="adc_dwidth_converter" PORT="aresetn"/>
             <CONNECTION INSTANCE="adc_cdc_fifo" PORT="s_axis_aresetn"/>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="m0_axis_aresetn"/>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="reset_n"/>
-          </CONNECTIONS>
-        </PORT>
-      </PORTS>
-      <BUSINTERFACES/>
-    </MODULE>
-    <MODULE COREREVISION="2" FULLNAME="/adc_sel_cdc" HWVERSION="1.0" INSTANCE="adc_sel_cdc" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="xpm_cdc_gen" VLNV="xilinx.com:ip:xpm_cdc_gen:1.0">
-      <DOCUMENTS>
-        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=xpm_cdc_gen;v=v1_0;d=pg382-xpm-cdc-generator.pdf"/>
-      </DOCUMENTS>
-      <PARAMETERS>
-        <PARAMETER NAME="C_CDC_TYPE" VALUE="6"/>
-        <PARAMETER NAME="SRC_CLK_PERIOD" VALUE="5000"/>
-        <PARAMETER NAME="DEST_CLK_PERIOD" VALUE="2500"/>
-        <PARAMETER NAME="SIM_ASSERT_CHK" VALUE="1"/>
-        <PARAMETER NAME="DEST_SYNC_FF" VALUE="3"/>
-        <PARAMETER NAME="INIT_SYNC_FF" VALUE="0"/>
-        <PARAMETER NAME="SRC_INPUT_REG" VALUE="1"/>
-        <PARAMETER NAME="WIDTH" VALUE="1"/>
-        <PARAMETER NAME="REG_OUTPUT" VALUE="0"/>
-        <PARAMETER NAME="SIM_LOSSLESS_GRAY_CHK" VALUE="0"/>
-        <PARAMETER NAME="SRC_SYNC_FF" VALUE="4"/>
-        <PARAMETER NAME="DEST_EXT_HSK" VALUE="1"/>
-        <PARAMETER NAME="RST_USED" VALUE="1"/>
-        <PARAMETER NAME="INIT" VALUE="1"/>
-        <PARAMETER NAME="RST_ACTIVE_HIGH" VALUE="0"/>
-        <PARAMETER NAME="CDC_TYPE" VALUE="xpm_cdc_single"/>
-        <PARAMETER NAME="Component_Name" VALUE="top_xpm_cdc_gen_0_0"/>
-        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
-      </PARAMETERS>
-      <PORTS>
-        <PORT CLKFREQUENCY="149998505" DIR="I" NAME="src_clk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT CLKFREQUENCY="512000000" DIR="I" NAME="dest_clk" SIGIS="clk" SIGNAME="adc_clk_512_gen_clk_out1">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_clk_512_gen" PORT="clk_out1"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="0" NAME="src_in" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_gpio_io_o">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="gpio_io_o"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="0" NAME="dest_out" RIGHT="0" SIGIS="undef" SIGNAME="adc_sel_cdc_dest_out">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="sel"/>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="m2_axis_aresetn"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -2460,362 +2262,6 @@
         <PERIPHERAL INSTANCE="zynq_ultra_ps_e_0"/>
       </PERIPHERALS>
     </MODULE>
-    <MODULE COREREVISION="29" FULLNAME="/axi_gpio_adc_sel" HWVERSION="2.0" INSTANCE="axi_gpio_adc_sel" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="axi_gpio" VLNV="xilinx.com:ip:axi_gpio:2.0">
-      <DOCUMENTS>
-        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=axi_gpio;v=v2_0;d=pg144-axi-gpio.pdf"/>
-      </DOCUMENTS>
-      <ADDRESSBLOCKS>
-        <ADDRESSBLOCK ACCESS="read-write" INTERFACE="S_AXI" NAME="Reg" RANGE="4096" USAGE="register">
-          <REGISTERS>
-            <REGISTER NAME="GPIO_DATA">
-              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-1 AXI GPIO Data register"/>
-              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x0"/>
-              <PROPERTY NAME="SIZE" VALUE="1"/>
-              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
-              <FIELDS>
-                <FIELD NAME="Channel_1_GPIO_DATA">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO Data Register.&#xA;For each I/O bit programmed as input&#xA;  R - Reads value on the input pin.&#xA;  W - No effect.&#xA;For each I/O bit programmed as output&#xA;  R - Reads value on GPIO_O pins&#xA;  W - Writes value to the corresponding AXI GPIO &#xA;      data register bit and output pin&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
-                </FIELD>
-              </FIELDS>
-            </REGISTER>
-            <REGISTER NAME="GPIO_TRI">
-              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-1 AXI GPIO 3-State Control register"/>
-              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x4"/>
-              <PROPERTY NAME="SIZE" VALUE="1"/>
-              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
-              <FIELDS>
-                <FIELD NAME="Channel_1_GPIO_TRI">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO 3-State Control Register&#xA;Each I/O pin of the AXI GPIO is individually programmable as an input or output   For each of the bits     0 - I/O pin configured as output     1 - I/O pin configured as input&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
-                </FIELD>
-              </FIELDS>
-            </REGISTER>
-            <REGISTER NAME="GPIO2_DATA">
-              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-2 AXI GPIO Data register"/>
-              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x8"/>
-              <PROPERTY NAME="SIZE" VALUE="32"/>
-              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
-              <FIELDS>
-                <FIELD NAME="Channel_2_GPIO_DATA">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO Data Register.&#xA;For each I/O bit programmed as input&#xA;  R - Reads value on the input pin.&#xA;  W - No effect.&#xA;For each I/O bit programmed as output&#xA;  R - Reads value on GPIO_O pins&#xA;  W - Writes value to the corresponding AXI GPIO &#xA;      data register bit and output pin&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
-                </FIELD>
-              </FIELDS>
-            </REGISTER>
-            <REGISTER NAME="GPIO2_TRI">
-              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-2 AXI GPIO 3-State Control register"/>
-              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0xC"/>
-              <PROPERTY NAME="SIZE" VALUE="32"/>
-              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
-              <FIELDS>
-                <FIELD NAME="Channel_2_GPIO_TRI">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO 3-State Control Register&#xA;Each I/O pin of the AXI GPIO is individually programmable as an input or output   For each of the bits     0 - I/O pin configured as output     1 - I/O pin configured as input&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
-                </FIELD>
-              </FIELDS>
-            </REGISTER>
-            <REGISTER NAME="GIER">
-              <PROPERTY NAME="DESCRIPTION" VALUE="Global_Interrupt_Enable register"/>
-              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x11C"/>
-              <PROPERTY NAME="SIZE" VALUE="32"/>
-              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
-              <FIELDS>
-                <FIELD NAME="Global_Interrupt_Enable">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="Master enable for the device interrupt output&#xA;  0 - Disabled&#xA;  1 - Enabled&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="31"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="31"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
-                </FIELD>
-              </FIELDS>
-            </REGISTER>
-            <REGISTER NAME="IP_IER">
-              <PROPERTY NAME="DESCRIPTION" VALUE="IP Interrupt Enable register"/>
-              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x128"/>
-              <PROPERTY NAME="SIZE" VALUE="32"/>
-              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
-              <FIELDS>
-                <FIELD NAME="Channel_1_Interrupt_Enable">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Channel 1 Interrupt&#xA;  0 - Disabled (masked)&#xA;  1 - Enabled&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
-                </FIELD>
-                <FIELD NAME="Channel_2_Interrupt_Enable">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Channel 2 Interrupt&#xA;  0 - Disabled (masked)&#xA;  1 - Enabled&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
-                </FIELD>
-              </FIELDS>
-            </REGISTER>
-            <REGISTER NAME="IP_ISR">
-              <PROPERTY NAME="DESCRIPTION" VALUE="IP Interrupt Status register"/>
-              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x120"/>
-              <PROPERTY NAME="SIZE" VALUE="32"/>
-              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
-              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
-              <FIELDS>
-                <FIELD NAME="Channel_1_Interrupt_Status">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="Channel 1 Interrupt Status&#xA;  0 - No Channel 1 input interrupt&#xA;  1 - Channel 1 input interrupt&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToToggle"/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
-                </FIELD>
-                <FIELD NAME="Channel_2_Interrupt_Status">
-                  <PROPERTY NAME="DESCRIPTION" VALUE="Channel 2 Interrupt Status&#xA;  0 - No Channel 2 input interrupt&#xA;  1 - Channel 2 input interrupt&#xA;"/>
-                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
-                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
-                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToToggle"/>
-                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
-                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
-                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
-                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
-                </FIELD>
-              </FIELDS>
-            </REGISTER>
-          </REGISTERS>
-        </ADDRESSBLOCK>
-      </ADDRESSBLOCKS>
-      <PARAMETERS>
-        <PARAMETER NAME="C_FAMILY" VALUE="zynquplus"/>
-        <PARAMETER NAME="C_S_AXI_ADDR_WIDTH" VALUE="9"/>
-        <PARAMETER NAME="C_S_AXI_DATA_WIDTH" VALUE="32"/>
-        <PARAMETER NAME="C_GPIO_WIDTH" VALUE="1"/>
-        <PARAMETER NAME="C_GPIO2_WIDTH" VALUE="32"/>
-        <PARAMETER NAME="C_ALL_INPUTS" VALUE="0"/>
-        <PARAMETER NAME="C_ALL_INPUTS_2" VALUE="0"/>
-        <PARAMETER NAME="C_ALL_OUTPUTS" VALUE="1"/>
-        <PARAMETER NAME="C_ALL_OUTPUTS_2" VALUE="0"/>
-        <PARAMETER NAME="C_INTERRUPT_PRESENT" VALUE="0"/>
-        <PARAMETER NAME="C_DOUT_DEFAULT" VALUE="0x00000000"/>
-        <PARAMETER NAME="C_TRI_DEFAULT" VALUE="0xFFFFFFFF"/>
-        <PARAMETER NAME="C_IS_DUAL" VALUE="0"/>
-        <PARAMETER NAME="C_DOUT_DEFAULT_2" VALUE="0x00000000"/>
-        <PARAMETER NAME="C_TRI_DEFAULT_2" VALUE="0xFFFFFFFF"/>
-        <PARAMETER NAME="Component_Name" VALUE="top_axi_gpio_0_1"/>
-        <PARAMETER NAME="USE_BOARD_FLOW" VALUE="false"/>
-        <PARAMETER NAME="GPIO_BOARD_INTERFACE" VALUE="Custom"/>
-        <PARAMETER NAME="GPIO2_BOARD_INTERFACE" VALUE="Custom"/>
-        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
-        <PARAMETER NAME="C_BASEADDR" VALUE="0xA0010000"/>
-        <PARAMETER NAME="C_HIGHADDR" VALUE="0xA001FFFF"/>
-      </PARAMETERS>
-      <PORTS>
-        <PORT CLKFREQUENCY="149998505" DIR="I" NAME="s_axi_aclk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="pl_clk0"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="s_axi_aresetn" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="axi_peripheral_reset_peripheral_aresetn">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_peripheral_reset" PORT="peripheral_aresetn"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="8" NAME="s_axi_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_awaddr">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_awaddr"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="s_axi_awvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_awvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_awvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="s_axi_awready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_awready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_awready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="31" NAME="s_axi_wdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_wdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_wdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="3" NAME="s_axi_wstrb" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_wstrb">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_wstrb"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="s_axi_wvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_wvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_wvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="s_axi_wready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_wready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_wready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="1" NAME="s_axi_bresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_bresp">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_bresp"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="s_axi_bvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_bvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_bvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="s_axi_bready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_bready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_bready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="8" NAME="s_axi_araddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_araddr">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_araddr"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="s_axi_arvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_arvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_arvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="s_axi_arready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_arready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_arready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="31" NAME="s_axi_rdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_rdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_rdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="1" NAME="s_axi_rresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_rresp">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_rresp"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="s_axi_rvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_rvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_rvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="s_axi_rready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_rready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_AXI_rready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="0" NAME="gpio_io_o" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_gpio_io_o">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_sel_cdc" PORT="src_in"/>
-          </CONNECTIONS>
-        </PORT>
-      </PORTS>
-      <BUSINTERFACES>
-        <BUSINTERFACE BUSNAME="ps8_0_axi_periph_M01_AXI" DATAWIDTH="32" NAME="S_AXI" TYPE="SLAVE" VLNV="xilinx.com:interface:aximm:1.0">
-          <PARAMETER NAME="DATA_WIDTH" VALUE="32"/>
-          <PARAMETER NAME="PROTOCOL" VALUE="AXI4LITE"/>
-          <PARAMETER NAME="FREQ_HZ" VALUE="149998505"/>
-          <PARAMETER NAME="ID_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="ADDR_WIDTH" VALUE="9"/>
-          <PARAMETER NAME="AWUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="ARUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="WUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="RUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="BUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="READ_WRITE_MODE" VALUE="READ_WRITE"/>
-          <PARAMETER NAME="HAS_BURST" VALUE="0"/>
-          <PARAMETER NAME="HAS_LOCK" VALUE="0"/>
-          <PARAMETER NAME="HAS_PROT" VALUE="0"/>
-          <PARAMETER NAME="HAS_CACHE" VALUE="0"/>
-          <PARAMETER NAME="HAS_QOS" VALUE="0"/>
-          <PARAMETER NAME="HAS_REGION" VALUE="0"/>
-          <PARAMETER NAME="HAS_WSTRB" VALUE="1"/>
-          <PARAMETER NAME="HAS_BRESP" VALUE="1"/>
-          <PARAMETER NAME="HAS_RRESP" VALUE="1"/>
-          <PARAMETER NAME="SUPPORTS_NARROW_BURST" VALUE="0"/>
-          <PARAMETER NAME="NUM_READ_OUTSTANDING" VALUE="2"/>
-          <PARAMETER NAME="NUM_WRITE_OUTSTANDING" VALUE="2"/>
-          <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="1"/>
-          <PARAMETER NAME="PHASE" VALUE="0.0"/>
-          <PARAMETER NAME="CLK_DOMAIN" VALUE="top_zynq_ultra_ps_e_0_0_pl_clk0"/>
-          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
-          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
-          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
-          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
-          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
-          <PORTMAPS>
-            <PORTMAP LOGICAL="ARADDR" PHYSICAL="s_axi_araddr"/>
-            <PORTMAP LOGICAL="ARREADY" PHYSICAL="s_axi_arready"/>
-            <PORTMAP LOGICAL="ARVALID" PHYSICAL="s_axi_arvalid"/>
-            <PORTMAP LOGICAL="AWADDR" PHYSICAL="s_axi_awaddr"/>
-            <PORTMAP LOGICAL="AWREADY" PHYSICAL="s_axi_awready"/>
-            <PORTMAP LOGICAL="AWVALID" PHYSICAL="s_axi_awvalid"/>
-            <PORTMAP LOGICAL="BREADY" PHYSICAL="s_axi_bready"/>
-            <PORTMAP LOGICAL="BRESP" PHYSICAL="s_axi_bresp"/>
-            <PORTMAP LOGICAL="BVALID" PHYSICAL="s_axi_bvalid"/>
-            <PORTMAP LOGICAL="RDATA" PHYSICAL="s_axi_rdata"/>
-            <PORTMAP LOGICAL="RREADY" PHYSICAL="s_axi_rready"/>
-            <PORTMAP LOGICAL="RRESP" PHYSICAL="s_axi_rresp"/>
-            <PORTMAP LOGICAL="RVALID" PHYSICAL="s_axi_rvalid"/>
-            <PORTMAP LOGICAL="WDATA" PHYSICAL="s_axi_wdata"/>
-            <PORTMAP LOGICAL="WREADY" PHYSICAL="s_axi_wready"/>
-            <PORTMAP LOGICAL="WSTRB" PHYSICAL="s_axi_wstrb"/>
-            <PORTMAP LOGICAL="WVALID" PHYSICAL="s_axi_wvalid"/>
-          </PORTMAPS>
-        </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="__NOC__" NAME="GPIO" TYPE="INITIATOR" VLNV="xilinx.com:interface:gpio:1.0">
-          <PORTMAPS>
-            <PORTMAP LOGICAL="TRI_O" PHYSICAL="gpio_io_o"/>
-          </PORTMAPS>
-        </BUSINTERFACE>
-      </BUSINTERFACES>
-    </MODULE>
     <MODULE COREREVISION="29" FULLNAME="/axi_gpio_adcio" HWVERSION="2.0" INSTANCE="axi_gpio_adcio" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="axi_gpio" VLNV="xilinx.com:ip:axi_gpio:2.0">
       <DOCUMENTS>
         <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=axi_gpio;v=v2_0;d=pg144-axi-gpio.pdf"/>
@@ -3528,6 +2974,718 @@
         </BUSINTERFACE>
       </BUSINTERFACES>
     </MODULE>
+    <MODULE COREREVISION="29" FULLNAME="/axi_gpio_dac_scale_0" HWVERSION="2.0" INSTANCE="axi_gpio_dac_scale_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="axi_gpio" VLNV="xilinx.com:ip:axi_gpio:2.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=axi_gpio;v=v2_0;d=pg144-axi-gpio.pdf"/>
+      </DOCUMENTS>
+      <ADDRESSBLOCKS>
+        <ADDRESSBLOCK ACCESS="read-write" INTERFACE="S_AXI" NAME="Reg" RANGE="4096" USAGE="register">
+          <REGISTERS>
+            <REGISTER NAME="GPIO_DATA">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-1 AXI GPIO Data register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x0"/>
+              <PROPERTY NAME="SIZE" VALUE="18"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_1_GPIO_DATA">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO Data Register.&#xA;For each I/O bit programmed as input&#xA;  R - Reads value on the input pin.&#xA;  W - No effect.&#xA;For each I/O bit programmed as output&#xA;  R - Reads value on GPIO_O pins&#xA;  W - Writes value to the corresponding AXI GPIO &#xA;      data register bit and output pin&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="18"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="GPIO_TRI">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-1 AXI GPIO 3-State Control register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x4"/>
+              <PROPERTY NAME="SIZE" VALUE="18"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_1_GPIO_TRI">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO 3-State Control Register&#xA;Each I/O pin of the AXI GPIO is individually programmable as an input or output   For each of the bits     0 - I/O pin configured as output     1 - I/O pin configured as input&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="18"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="GPIO2_DATA">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-2 AXI GPIO Data register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x8"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_2_GPIO_DATA">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO Data Register.&#xA;For each I/O bit programmed as input&#xA;  R - Reads value on the input pin.&#xA;  W - No effect.&#xA;For each I/O bit programmed as output&#xA;  R - Reads value on GPIO_O pins&#xA;  W - Writes value to the corresponding AXI GPIO &#xA;      data register bit and output pin&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="GPIO2_TRI">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-2 AXI GPIO 3-State Control register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0xC"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_2_GPIO_TRI">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO 3-State Control Register&#xA;Each I/O pin of the AXI GPIO is individually programmable as an input or output   For each of the bits     0 - I/O pin configured as output     1 - I/O pin configured as input&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="GIER">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Global_Interrupt_Enable register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x11C"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Global_Interrupt_Enable">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Master enable for the device interrupt output&#xA;  0 - Disabled&#xA;  1 - Enabled&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="31"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="31"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="IP_IER">
+              <PROPERTY NAME="DESCRIPTION" VALUE="IP Interrupt Enable register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x128"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_1_Interrupt_Enable">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Channel 1 Interrupt&#xA;  0 - Disabled (masked)&#xA;  1 - Enabled&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="Channel_2_Interrupt_Enable">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Channel 2 Interrupt&#xA;  0 - Disabled (masked)&#xA;  1 - Enabled&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="IP_ISR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="IP Interrupt Status register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x120"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_1_Interrupt_Status">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Channel 1 Interrupt Status&#xA;  0 - No Channel 1 input interrupt&#xA;  1 - Channel 1 input interrupt&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToToggle"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="Channel_2_Interrupt_Status">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Channel 2 Interrupt Status&#xA;  0 - No Channel 2 input interrupt&#xA;  1 - Channel 2 input interrupt&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToToggle"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+          </REGISTERS>
+        </ADDRESSBLOCK>
+      </ADDRESSBLOCKS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_FAMILY" VALUE="zynquplus"/>
+        <PARAMETER NAME="C_S_AXI_ADDR_WIDTH" VALUE="9"/>
+        <PARAMETER NAME="C_S_AXI_DATA_WIDTH" VALUE="32"/>
+        <PARAMETER NAME="C_GPIO_WIDTH" VALUE="18"/>
+        <PARAMETER NAME="C_GPIO2_WIDTH" VALUE="32"/>
+        <PARAMETER NAME="C_ALL_INPUTS" VALUE="0"/>
+        <PARAMETER NAME="C_ALL_INPUTS_2" VALUE="0"/>
+        <PARAMETER NAME="C_ALL_OUTPUTS" VALUE="1"/>
+        <PARAMETER NAME="C_ALL_OUTPUTS_2" VALUE="0"/>
+        <PARAMETER NAME="C_INTERRUPT_PRESENT" VALUE="0"/>
+        <PARAMETER NAME="C_DOUT_DEFAULT" VALUE="0x00000000"/>
+        <PARAMETER NAME="C_TRI_DEFAULT" VALUE="0xFFFFFFFF"/>
+        <PARAMETER NAME="C_IS_DUAL" VALUE="0"/>
+        <PARAMETER NAME="C_DOUT_DEFAULT_2" VALUE="0x00000000"/>
+        <PARAMETER NAME="C_TRI_DEFAULT_2" VALUE="0xFFFFFFFF"/>
+        <PARAMETER NAME="Component_Name" VALUE="top_axi_gpio_0_4"/>
+        <PARAMETER NAME="USE_BOARD_FLOW" VALUE="false"/>
+        <PARAMETER NAME="GPIO_BOARD_INTERFACE" VALUE="Custom"/>
+        <PARAMETER NAME="GPIO2_BOARD_INTERFACE" VALUE="Custom"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+        <PARAMETER NAME="C_BASEADDR" VALUE="0xA00F0000"/>
+        <PARAMETER NAME="C_HIGHADDR" VALUE="0xA00FFFFF"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="256000000" DIR="I" NAME="s_axi_aclk" SIGIS="clk" SIGNAME="rf_data_converter_clk_dac0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="clk_dac0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_aresetn" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="dac_reset_peripheral_aresetn">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_reset" PORT="peripheral_aresetn"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="8" NAME="s_axi_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_awaddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_awaddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_awvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_awvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_awvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_awready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_awready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_awready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="31" NAME="s_axi_wdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_wdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_wdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="3" NAME="s_axi_wstrb" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_wstrb">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_wstrb"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_wvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_wvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_wvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_wready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_wready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_wready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="1" NAME="s_axi_bresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_bresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_bresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_bvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_bvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_bvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_bready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_bready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_bready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="8" NAME="s_axi_araddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_araddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_araddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_arvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_arvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_arvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_arready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_arready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_arready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="31" NAME="s_axi_rdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_rdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_rdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="1" NAME="s_axi_rresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_rresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_rresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_rvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_rvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_rvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_rready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_rready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_AXI_rready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="17" NAME="gpio_io_o" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_gpio_io_o">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="scale_factor"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES>
+        <BUSINTERFACE BUSNAME="ps8_0_axi_periph_M12_AXI" DATAWIDTH="32" NAME="S_AXI" TYPE="SLAVE" VLNV="xilinx.com:interface:aximm:1.0">
+          <PARAMETER NAME="DATA_WIDTH" VALUE="32"/>
+          <PARAMETER NAME="PROTOCOL" VALUE="AXI4LITE"/>
+          <PARAMETER NAME="FREQ_HZ" VALUE="256000000"/>
+          <PARAMETER NAME="ID_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="ADDR_WIDTH" VALUE="9"/>
+          <PARAMETER NAME="AWUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="ARUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="WUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="RUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="BUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="READ_WRITE_MODE" VALUE="READ_WRITE"/>
+          <PARAMETER NAME="HAS_BURST" VALUE="0"/>
+          <PARAMETER NAME="HAS_LOCK" VALUE="0"/>
+          <PARAMETER NAME="HAS_PROT" VALUE="0"/>
+          <PARAMETER NAME="HAS_CACHE" VALUE="0"/>
+          <PARAMETER NAME="HAS_QOS" VALUE="0"/>
+          <PARAMETER NAME="HAS_REGION" VALUE="0"/>
+          <PARAMETER NAME="HAS_WSTRB" VALUE="1"/>
+          <PARAMETER NAME="HAS_BRESP" VALUE="1"/>
+          <PARAMETER NAME="HAS_RRESP" VALUE="1"/>
+          <PARAMETER NAME="SUPPORTS_NARROW_BURST" VALUE="0"/>
+          <PARAMETER NAME="NUM_READ_OUTSTANDING" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_OUTSTANDING" VALUE="1"/>
+          <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="1"/>
+          <PARAMETER NAME="PHASE" VALUE="0.0"/>
+          <PARAMETER NAME="CLK_DOMAIN" VALUE="top_usp_rf_data_converter_0_0_clk_dac0"/>
+          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
+          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
+          <PORTMAPS>
+            <PORTMAP LOGICAL="ARADDR" PHYSICAL="s_axi_araddr"/>
+            <PORTMAP LOGICAL="ARREADY" PHYSICAL="s_axi_arready"/>
+            <PORTMAP LOGICAL="ARVALID" PHYSICAL="s_axi_arvalid"/>
+            <PORTMAP LOGICAL="AWADDR" PHYSICAL="s_axi_awaddr"/>
+            <PORTMAP LOGICAL="AWREADY" PHYSICAL="s_axi_awready"/>
+            <PORTMAP LOGICAL="AWVALID" PHYSICAL="s_axi_awvalid"/>
+            <PORTMAP LOGICAL="BREADY" PHYSICAL="s_axi_bready"/>
+            <PORTMAP LOGICAL="BRESP" PHYSICAL="s_axi_bresp"/>
+            <PORTMAP LOGICAL="BVALID" PHYSICAL="s_axi_bvalid"/>
+            <PORTMAP LOGICAL="RDATA" PHYSICAL="s_axi_rdata"/>
+            <PORTMAP LOGICAL="RREADY" PHYSICAL="s_axi_rready"/>
+            <PORTMAP LOGICAL="RRESP" PHYSICAL="s_axi_rresp"/>
+            <PORTMAP LOGICAL="RVALID" PHYSICAL="s_axi_rvalid"/>
+            <PORTMAP LOGICAL="WDATA" PHYSICAL="s_axi_wdata"/>
+            <PORTMAP LOGICAL="WREADY" PHYSICAL="s_axi_wready"/>
+            <PORTMAP LOGICAL="WSTRB" PHYSICAL="s_axi_wstrb"/>
+            <PORTMAP LOGICAL="WVALID" PHYSICAL="s_axi_wvalid"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+        <BUSINTERFACE BUSNAME="__NOC__" NAME="GPIO" TYPE="INITIATOR" VLNV="xilinx.com:interface:gpio:1.0">
+          <PORTMAPS>
+            <PORTMAP LOGICAL="TRI_O" PHYSICAL="gpio_io_o"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+      </BUSINTERFACES>
+    </MODULE>
+    <MODULE COREREVISION="29" FULLNAME="/axi_gpio_dac_scale_1" HWVERSION="2.0" INSTANCE="axi_gpio_dac_scale_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="axi_gpio" VLNV="xilinx.com:ip:axi_gpio:2.0">
+      <DOCUMENTS>
+        <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=axi_gpio;v=v2_0;d=pg144-axi-gpio.pdf"/>
+      </DOCUMENTS>
+      <ADDRESSBLOCKS>
+        <ADDRESSBLOCK ACCESS="read-write" INTERFACE="S_AXI" NAME="Reg" RANGE="4096" USAGE="register">
+          <REGISTERS>
+            <REGISTER NAME="GPIO_DATA">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-1 AXI GPIO Data register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x0"/>
+              <PROPERTY NAME="SIZE" VALUE="18"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_1_GPIO_DATA">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO Data Register.&#xA;For each I/O bit programmed as input&#xA;  R - Reads value on the input pin.&#xA;  W - No effect.&#xA;For each I/O bit programmed as output&#xA;  R - Reads value on GPIO_O pins&#xA;  W - Writes value to the corresponding AXI GPIO &#xA;      data register bit and output pin&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="18"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="GPIO_TRI">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-1 AXI GPIO 3-State Control register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x4"/>
+              <PROPERTY NAME="SIZE" VALUE="18"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_1_GPIO_TRI">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO 3-State Control Register&#xA;Each I/O pin of the AXI GPIO is individually programmable as an input or output   For each of the bits     0 - I/O pin configured as output     1 - I/O pin configured as input&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="18"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="GPIO2_DATA">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-2 AXI GPIO Data register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x8"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_2_GPIO_DATA">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO Data Register.&#xA;For each I/O bit programmed as input&#xA;  R - Reads value on the input pin.&#xA;  W - No effect.&#xA;For each I/O bit programmed as output&#xA;  R - Reads value on GPIO_O pins&#xA;  W - Writes value to the corresponding AXI GPIO &#xA;      data register bit and output pin&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="GPIO2_TRI">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Channel-2 AXI GPIO 3-State Control register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0xC"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_2_GPIO_TRI">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="AXI GPIO 3-State Control Register&#xA;Each I/O pin of the AXI GPIO is individually programmable as an input or output   For each of the bits     0 - I/O pin configured as output     1 - I/O pin configured as input&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="32"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="GIER">
+              <PROPERTY NAME="DESCRIPTION" VALUE="Global_Interrupt_Enable register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x11C"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Global_Interrupt_Enable">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Master enable for the device interrupt output&#xA;  0 - Disabled&#xA;  1 - Enabled&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="31"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="31"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="IP_IER">
+              <PROPERTY NAME="DESCRIPTION" VALUE="IP Interrupt Enable register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x128"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_1_Interrupt_Enable">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Channel 1 Interrupt&#xA;  0 - Disabled (masked)&#xA;  1 - Enabled&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="Channel_2_Interrupt_Enable">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Enable Channel 2 Interrupt&#xA;  0 - Disabled (masked)&#xA;  1 - Enabled&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE=""/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+            <REGISTER NAME="IP_ISR">
+              <PROPERTY NAME="DESCRIPTION" VALUE="IP Interrupt Status register"/>
+              <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0x120"/>
+              <PROPERTY NAME="SIZE" VALUE="32"/>
+              <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+              <PROPERTY NAME="IS_ENABLED" VALUE="true"/>
+              <PROPERTY NAME="RESET_VALUE" VALUE="0x0"/>
+              <FIELDS>
+                <FIELD NAME="Channel_1_Interrupt_Status">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Channel 1 Interrupt Status&#xA;  0 - No Channel 1 input interrupt&#xA;  1 - Channel 1 input interrupt&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToToggle"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="0"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+                <FIELD NAME="Channel_2_Interrupt_Status">
+                  <PROPERTY NAME="DESCRIPTION" VALUE="Channel 2 Interrupt Status&#xA;  0 - No Channel 2 input interrupt&#xA;  1 - Channel 2 input interrupt&#xA;"/>
+                  <PROPERTY NAME="ADDRESS_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="ACCESS" VALUE="read-write"/>
+                  <PROPERTY NAME="MODIFIED_READ_VALUES" VALUE="oneToToggle"/>
+                  <PROPERTY NAME="WRITE_CONSTRAINT" VALUE="0"/>
+                  <PROPERTY NAME="READ_ACTION" VALUE=""/>
+                  <PROPERTY NAME="BIT_OFFSET" VALUE="1"/>
+                  <PROPERTY NAME="BIT_WIDTH" VALUE="1"/>
+                </FIELD>
+              </FIELDS>
+            </REGISTER>
+          </REGISTERS>
+        </ADDRESSBLOCK>
+      </ADDRESSBLOCKS>
+      <PARAMETERS>
+        <PARAMETER NAME="C_FAMILY" VALUE="zynquplus"/>
+        <PARAMETER NAME="C_S_AXI_ADDR_WIDTH" VALUE="9"/>
+        <PARAMETER NAME="C_S_AXI_DATA_WIDTH" VALUE="32"/>
+        <PARAMETER NAME="C_GPIO_WIDTH" VALUE="18"/>
+        <PARAMETER NAME="C_GPIO2_WIDTH" VALUE="32"/>
+        <PARAMETER NAME="C_ALL_INPUTS" VALUE="0"/>
+        <PARAMETER NAME="C_ALL_INPUTS_2" VALUE="0"/>
+        <PARAMETER NAME="C_ALL_OUTPUTS" VALUE="1"/>
+        <PARAMETER NAME="C_ALL_OUTPUTS_2" VALUE="0"/>
+        <PARAMETER NAME="C_INTERRUPT_PRESENT" VALUE="0"/>
+        <PARAMETER NAME="C_DOUT_DEFAULT" VALUE="0x00000000"/>
+        <PARAMETER NAME="C_TRI_DEFAULT" VALUE="0xFFFFFFFF"/>
+        <PARAMETER NAME="C_IS_DUAL" VALUE="0"/>
+        <PARAMETER NAME="C_DOUT_DEFAULT_2" VALUE="0x00000000"/>
+        <PARAMETER NAME="C_TRI_DEFAULT_2" VALUE="0xFFFFFFFF"/>
+        <PARAMETER NAME="Component_Name" VALUE="top_axi_gpio_dac_scale_0_0"/>
+        <PARAMETER NAME="USE_BOARD_FLOW" VALUE="false"/>
+        <PARAMETER NAME="GPIO_BOARD_INTERFACE" VALUE="Custom"/>
+        <PARAMETER NAME="GPIO2_BOARD_INTERFACE" VALUE="Custom"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+        <PARAMETER NAME="C_BASEADDR" VALUE="0xA0100000"/>
+        <PARAMETER NAME="C_HIGHADDR" VALUE="0xA010FFFF"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="256000000" DIR="I" NAME="s_axi_aclk" SIGIS="clk" SIGNAME="rf_data_converter_clk_dac0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="clk_dac0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_aresetn" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="dac_reset_peripheral_aresetn">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_reset" PORT="peripheral_aresetn"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="8" NAME="s_axi_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_awaddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_awaddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_awvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_awvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_awvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_awready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_awready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_awready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="31" NAME="s_axi_wdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_wdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_wdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="3" NAME="s_axi_wstrb" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_wstrb">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_wstrb"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_wvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_wvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_wvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_wready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_wready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_wready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="1" NAME="s_axi_bresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_bresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_bresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_bvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_bvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_bvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_bready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_bready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_bready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="8" NAME="s_axi_araddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_araddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_araddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_arvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_arvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_arvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_arready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_arready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_arready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="31" NAME="s_axi_rdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_rdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_rdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="1" NAME="s_axi_rresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_rresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_rresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axi_rvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_rvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_rvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axi_rready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_rready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_AXI_rready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="17" NAME="gpio_io_o" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_gpio_io_o">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="scale_factor"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES>
+        <BUSINTERFACE BUSNAME="ps8_0_axi_periph_M13_AXI" DATAWIDTH="32" NAME="S_AXI" TYPE="SLAVE" VLNV="xilinx.com:interface:aximm:1.0">
+          <PARAMETER NAME="DATA_WIDTH" VALUE="32"/>
+          <PARAMETER NAME="PROTOCOL" VALUE="AXI4LITE"/>
+          <PARAMETER NAME="FREQ_HZ" VALUE="256000000"/>
+          <PARAMETER NAME="ID_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="ADDR_WIDTH" VALUE="9"/>
+          <PARAMETER NAME="AWUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="ARUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="WUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="RUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="BUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="READ_WRITE_MODE" VALUE="READ_WRITE"/>
+          <PARAMETER NAME="HAS_BURST" VALUE="0"/>
+          <PARAMETER NAME="HAS_LOCK" VALUE="0"/>
+          <PARAMETER NAME="HAS_PROT" VALUE="0"/>
+          <PARAMETER NAME="HAS_CACHE" VALUE="0"/>
+          <PARAMETER NAME="HAS_QOS" VALUE="0"/>
+          <PARAMETER NAME="HAS_REGION" VALUE="0"/>
+          <PARAMETER NAME="HAS_WSTRB" VALUE="1"/>
+          <PARAMETER NAME="HAS_BRESP" VALUE="1"/>
+          <PARAMETER NAME="HAS_RRESP" VALUE="1"/>
+          <PARAMETER NAME="SUPPORTS_NARROW_BURST" VALUE="0"/>
+          <PARAMETER NAME="NUM_READ_OUTSTANDING" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_OUTSTANDING" VALUE="1"/>
+          <PARAMETER NAME="MAX_BURST_LENGTH" VALUE="1"/>
+          <PARAMETER NAME="PHASE" VALUE="0.0"/>
+          <PARAMETER NAME="CLK_DOMAIN" VALUE="top_usp_rf_data_converter_0_0_clk_dac0"/>
+          <PARAMETER NAME="NUM_READ_THREADS" VALUE="1"/>
+          <PARAMETER NAME="NUM_WRITE_THREADS" VALUE="1"/>
+          <PARAMETER NAME="RUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="WUSER_BITS_PER_BYTE" VALUE="0"/>
+          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
+          <PORTMAPS>
+            <PORTMAP LOGICAL="ARADDR" PHYSICAL="s_axi_araddr"/>
+            <PORTMAP LOGICAL="ARREADY" PHYSICAL="s_axi_arready"/>
+            <PORTMAP LOGICAL="ARVALID" PHYSICAL="s_axi_arvalid"/>
+            <PORTMAP LOGICAL="AWADDR" PHYSICAL="s_axi_awaddr"/>
+            <PORTMAP LOGICAL="AWREADY" PHYSICAL="s_axi_awready"/>
+            <PORTMAP LOGICAL="AWVALID" PHYSICAL="s_axi_awvalid"/>
+            <PORTMAP LOGICAL="BREADY" PHYSICAL="s_axi_bready"/>
+            <PORTMAP LOGICAL="BRESP" PHYSICAL="s_axi_bresp"/>
+            <PORTMAP LOGICAL="BVALID" PHYSICAL="s_axi_bvalid"/>
+            <PORTMAP LOGICAL="RDATA" PHYSICAL="s_axi_rdata"/>
+            <PORTMAP LOGICAL="RREADY" PHYSICAL="s_axi_rready"/>
+            <PORTMAP LOGICAL="RRESP" PHYSICAL="s_axi_rresp"/>
+            <PORTMAP LOGICAL="RVALID" PHYSICAL="s_axi_rvalid"/>
+            <PORTMAP LOGICAL="WDATA" PHYSICAL="s_axi_wdata"/>
+            <PORTMAP LOGICAL="WREADY" PHYSICAL="s_axi_wready"/>
+            <PORTMAP LOGICAL="WSTRB" PHYSICAL="s_axi_wstrb"/>
+            <PORTMAP LOGICAL="WVALID" PHYSICAL="s_axi_wvalid"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+        <BUSINTERFACE BUSNAME="__NOC__" NAME="GPIO" TYPE="INITIATOR" VLNV="xilinx.com:interface:gpio:1.0">
+          <PORTMAPS>
+            <PORTMAP LOGICAL="TRI_O" PHYSICAL="gpio_io_o"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+      </BUSINTERFACES>
+    </MODULE>
     <MODULE COREREVISION="29" FULLNAME="/axi_gpio_trigger_sel" HWVERSION="2.0" INSTANCE="axi_gpio_trigger_sel" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="axi_gpio" VLNV="xilinx.com:ip:axi_gpio:2.0">
       <DOCUMENTS>
         <DOCUMENT SOURCE="http://www.xilinx.com/cgi-bin/docs/ipdoc?c=axi_gpio;v=v2_0;d=pg144-axi-gpio.pdf"/>
@@ -3927,7 +4085,6 @@
             <CONNECTION INSTANCE="axi_dma_0" PORT="axi_resetn"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M00_ARESETN"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="ARESETN"/>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_aresetn"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_ARESETN"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M02_ARESETN"/>
             <CONNECTION INSTANCE="axi_smc" PORT="aresetn"/>
@@ -4793,6 +4950,198 @@
         </BUSINTERFACE>
       </BUSINTERFACES>
     </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/dac_prescaler_wrapper_0" HWVERSION="1.0" INSTANCE="dac_prescaler_wrapper_0" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="dac_prescaler_wrapper" VLNV="xilinx.com:module_ref:dac_prescaler_wrapper:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="Component_Name" VALUE="top_dac_prescaler_wrapper_0_0"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="256000000" DIR="I" NAME="clk" SIGIS="clk" SIGNAME="rf_data_converter_clk_dac0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="clk_dac0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="reset_n" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="dac_reset_peripheral_aresetn">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_reset" PORT="peripheral_aresetn"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="255" NAME="m_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_m_axis_tdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="s00_axis_tdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="m_axis_tvalid" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_m_axis_tvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="s00_axis_tvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="m_axis_tready" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_m_axis_tready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="s00_axis_tready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="255" NAME="s_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_s_axis_tdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_dwidth_converter" PORT="m_axis_tdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axis_tvalid" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_s_axis_tvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_dwidth_converter" PORT="m_axis_tvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axis_tready" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_s_axis_tready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_dwidth_converter" PORT="m_axis_tready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="17" NAME="scale_factor" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_gpio_io_o">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="gpio_io_o"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES>
+        <BUSINTERFACE BUSNAME="dac_prescaler_wrapper_0_m_axis" NAME="m_axis" TYPE="INITIATOR" VLNV="xilinx.com:interface:axis:1.0">
+          <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="32"/>
+          <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="TUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="HAS_TREADY" VALUE="1"/>
+          <PARAMETER NAME="HAS_TSTRB" VALUE="0"/>
+          <PARAMETER NAME="HAS_TKEEP" VALUE="0"/>
+          <PARAMETER NAME="HAS_TLAST" VALUE="0"/>
+          <PARAMETER NAME="FREQ_HZ" VALUE="256000000"/>
+          <PARAMETER NAME="PHASE" VALUE="0.0"/>
+          <PARAMETER NAME="CLK_DOMAIN" VALUE="top_usp_rf_data_converter_0_0_clk_dac0"/>
+          <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
+          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
+          <PORTMAPS>
+            <PORTMAP LOGICAL="TDATA" PHYSICAL="m_axis_tdata"/>
+            <PORTMAP LOGICAL="TVALID" PHYSICAL="m_axis_tvalid"/>
+            <PORTMAP LOGICAL="TREADY" PHYSICAL="m_axis_tready"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+        <BUSINTERFACE BUSNAME="dac_rate_converter_0_dac_0_dwidth_converter_M_AXIS" NAME="s_axis" TYPE="TARGET" VLNV="xilinx.com:interface:axis:1.0">
+          <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="32"/>
+          <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="TUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="HAS_TREADY" VALUE="1"/>
+          <PARAMETER NAME="HAS_TSTRB" VALUE="0"/>
+          <PARAMETER NAME="HAS_TKEEP" VALUE="0"/>
+          <PARAMETER NAME="HAS_TLAST" VALUE="0"/>
+          <PARAMETER NAME="FREQ_HZ" VALUE="256000000"/>
+          <PARAMETER NAME="PHASE" VALUE="0.0"/>
+          <PARAMETER NAME="CLK_DOMAIN" VALUE="top_usp_rf_data_converter_0_0_clk_dac0"/>
+          <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
+          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
+          <PORTMAPS>
+            <PORTMAP LOGICAL="TDATA" PHYSICAL="s_axis_tdata"/>
+            <PORTMAP LOGICAL="TVALID" PHYSICAL="s_axis_tvalid"/>
+            <PORTMAP LOGICAL="TREADY" PHYSICAL="s_axis_tready"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+      </BUSINTERFACES>
+    </MODULE>
+    <MODULE COREREVISION="1" FULLNAME="/dac_prescaler_wrapper_1" HWVERSION="1.0" INSTANCE="dac_prescaler_wrapper_1" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="dac_prescaler_wrapper" VLNV="xilinx.com:module_ref:dac_prescaler_wrapper:1.0">
+      <DOCUMENTS/>
+      <PARAMETERS>
+        <PARAMETER NAME="Component_Name" VALUE="top_dac_prescaler_wrapper_0_1"/>
+        <PARAMETER NAME="EDK_IPTYPE" VALUE="PERIPHERAL"/>
+      </PARAMETERS>
+      <PORTS>
+        <PORT CLKFREQUENCY="256000000" DIR="I" NAME="clk" SIGIS="clk" SIGNAME="rf_data_converter_clk_dac0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="clk_dac0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="reset_n" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="dac_reset_peripheral_aresetn">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_reset" PORT="peripheral_aresetn"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="255" NAME="m_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_m_axis_tdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="s01_axis_tdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="m_axis_tvalid" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_m_axis_tvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="s01_axis_tvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="m_axis_tready" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_m_axis_tready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="s01_axis_tready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="255" NAME="s_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_s_axis_tdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_dwidth_converter" PORT="m_axis_tdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="s_axis_tvalid" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_s_axis_tvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_dwidth_converter" PORT="m_axis_tvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="s_axis_tready" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_s_axis_tready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_dwidth_converter" PORT="m_axis_tready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="17" NAME="scale_factor" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_gpio_io_o">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="gpio_io_o"/>
+          </CONNECTIONS>
+        </PORT>
+      </PORTS>
+      <BUSINTERFACES>
+        <BUSINTERFACE BUSNAME="dac_prescaler_wrapper_1_m_axis" NAME="m_axis" TYPE="INITIATOR" VLNV="xilinx.com:interface:axis:1.0">
+          <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="32"/>
+          <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="TUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="HAS_TREADY" VALUE="1"/>
+          <PARAMETER NAME="HAS_TSTRB" VALUE="0"/>
+          <PARAMETER NAME="HAS_TKEEP" VALUE="0"/>
+          <PARAMETER NAME="HAS_TLAST" VALUE="0"/>
+          <PARAMETER NAME="FREQ_HZ" VALUE="256000000"/>
+          <PARAMETER NAME="PHASE" VALUE="0.0"/>
+          <PARAMETER NAME="CLK_DOMAIN" VALUE="top_usp_rf_data_converter_0_0_clk_dac0"/>
+          <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
+          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
+          <PORTMAPS>
+            <PORTMAP LOGICAL="TDATA" PHYSICAL="m_axis_tdata"/>
+            <PORTMAP LOGICAL="TVALID" PHYSICAL="m_axis_tvalid"/>
+            <PORTMAP LOGICAL="TREADY" PHYSICAL="m_axis_tready"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+        <BUSINTERFACE BUSNAME="dac_rate_converter_1_dac_1_dwidth_converter_M_AXIS" NAME="s_axis" TYPE="TARGET" VLNV="xilinx.com:interface:axis:1.0">
+          <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="32"/>
+          <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="TUSER_WIDTH" VALUE="0"/>
+          <PARAMETER NAME="HAS_TREADY" VALUE="1"/>
+          <PARAMETER NAME="HAS_TSTRB" VALUE="0"/>
+          <PARAMETER NAME="HAS_TKEEP" VALUE="0"/>
+          <PARAMETER NAME="HAS_TLAST" VALUE="0"/>
+          <PARAMETER NAME="FREQ_HZ" VALUE="256000000"/>
+          <PARAMETER NAME="PHASE" VALUE="0.0"/>
+          <PARAMETER NAME="CLK_DOMAIN" VALUE="top_usp_rf_data_converter_0_0_clk_dac0"/>
+          <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
+          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
+          <PORTMAPS>
+            <PORTMAP LOGICAL="TDATA" PHYSICAL="s_axis_tdata"/>
+            <PORTMAP LOGICAL="TVALID" PHYSICAL="s_axis_tvalid"/>
+            <PORTMAP LOGICAL="TREADY" PHYSICAL="s_axis_tready"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+      </BUSINTERFACES>
+    </MODULE>
     <MODULE COREREVISION="9" FULLNAME="/dac_rate_converter_0/dac_0_cdc_fifo" HWVERSION="2.0" INSTANCE="dac_rate_converter_0_dac_0_cdc_fifo" IPTYPE="BUS" IS_ENABLE="1" MODCLASS="BUS" MODTYPE="axis_data_fifo" VLNV="xilinx.com:ip:axis_data_fifo:2.0">
       <DOCUMENTS>
         <DOCUMENT SOURCE="https://www.xilinx.com/cgi-bin/docs/ipdoc?c=axis_data_fifo;v=v2_0;d=pg085-axi4stream-infrastructure.pdf"/>
@@ -4984,19 +5333,19 @@
             <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_cdc_fifo" PORT="m_axis_tdata"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="m_axis_tvalid" SIGIS="undef" SIGNAME="dac_rate_converter_0_dac_0_dwidth_converter_m_axis_tvalid">
+        <PORT DIR="O" NAME="m_axis_tvalid" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_s_axis_tvalid">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="s00_axis_tvalid"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="s_axis_tvalid"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="m_axis_tready" SIGIS="undef" SIGNAME="dac_rate_converter_0_dac_0_dwidth_converter_m_axis_tready">
+        <PORT DIR="I" NAME="m_axis_tready" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_s_axis_tready">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="s00_axis_tready"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="s_axis_tready"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="255" NAME="m_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_rate_converter_0_dac_0_dwidth_converter_m_axis_tdata">
+        <PORT DIR="O" LEFT="255" NAME="m_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_s_axis_tdata">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="s00_axis_tdata"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="s_axis_tdata"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -5021,7 +5370,7 @@
             <PORTMAP LOGICAL="TDATA" PHYSICAL="s_axis_tdata"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="dac_rate_converter_0_dac_0_dwidth_converter_M_AXIS" NAME="M_AXIS" TYPE="MASTER" VLNV="xilinx.com:interface:axis:1.0">
+        <BUSINTERFACE BUSNAME="dac_rate_converter_0_dac_0_dwidth_converter_M_AXIS" NAME="M_AXIS" TYPE="INITIATOR" VLNV="xilinx.com:interface:axis:1.0">
           <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="32"/>
           <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
           <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
@@ -5234,19 +5583,19 @@
             <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_cdc_fifo" PORT="m_axis_tdata"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="m_axis_tvalid" SIGIS="undef" SIGNAME="dac_rate_converter_1_dac_1_dwidth_converter_m_axis_tvalid">
+        <PORT DIR="O" NAME="m_axis_tvalid" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_s_axis_tvalid">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="s01_axis_tvalid"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="s_axis_tvalid"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="m_axis_tready" SIGIS="undef" SIGNAME="dac_rate_converter_1_dac_1_dwidth_converter_m_axis_tready">
+        <PORT DIR="I" NAME="m_axis_tready" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_s_axis_tready">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="s01_axis_tready"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="s_axis_tready"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="255" NAME="m_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_rate_converter_1_dac_1_dwidth_converter_m_axis_tdata">
+        <PORT DIR="O" LEFT="255" NAME="m_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_s_axis_tdata">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="rf_data_converter" PORT="s01_axis_tdata"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="s_axis_tdata"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -5271,7 +5620,7 @@
             <PORTMAP LOGICAL="TDATA" PHYSICAL="s_axis_tdata"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="dac_rate_converter_1_dac_1_dwidth_converter_M_AXIS" NAME="M_AXIS" TYPE="MASTER" VLNV="xilinx.com:interface:axis:1.0">
+        <BUSINTERFACE BUSNAME="dac_rate_converter_1_dac_1_dwidth_converter_M_AXIS" NAME="M_AXIS" TYPE="INITIATOR" VLNV="xilinx.com:interface:axis:1.0">
           <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="32"/>
           <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
           <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
@@ -5335,6 +5684,12 @@
             <CONNECTION INSTANCE="rf_data_converter" PORT="s0_axis_aresetn"/>
             <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_dwidth_converter" PORT="aresetn"/>
             <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_dwidth_converter" PORT="aresetn"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="reset_n"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="reset_n"/>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_aresetn"/>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_ARESETN"/>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_aresetn"/>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_ARESETN"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -9559,7 +9914,7 @@
       </DOCUMENTS>
       <PARAMETERS>
         <PARAMETER NAME="NUM_SI" VALUE="1"/>
-        <PARAMETER NAME="NUM_MI" VALUE="12"/>
+        <PARAMETER NAME="NUM_MI" VALUE="14"/>
         <PARAMETER NAME="STRATEGY" VALUE="0"/>
         <PARAMETER NAME="ENABLE_ADVANCED_OPTIONS" VALUE="0"/>
         <PARAMETER NAME="ENABLE_PROTOCOL_CHECKERS" VALUE="0"/>
@@ -10016,6 +10371,200 @@
             <CONNECTION INSTANCE="axi_peripheral_reset" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
         </PORT>
+        <PORT DIR="I" NAME="M12_ACLK" SIGIS="clk" SIGNAME="rf_data_converter_clk_dac0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="clk_dac0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M12_ARESETN" SIGIS="rst" SIGNAME="dac_reset_peripheral_aresetn">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_reset" PORT="peripheral_aresetn"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M13_ACLK" SIGIS="clk" SIGNAME="rf_data_converter_clk_dac0">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="rf_data_converter" PORT="clk_dac0"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M13_ARESETN" SIGIS="rst" SIGNAME="dac_reset_peripheral_aresetn">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="dac_reset" PORT="peripheral_aresetn"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="8" NAME="M12_AXI_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_awaddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_awaddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M12_AXI_awprot" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M12_AXI_awvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_awvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_awvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M12_AXI_awready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_awready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_awready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="31" NAME="M12_AXI_wdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_wdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_wdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="3" NAME="M12_AXI_wstrb" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_wstrb">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_wstrb"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M12_AXI_wvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_wvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_wvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M12_AXI_wready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_wready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_wready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="1" NAME="M12_AXI_bresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_bresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_bresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M12_AXI_bvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_bvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_bvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M12_AXI_bready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_bready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_bready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="8" NAME="M12_AXI_araddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_araddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_araddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M12_AXI_arprot" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M12_AXI_arvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_arvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_arvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M12_AXI_arready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_arready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_arready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="31" NAME="M12_AXI_rdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_rdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_rdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="1" NAME="M12_AXI_rresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_rresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_rresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M12_AXI_rvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_rvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_rvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M12_AXI_rready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_0_s_axi_rready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_rready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="8" NAME="M13_AXI_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_awaddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_awaddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M13_AXI_awprot" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M13_AXI_awvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_awvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_awvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M13_AXI_awready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_awready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_awready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="31" NAME="M13_AXI_wdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_wdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_wdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="3" NAME="M13_AXI_wstrb" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_wstrb">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_wstrb"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M13_AXI_wvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_wvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_wvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M13_AXI_wready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_wready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_wready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="1" NAME="M13_AXI_bresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_bresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_bresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M13_AXI_bvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_bvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_bvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M13_AXI_bready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_bready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_bready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" LEFT="8" NAME="M13_AXI_araddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_araddr">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_araddr"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M13_AXI_arprot" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M13_AXI_arvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_arvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_arvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M13_AXI_arready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_arready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_arready"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="31" NAME="M13_AXI_rdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_rdata">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_rdata"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" LEFT="1" NAME="M13_AXI_rresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_rresp">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_rresp"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="I" NAME="M13_AXI_rvalid" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_rvalid">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_rvalid"/>
+          </CONNECTIONS>
+        </PORT>
+        <PORT DIR="O" NAME="M13_AXI_rready" SIGIS="undef" SIGNAME="axi_gpio_dac_scale_1_s_axi_rready">
+          <CONNECTIONS>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_rready"/>
+          </CONNECTIONS>
+        </PORT>
         <PORT DIR="I" LEFT="15" NAME="S00_AXI_awid" RIGHT="0" SIGIS="undef" SIGNAME="ps8_0_axi_periph_S00_AXI_awid">
           <CONNECTIONS>
             <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="maxigp0_awid"/>
@@ -10286,93 +10835,25 @@
             <CONNECTION INSTANCE="axi_dma_0" PORT="s_axi_lite_rready"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="39" NAME="M01_AXI_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_awaddr">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_awaddr"/>
-          </CONNECTIONS>
-        </PORT>
+        <PORT DIR="O" NAME="M01_AXI_awaddr" SIGIS="undef"/>
         <PORT DIR="O" NAME="M01_AXI_awprot" SIGIS="undef"/>
-        <PORT DIR="O" NAME="M01_AXI_awvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_awvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_awvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M01_AXI_awready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_awready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_awready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="31" NAME="M01_AXI_wdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_wdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_wdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="3" NAME="M01_AXI_wstrb" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_wstrb">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_wstrb"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="M01_AXI_wvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_wvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_wvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M01_AXI_wready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_wready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_wready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="1" NAME="M01_AXI_bresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_bresp">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_bresp"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M01_AXI_bvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_bvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_bvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="M01_AXI_bready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_bready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_bready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="39" NAME="M01_AXI_araddr" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_araddr">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_araddr"/>
-          </CONNECTIONS>
-        </PORT>
+        <PORT DIR="O" NAME="M01_AXI_awvalid" SIGIS="undef"/>
+        <PORT DIR="I" NAME="M01_AXI_awready" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M01_AXI_wdata" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M01_AXI_wstrb" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M01_AXI_wvalid" SIGIS="undef"/>
+        <PORT DIR="I" NAME="M01_AXI_wready" SIGIS="undef"/>
+        <PORT DIR="I" NAME="M01_AXI_bresp" SIGIS="undef"/>
+        <PORT DIR="I" NAME="M01_AXI_bvalid" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M01_AXI_bready" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M01_AXI_araddr" SIGIS="undef"/>
         <PORT DIR="O" NAME="M01_AXI_arprot" SIGIS="undef"/>
-        <PORT DIR="O" NAME="M01_AXI_arvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_arvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_arvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M01_AXI_arready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_arready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_arready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="31" NAME="M01_AXI_rdata" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_rdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_rdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" LEFT="1" NAME="M01_AXI_rresp" RIGHT="0" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_rresp">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_rresp"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="M01_AXI_rvalid" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_rvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_rvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="M01_AXI_rready" SIGIS="undef" SIGNAME="axi_gpio_adc_sel_s_axi_rready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_rready"/>
-          </CONNECTIONS>
-        </PORT>
+        <PORT DIR="O" NAME="M01_AXI_arvalid" SIGIS="undef"/>
+        <PORT DIR="I" NAME="M01_AXI_arready" SIGIS="undef"/>
+        <PORT DIR="I" NAME="M01_AXI_rdata" SIGIS="undef"/>
+        <PORT DIR="I" NAME="M01_AXI_rresp" SIGIS="undef"/>
+        <PORT DIR="I" NAME="M01_AXI_rvalid" SIGIS="undef"/>
+        <PORT DIR="O" NAME="M01_AXI_rready" SIGIS="undef"/>
         <PORT DIR="O" LEFT="39" NAME="M02_AXI_awaddr" RIGHT="0" SIGIS="undef" SIGNAME="ps8_0_axi_periph_M02_AXI_awaddr">
           <CONNECTIONS>
             <CONNECTION INSTANCE="rf_data_converter" PORT="s_axi_awaddr"/>
@@ -11311,7 +11792,7 @@
             <PORTMAP LOGICAL="RREADY" PHYSICAL="M00_AXI_rready"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="ps8_0_axi_periph_M01_AXI" DATAWIDTH="32" NAME="M01_AXI" TYPE="MASTER" VLNV="xilinx.com:interface:aximm:1.0">
+        <BUSINTERFACE BUSNAME="__NOC__" NAME="M01_AXI" TYPE="MASTER" VLNV="xilinx.com:interface:aximm:1.0">
           <PORTMAPS>
             <PORTMAP LOGICAL="AWADDR" PHYSICAL="M01_AXI_awaddr"/>
             <PORTMAP LOGICAL="AWPROT" PHYSICAL="M01_AXI_awprot"/>
@@ -11564,6 +12045,52 @@
             <PORTMAP LOGICAL="RREADY" PHYSICAL="M11_AXI_rready"/>
           </PORTMAPS>
         </BUSINTERFACE>
+        <BUSINTERFACE BUSNAME="ps8_0_axi_periph_M12_AXI" DATAWIDTH="32" NAME="M12_AXI" TYPE="MASTER" VLNV="xilinx.com:interface:aximm:1.0">
+          <PORTMAPS>
+            <PORTMAP LOGICAL="AWADDR" PHYSICAL="M12_AXI_awaddr"/>
+            <PORTMAP LOGICAL="AWPROT" PHYSICAL="M12_AXI_awprot"/>
+            <PORTMAP LOGICAL="AWVALID" PHYSICAL="M12_AXI_awvalid"/>
+            <PORTMAP LOGICAL="AWREADY" PHYSICAL="M12_AXI_awready"/>
+            <PORTMAP LOGICAL="WDATA" PHYSICAL="M12_AXI_wdata"/>
+            <PORTMAP LOGICAL="WSTRB" PHYSICAL="M12_AXI_wstrb"/>
+            <PORTMAP LOGICAL="WVALID" PHYSICAL="M12_AXI_wvalid"/>
+            <PORTMAP LOGICAL="WREADY" PHYSICAL="M12_AXI_wready"/>
+            <PORTMAP LOGICAL="BRESP" PHYSICAL="M12_AXI_bresp"/>
+            <PORTMAP LOGICAL="BVALID" PHYSICAL="M12_AXI_bvalid"/>
+            <PORTMAP LOGICAL="BREADY" PHYSICAL="M12_AXI_bready"/>
+            <PORTMAP LOGICAL="ARADDR" PHYSICAL="M12_AXI_araddr"/>
+            <PORTMAP LOGICAL="ARPROT" PHYSICAL="M12_AXI_arprot"/>
+            <PORTMAP LOGICAL="ARVALID" PHYSICAL="M12_AXI_arvalid"/>
+            <PORTMAP LOGICAL="ARREADY" PHYSICAL="M12_AXI_arready"/>
+            <PORTMAP LOGICAL="RDATA" PHYSICAL="M12_AXI_rdata"/>
+            <PORTMAP LOGICAL="RRESP" PHYSICAL="M12_AXI_rresp"/>
+            <PORTMAP LOGICAL="RVALID" PHYSICAL="M12_AXI_rvalid"/>
+            <PORTMAP LOGICAL="RREADY" PHYSICAL="M12_AXI_rready"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
+        <BUSINTERFACE BUSNAME="ps8_0_axi_periph_M13_AXI" DATAWIDTH="32" NAME="M13_AXI" TYPE="MASTER" VLNV="xilinx.com:interface:aximm:1.0">
+          <PORTMAPS>
+            <PORTMAP LOGICAL="AWADDR" PHYSICAL="M13_AXI_awaddr"/>
+            <PORTMAP LOGICAL="AWPROT" PHYSICAL="M13_AXI_awprot"/>
+            <PORTMAP LOGICAL="AWVALID" PHYSICAL="M13_AXI_awvalid"/>
+            <PORTMAP LOGICAL="AWREADY" PHYSICAL="M13_AXI_awready"/>
+            <PORTMAP LOGICAL="WDATA" PHYSICAL="M13_AXI_wdata"/>
+            <PORTMAP LOGICAL="WSTRB" PHYSICAL="M13_AXI_wstrb"/>
+            <PORTMAP LOGICAL="WVALID" PHYSICAL="M13_AXI_wvalid"/>
+            <PORTMAP LOGICAL="WREADY" PHYSICAL="M13_AXI_wready"/>
+            <PORTMAP LOGICAL="BRESP" PHYSICAL="M13_AXI_bresp"/>
+            <PORTMAP LOGICAL="BVALID" PHYSICAL="M13_AXI_bvalid"/>
+            <PORTMAP LOGICAL="BREADY" PHYSICAL="M13_AXI_bready"/>
+            <PORTMAP LOGICAL="ARADDR" PHYSICAL="M13_AXI_araddr"/>
+            <PORTMAP LOGICAL="ARPROT" PHYSICAL="M13_AXI_arprot"/>
+            <PORTMAP LOGICAL="ARVALID" PHYSICAL="M13_AXI_arvalid"/>
+            <PORTMAP LOGICAL="ARREADY" PHYSICAL="M13_AXI_arready"/>
+            <PORTMAP LOGICAL="RDATA" PHYSICAL="M13_AXI_rdata"/>
+            <PORTMAP LOGICAL="RRESP" PHYSICAL="M13_AXI_rresp"/>
+            <PORTMAP LOGICAL="RVALID" PHYSICAL="M13_AXI_rvalid"/>
+            <PORTMAP LOGICAL="RREADY" PHYSICAL="M13_AXI_rready"/>
+          </PORTMAPS>
+        </BUSINTERFACE>
       </BUSINTERFACES>
     </MODULE>
     <MODULE COREREVISION="3" FULLNAME="/rf_data_converter" HWVERSION="2.6" INSTANCE="rf_data_converter" IPTYPE="PERIPHERAL" IS_ENABLE="1" MODCLASS="PERIPHERAL" MODTYPE="usp_rf_data_converter" VLNV="xilinx.com:ip:usp_rf_data_converter:2.6">
@@ -11598,33 +12125,33 @@
         <PARAMETER NAME="C_ADC_DSA_RTS" VALUE="false"/>
         <PARAMETER NAME="C_ADC_MTS_Variable_Fabric_Width" VALUE="false"/>
         <PARAMETER NAME="C_RESERVED_2" VALUE="false"/>
-        <PARAMETER NAME="C_ADC0_Enable" VALUE="1"/>
-        <PARAMETER NAME="C_ADC0_PLL_Enable" VALUE="true"/>
+        <PARAMETER NAME="C_ADC0_Enable" VALUE="0"/>
+        <PARAMETER NAME="C_ADC0_PLL_Enable" VALUE="false"/>
         <PARAMETER NAME="C_ADC0_Sampling_Rate" VALUE="4.096"/>
         <PARAMETER NAME="C_ADC0_Fs_Max" VALUE="4.096"/>
-        <PARAMETER NAME="C_ADC0_Refclk_Freq" VALUE="409.600"/>
+        <PARAMETER NAME="C_ADC0_Refclk_Freq" VALUE="4096.000"/>
         <PARAMETER NAME="C_ADC0_Outclk_Freq" VALUE="256.000"/>
         <PARAMETER NAME="C_ADC0_FBDIV" VALUE="30"/>
-        <PARAMETER NAME="C_ADC0_OutDiv" VALUE="3"/>
+        <PARAMETER NAME="C_ADC0_OutDiv" VALUE="1"/>
         <PARAMETER NAME="C_ADC0_Vco" VALUE="12288.0"/>
-        <PARAMETER NAME="C_ADC0_Fabric_Freq" VALUE="512.000"/>
+        <PARAMETER NAME="C_ADC0_Fabric_Freq" VALUE="0.0"/>
         <PARAMETER NAME="C_ADC0_OBS_Fabric_Freq" VALUE="0.0"/>
         <PARAMETER NAME="C_ADC0_Multi_Tile_Sync" VALUE="false"/>
         <PARAMETER NAME="C_ADC0_Link_Coupling" VALUE="1"/>
         <PARAMETER NAME="C_ADC0_Band" VALUE="0"/>
         <PARAMETER NAME="C_ADC0_Refclk_Div" VALUE="1"/>
         <PARAMETER NAME="C_ADC0_Slices" VALUE="2"/>
-        <PARAMETER NAME="C_ADC0_Decimation" VALUE="1"/>
+        <PARAMETER NAME="C_ADC0_Decimation" VALUE="0"/>
         <PARAMETER NAME="C_ADC0_Clock_Source" VALUE="0"/>
         <PARAMETER NAME="C_ADC0_Clock_Source_MX" VALUE="0"/>
         <PARAMETER NAME="C_ADC0_Clock_Dist" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Slice00_Enable" VALUE="true"/>
+        <PARAMETER NAME="C_ADC_Slice00_Enable" VALUE="false"/>
         <PARAMETER NAME="C_ADC_Dither00" VALUE="true"/>
         <PARAMETER NAME="C_ADC_Data_Type00" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Decimation_Mode00" VALUE="1"/>
+        <PARAMETER NAME="C_ADC_Decimation_Mode00" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS_Decimation_Mode00" VALUE="1"/>
         <PARAMETER NAME="C_ADC_CalOpt_Mode00" VALUE="1"/>
-        <PARAMETER NAME="C_ADC_Mixer_Type00" VALUE="0"/>
+        <PARAMETER NAME="C_ADC_Mixer_Type00" VALUE="3"/>
         <PARAMETER NAME="C_ADC_Mixer_Mode00" VALUE="2"/>
         <PARAMETER NAME="C_ADC_Data_Width00" VALUE="8"/>
         <PARAMETER NAME="C_ADC_OBS_Data_Width00" VALUE="8"/>
@@ -11637,14 +12164,14 @@
         <PARAMETER NAME="C_ADC_RESERVED_1_00" VALUE="false"/>
         <PARAMETER NAME="C_ADC_TDD_RTS00" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS00" VALUE="false"/>
-        <PARAMETER NAME="C_ADC00_Dig_Port" VALUE="1"/>
-        <PARAMETER NAME="C_ADC_Slice01_Enable" VALUE="true"/>
+        <PARAMETER NAME="C_ADC00_Dig_Port" VALUE="0"/>
+        <PARAMETER NAME="C_ADC_Slice01_Enable" VALUE="false"/>
         <PARAMETER NAME="C_ADC_Dither01" VALUE="true"/>
         <PARAMETER NAME="C_ADC_Data_Type01" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Decimation_Mode01" VALUE="1"/>
+        <PARAMETER NAME="C_ADC_Decimation_Mode01" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS_Decimation_Mode01" VALUE="1"/>
         <PARAMETER NAME="C_ADC_CalOpt_Mode01" VALUE="1"/>
-        <PARAMETER NAME="C_ADC_Mixer_Type01" VALUE="0"/>
+        <PARAMETER NAME="C_ADC_Mixer_Type01" VALUE="3"/>
         <PARAMETER NAME="C_ADC_Mixer_Mode01" VALUE="2"/>
         <PARAMETER NAME="C_ADC_Data_Width01" VALUE="8"/>
         <PARAMETER NAME="C_ADC_OBS_Data_Width01" VALUE="8"/>
@@ -11658,13 +12185,13 @@
         <PARAMETER NAME="C_ADC_TDD_RTS01" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS01" VALUE="false"/>
         <PARAMETER NAME="C_ADC01_Dig_Port" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Slice02_Enable" VALUE="true"/>
+        <PARAMETER NAME="C_ADC_Slice02_Enable" VALUE="false"/>
         <PARAMETER NAME="C_ADC_Dither02" VALUE="true"/>
         <PARAMETER NAME="C_ADC_Data_Type02" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Decimation_Mode02" VALUE="1"/>
+        <PARAMETER NAME="C_ADC_Decimation_Mode02" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS_Decimation_Mode02" VALUE="0"/>
         <PARAMETER NAME="C_ADC_CalOpt_Mode02" VALUE="1"/>
-        <PARAMETER NAME="C_ADC_Mixer_Type02" VALUE="0"/>
+        <PARAMETER NAME="C_ADC_Mixer_Type02" VALUE="3"/>
         <PARAMETER NAME="C_ADC_Mixer_Mode02" VALUE="2"/>
         <PARAMETER NAME="C_ADC_Data_Width02" VALUE="8"/>
         <PARAMETER NAME="C_ADC_OBS_Data_Width02" VALUE="8"/>
@@ -11677,14 +12204,14 @@
         <PARAMETER NAME="C_ADC_RESERVED_1_02" VALUE="false"/>
         <PARAMETER NAME="C_ADC_TDD_RTS02" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS02" VALUE="false"/>
-        <PARAMETER NAME="C_ADC02_Dig_Port" VALUE="1"/>
-        <PARAMETER NAME="C_ADC_Slice03_Enable" VALUE="true"/>
+        <PARAMETER NAME="C_ADC02_Dig_Port" VALUE="0"/>
+        <PARAMETER NAME="C_ADC_Slice03_Enable" VALUE="false"/>
         <PARAMETER NAME="C_ADC_Dither03" VALUE="true"/>
         <PARAMETER NAME="C_ADC_Data_Type03" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Decimation_Mode03" VALUE="1"/>
+        <PARAMETER NAME="C_ADC_Decimation_Mode03" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS_Decimation_Mode03" VALUE="0"/>
         <PARAMETER NAME="C_ADC_CalOpt_Mode03" VALUE="1"/>
-        <PARAMETER NAME="C_ADC_Mixer_Type03" VALUE="0"/>
+        <PARAMETER NAME="C_ADC_Mixer_Type03" VALUE="3"/>
         <PARAMETER NAME="C_ADC_Mixer_Mode03" VALUE="2"/>
         <PARAMETER NAME="C_ADC_Data_Width03" VALUE="8"/>
         <PARAMETER NAME="C_ADC_OBS_Data_Width03" VALUE="8"/>
@@ -11798,33 +12325,33 @@
         <PARAMETER NAME="C_ADC_TDD_RTS13" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS13" VALUE="false"/>
         <PARAMETER NAME="C_ADC13_Dig_Port" VALUE="0"/>
-        <PARAMETER NAME="C_ADC2_Enable" VALUE="0"/>
-        <PARAMETER NAME="C_ADC2_PLL_Enable" VALUE="false"/>
+        <PARAMETER NAME="C_ADC2_Enable" VALUE="1"/>
+        <PARAMETER NAME="C_ADC2_PLL_Enable" VALUE="true"/>
         <PARAMETER NAME="C_ADC2_Sampling_Rate" VALUE="4.096"/>
         <PARAMETER NAME="C_ADC2_Fs_Max" VALUE="4.096"/>
-        <PARAMETER NAME="C_ADC2_Refclk_Freq" VALUE="4096.000"/>
+        <PARAMETER NAME="C_ADC2_Refclk_Freq" VALUE="409.600"/>
         <PARAMETER NAME="C_ADC2_Outclk_Freq" VALUE="256.000"/>
         <PARAMETER NAME="C_ADC2_FBDIV" VALUE="30"/>
-        <PARAMETER NAME="C_ADC2_OutDiv" VALUE="1"/>
+        <PARAMETER NAME="C_ADC2_OutDiv" VALUE="3"/>
         <PARAMETER NAME="C_ADC2_Vco" VALUE="12288.0"/>
-        <PARAMETER NAME="C_ADC2_Fabric_Freq" VALUE="0.0"/>
+        <PARAMETER NAME="C_ADC2_Fabric_Freq" VALUE="512.000"/>
         <PARAMETER NAME="C_ADC2_OBS_Fabric_Freq" VALUE="0.0"/>
         <PARAMETER NAME="C_ADC2_Multi_Tile_Sync" VALUE="false"/>
-        <PARAMETER NAME="C_ADC2_Link_Coupling" VALUE="0"/>
+        <PARAMETER NAME="C_ADC2_Link_Coupling" VALUE="1"/>
         <PARAMETER NAME="C_ADC2_Band" VALUE="0"/>
         <PARAMETER NAME="C_ADC2_Refclk_Div" VALUE="1"/>
         <PARAMETER NAME="C_ADC2_Slices" VALUE="2"/>
-        <PARAMETER NAME="C_ADC2_Decimation" VALUE="0"/>
+        <PARAMETER NAME="C_ADC2_Decimation" VALUE="1"/>
         <PARAMETER NAME="C_ADC2_Clock_Source" VALUE="2"/>
         <PARAMETER NAME="C_ADC2_Clock_Source_MX" VALUE="2"/>
         <PARAMETER NAME="C_ADC2_Clock_Dist" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Slice20_Enable" VALUE="false"/>
+        <PARAMETER NAME="C_ADC_Slice20_Enable" VALUE="true"/>
         <PARAMETER NAME="C_ADC_Dither20" VALUE="true"/>
         <PARAMETER NAME="C_ADC_Data_Type20" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Decimation_Mode20" VALUE="0"/>
+        <PARAMETER NAME="C_ADC_Decimation_Mode20" VALUE="1"/>
         <PARAMETER NAME="C_ADC_OBS_Decimation_Mode20" VALUE="1"/>
         <PARAMETER NAME="C_ADC_CalOpt_Mode20" VALUE="1"/>
-        <PARAMETER NAME="C_ADC_Mixer_Type20" VALUE="3"/>
+        <PARAMETER NAME="C_ADC_Mixer_Type20" VALUE="0"/>
         <PARAMETER NAME="C_ADC_Mixer_Mode20" VALUE="2"/>
         <PARAMETER NAME="C_ADC_Data_Width20" VALUE="8"/>
         <PARAMETER NAME="C_ADC_OBS_Data_Width20" VALUE="8"/>
@@ -11837,14 +12364,14 @@
         <PARAMETER NAME="C_ADC_RESERVED_1_20" VALUE="false"/>
         <PARAMETER NAME="C_ADC_TDD_RTS20" VALUE="0"/>
         <PARAMETER NAME="C_ADC_OBS20" VALUE="false"/>
-        <PARAMETER NAME="C_ADC20_Dig_Port" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Slice21_Enable" VALUE="false"/>
+        <PARAMETER NAME="C_ADC20_Dig_Port" VALUE="1"/>
+        <PARAMETER NAME="C_ADC_Slice21_Enable" VALUE="true"/>
         <PARAMETER NAME="C_ADC_Dither21" VALUE="true"/>
         <PARAMETER NAME="C_ADC_Data_Type21" VALUE="0"/>
-        <PARAMETER NAME="C_ADC_Decimation_Mode21" VALUE="0"/>
+        <PARAMETER NAME="C_ADC_Decimation_Mode21" VALUE="1"/>
         <PARAMETER NAME="C_ADC_OBS_Decimation_Mode21" VALUE="1"/>
         <PARAMETER NAME="C_ADC_CalOpt_Mode21" VALUE="1"/>
-        <PARAMETER NAME="C_ADC_Mixer_Type21" VALUE="3"/>
+        <PARAMETER NAME="C_ADC_Mixer_Type21" VALUE="0"/>
         <PARAMETER NAME="C_ADC_Mixer_Mode21" VALUE="2"/>
         <PARAMETER NAME="C_ADC_Data_Width21" VALUE="8"/>
         <PARAMETER NAME="C_ADC_OBS_Data_Width21" VALUE="8"/>
@@ -12377,12 +12904,12 @@
         <PARAMETER NAME="ADC_NCO_RTS" VALUE="false"/>
         <PARAMETER NAME="ADC_DSA_RTS" VALUE="false"/>
         <PARAMETER NAME="ADC_MTS_Variable_Fabric_Width" VALUE="false"/>
-        <PARAMETER NAME="ADC0_Enable" VALUE="1"/>
-        <PARAMETER NAME="ADC0_PLL_Enable" VALUE="true"/>
+        <PARAMETER NAME="ADC0_Enable" VALUE="0"/>
+        <PARAMETER NAME="ADC0_PLL_Enable" VALUE="false"/>
         <PARAMETER NAME="ADC0_Sampling_Rate" VALUE="4.096"/>
-        <PARAMETER NAME="ADC0_Refclk_Freq" VALUE="409.600"/>
+        <PARAMETER NAME="ADC0_Refclk_Freq" VALUE="4096.000"/>
         <PARAMETER NAME="ADC0_Outclk_Freq" VALUE="256.000"/>
-        <PARAMETER NAME="ADC0_Fabric_Freq" VALUE="512.000"/>
+        <PARAMETER NAME="ADC0_Fabric_Freq" VALUE="0.0"/>
         <PARAMETER NAME="ADC0_OBS_Fabric_Freq" VALUE="0.0"/>
         <PARAMETER NAME="ADC0_Link_Coupling" VALUE="1"/>
         <PARAMETER NAME="ADC0_Multi_Tile_Sync" VALUE="false"/>
@@ -12391,13 +12918,13 @@
         <PARAMETER NAME="ADC0_Clock_Source" VALUE="0"/>
         <PARAMETER NAME="ADC0_Clock_Source_MX" VALUE="0"/>
         <PARAMETER NAME="ADC0_Clock_Dist" VALUE="0"/>
-        <PARAMETER NAME="ADC_Slice00_Enable" VALUE="true"/>
+        <PARAMETER NAME="ADC_Slice00_Enable" VALUE="false"/>
         <PARAMETER NAME="ADC_Dither00" VALUE="true"/>
         <PARAMETER NAME="ADC_Data_Type00" VALUE="0"/>
-        <PARAMETER NAME="ADC_Decimation_Mode00" VALUE="1"/>
+        <PARAMETER NAME="ADC_Decimation_Mode00" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS_Decimation_Mode00" VALUE="1"/>
         <PARAMETER NAME="ADC_CalOpt_Mode00" VALUE="1"/>
-        <PARAMETER NAME="ADC_Mixer_Type00" VALUE="0"/>
+        <PARAMETER NAME="ADC_Mixer_Type00" VALUE="3"/>
         <PARAMETER NAME="ADC_Mixer_Mode00" VALUE="2"/>
         <PARAMETER NAME="ADC_Data_Width00" VALUE="8"/>
         <PARAMETER NAME="ADC_OBS_Data_Width00" VALUE="8"/>
@@ -12410,13 +12937,13 @@
         <PARAMETER NAME="ADC_RESERVED_1_00" VALUE="false"/>
         <PARAMETER NAME="ADC_TDD_RTS00" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS00" VALUE="false"/>
-        <PARAMETER NAME="ADC_Slice01_Enable" VALUE="true"/>
+        <PARAMETER NAME="ADC_Slice01_Enable" VALUE="false"/>
         <PARAMETER NAME="ADC_Dither01" VALUE="true"/>
         <PARAMETER NAME="ADC_Data_Type01" VALUE="0"/>
-        <PARAMETER NAME="ADC_Decimation_Mode01" VALUE="1"/>
+        <PARAMETER NAME="ADC_Decimation_Mode01" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS_Decimation_Mode01" VALUE="1"/>
         <PARAMETER NAME="ADC_CalOpt_Mode01" VALUE="1"/>
-        <PARAMETER NAME="ADC_Mixer_Type01" VALUE="0"/>
+        <PARAMETER NAME="ADC_Mixer_Type01" VALUE="3"/>
         <PARAMETER NAME="ADC_Mixer_Mode01" VALUE="2"/>
         <PARAMETER NAME="ADC_Data_Width01" VALUE="8"/>
         <PARAMETER NAME="ADC_OBS_Data_Width01" VALUE="8"/>
@@ -12429,13 +12956,13 @@
         <PARAMETER NAME="ADC_RESERVED_1_01" VALUE="false"/>
         <PARAMETER NAME="ADC_TDD_RTS01" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS01" VALUE="false"/>
-        <PARAMETER NAME="ADC_Slice02_Enable" VALUE="true"/>
+        <PARAMETER NAME="ADC_Slice02_Enable" VALUE="false"/>
         <PARAMETER NAME="ADC_Dither02" VALUE="true"/>
         <PARAMETER NAME="ADC_Data_Type02" VALUE="0"/>
-        <PARAMETER NAME="ADC_Decimation_Mode02" VALUE="1"/>
+        <PARAMETER NAME="ADC_Decimation_Mode02" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS_Decimation_Mode02" VALUE="0"/>
         <PARAMETER NAME="ADC_CalOpt_Mode02" VALUE="1"/>
-        <PARAMETER NAME="ADC_Mixer_Type02" VALUE="0"/>
+        <PARAMETER NAME="ADC_Mixer_Type02" VALUE="3"/>
         <PARAMETER NAME="ADC_Mixer_Mode02" VALUE="2"/>
         <PARAMETER NAME="ADC_Data_Width02" VALUE="8"/>
         <PARAMETER NAME="ADC_OBS_Data_Width02" VALUE="8"/>
@@ -12448,13 +12975,13 @@
         <PARAMETER NAME="ADC_RESERVED_1_02" VALUE="false"/>
         <PARAMETER NAME="ADC_TDD_RTS02" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS02" VALUE="false"/>
-        <PARAMETER NAME="ADC_Slice03_Enable" VALUE="true"/>
+        <PARAMETER NAME="ADC_Slice03_Enable" VALUE="false"/>
         <PARAMETER NAME="ADC_Dither03" VALUE="true"/>
         <PARAMETER NAME="ADC_Data_Type03" VALUE="0"/>
-        <PARAMETER NAME="ADC_Decimation_Mode03" VALUE="1"/>
+        <PARAMETER NAME="ADC_Decimation_Mode03" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS_Decimation_Mode03" VALUE="0"/>
         <PARAMETER NAME="ADC_CalOpt_Mode03" VALUE="1"/>
-        <PARAMETER NAME="ADC_Mixer_Type03" VALUE="0"/>
+        <PARAMETER NAME="ADC_Mixer_Type03" VALUE="3"/>
         <PARAMETER NAME="ADC_Mixer_Mode03" VALUE="2"/>
         <PARAMETER NAME="ADC_Data_Width03" VALUE="8"/>
         <PARAMETER NAME="ADC_OBS_Data_Width03" VALUE="8"/>
@@ -12557,27 +13084,27 @@
         <PARAMETER NAME="ADC_RESERVED_1_13" VALUE="false"/>
         <PARAMETER NAME="ADC_TDD_RTS13" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS13" VALUE="false"/>
-        <PARAMETER NAME="ADC2_Enable" VALUE="0"/>
-        <PARAMETER NAME="ADC2_PLL_Enable" VALUE="false"/>
+        <PARAMETER NAME="ADC2_Enable" VALUE="1"/>
+        <PARAMETER NAME="ADC2_PLL_Enable" VALUE="true"/>
         <PARAMETER NAME="ADC2_Sampling_Rate" VALUE="4.096"/>
-        <PARAMETER NAME="ADC2_Refclk_Freq" VALUE="4096.000"/>
+        <PARAMETER NAME="ADC2_Refclk_Freq" VALUE="409.600"/>
         <PARAMETER NAME="ADC2_Outclk_Freq" VALUE="256.000"/>
-        <PARAMETER NAME="ADC2_Fabric_Freq" VALUE="0.0"/>
+        <PARAMETER NAME="ADC2_Fabric_Freq" VALUE="512.000"/>
         <PARAMETER NAME="ADC2_OBS_Fabric_Freq" VALUE="0.0"/>
-        <PARAMETER NAME="ADC2_Link_Coupling" VALUE="0"/>
+        <PARAMETER NAME="ADC2_Link_Coupling" VALUE="1"/>
         <PARAMETER NAME="ADC2_Multi_Tile_Sync" VALUE="false"/>
         <PARAMETER NAME="ADC2_Band" VALUE="0"/>
         <PARAMETER NAME="ADC2_Refclk_Div" VALUE="1"/>
         <PARAMETER NAME="ADC2_Clock_Source" VALUE="2"/>
         <PARAMETER NAME="ADC2_Clock_Source_MX" VALUE="2"/>
         <PARAMETER NAME="ADC2_Clock_Dist" VALUE="0"/>
-        <PARAMETER NAME="ADC_Slice20_Enable" VALUE="false"/>
+        <PARAMETER NAME="ADC_Slice20_Enable" VALUE="true"/>
         <PARAMETER NAME="ADC_Dither20" VALUE="true"/>
         <PARAMETER NAME="ADC_Data_Type20" VALUE="0"/>
-        <PARAMETER NAME="ADC_Decimation_Mode20" VALUE="0"/>
+        <PARAMETER NAME="ADC_Decimation_Mode20" VALUE="1"/>
         <PARAMETER NAME="ADC_OBS_Decimation_Mode20" VALUE="1"/>
         <PARAMETER NAME="ADC_CalOpt_Mode20" VALUE="1"/>
-        <PARAMETER NAME="ADC_Mixer_Type20" VALUE="3"/>
+        <PARAMETER NAME="ADC_Mixer_Type20" VALUE="0"/>
         <PARAMETER NAME="ADC_Mixer_Mode20" VALUE="2"/>
         <PARAMETER NAME="ADC_Data_Width20" VALUE="8"/>
         <PARAMETER NAME="ADC_OBS_Data_Width20" VALUE="8"/>
@@ -12590,13 +13117,13 @@
         <PARAMETER NAME="ADC_RESERVED_1_20" VALUE="false"/>
         <PARAMETER NAME="ADC_TDD_RTS20" VALUE="0"/>
         <PARAMETER NAME="ADC_OBS20" VALUE="false"/>
-        <PARAMETER NAME="ADC_Slice21_Enable" VALUE="false"/>
+        <PARAMETER NAME="ADC_Slice21_Enable" VALUE="true"/>
         <PARAMETER NAME="ADC_Dither21" VALUE="true"/>
         <PARAMETER NAME="ADC_Data_Type21" VALUE="0"/>
-        <PARAMETER NAME="ADC_Decimation_Mode21" VALUE="0"/>
+        <PARAMETER NAME="ADC_Decimation_Mode21" VALUE="1"/>
         <PARAMETER NAME="ADC_OBS_Decimation_Mode21" VALUE="1"/>
         <PARAMETER NAME="ADC_CalOpt_Mode21" VALUE="1"/>
-        <PARAMETER NAME="ADC_Mixer_Type21" VALUE="3"/>
+        <PARAMETER NAME="ADC_Mixer_Type21" VALUE="0"/>
         <PARAMETER NAME="ADC_Mixer_Mode21" VALUE="2"/>
         <PARAMETER NAME="ADC_Data_Width21" VALUE="8"/>
         <PARAMETER NAME="ADC_OBS_Data_Width21" VALUE="8"/>
@@ -13214,17 +13741,17 @@
         <PARAMETER NAME="C_HIGHADDR" VALUE="0xA007FFFF"/>
       </PARAMETERS>
       <PORTS>
-        <PORT DIR="I" NAME="adc0_clk_p" SIGIS="clk" SIGNAME="rf_data_converter_adc0_clk_p">
+        <PORT DIR="I" NAME="adc2_clk_p" SIGIS="clk" SIGNAME="rf_data_converter_adc2_clk_p">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="top_imp" PORT="adc0_clk_clk_p"/>
+            <CONNECTION INSTANCE="top_imp" PORT="adc2_clk_clk_p"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="adc0_clk_n" SIGIS="clk" SIGNAME="rf_data_converter_adc0_clk_n">
+        <PORT DIR="I" NAME="adc2_clk_n" SIGIS="clk" SIGNAME="rf_data_converter_adc2_clk_n">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="top_imp" PORT="adc0_clk_clk_n"/>
+            <CONNECTION INSTANCE="top_imp" PORT="adc2_clk_clk_n"/>
           </CONNECTIONS>
         </PORT>
-        <PORT CLKFREQUENCY="256000000" DIR="O" NAME="clk_adc0" SIGIS="clk" SIGNAME="rf_data_converter_clk_adc0">
+        <PORT CLKFREQUENCY="256000000" DIR="O" NAME="clk_adc2" SIGIS="clk" SIGNAME="rf_data_converter_clk_adc2">
           <CONNECTIONS>
             <CONNECTION INSTANCE="adc_clk_512_gen" PORT="clk_in1"/>
           </CONNECTIONS>
@@ -13247,6 +13774,12 @@
             <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_dwidth_converter" PORT="aclk"/>
             <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_cdc_fifo" PORT="m_axis_aclk"/>
             <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_dwidth_converter" PORT="aclk"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="clk"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="clk"/>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_0" PORT="s_axi_aclk"/>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M12_ACLK"/>
+            <CONNECTION INSTANCE="axi_gpio_dac_scale_1" PORT="s_axi_aclk"/>
+            <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M13_ACLK"/>
           </CONNECTIONS>
         </PORT>
         <PORT CLKFREQUENCY="149998505" DIR="I" NAME="s_axi_aclk" SIGIS="clk" SIGNAME="zynq_ultra_ps_e_0_pl_clk0">
@@ -13355,24 +13888,14 @@
             <CONNECTION INSTANCE="top_imp" PORT="sysref_in_diff_n"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="vin0_01_p" SIGIS="undef" SIGNAME="rf_data_converter_vin0_01_p">
+        <PORT DIR="I" NAME="vin2_01_p" SIGIS="undef" SIGNAME="rf_data_converter_vin2_01_p">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="top_imp" PORT="vin0_01_v_p"/>
+            <CONNECTION INSTANCE="top_imp" PORT="vin2_01_v_p"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="vin0_01_n" SIGIS="undef" SIGNAME="rf_data_converter_vin0_01_n">
+        <PORT DIR="I" NAME="vin2_01_n" SIGIS="undef" SIGNAME="rf_data_converter_vin2_01_n">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="top_imp" PORT="vin0_01_v_n"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="vin0_23_p" SIGIS="undef" SIGNAME="rf_data_converter_vin0_23_p">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="top_imp" PORT="vin0_23_v_p"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="vin0_23_n" SIGIS="undef" SIGNAME="rf_data_converter_vin0_23_n">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="top_imp" PORT="vin0_23_v_n"/>
+            <CONNECTION INSTANCE="top_imp" PORT="vin2_01_v_n"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="O" NAME="vout00_p" SIGIS="undef" SIGNAME="rf_data_converter_vout00_p">
@@ -13395,44 +13918,29 @@
             <CONNECTION INSTANCE="top_imp" PORT="vout01_v_n"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="m0_axis_aresetn" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="adc_reset_peripheral_aresetn">
+        <PORT DIR="I" NAME="m2_axis_aresetn" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="adc_reset_peripheral_aresetn">
           <CONNECTIONS>
             <CONNECTION INSTANCE="adc_reset" PORT="peripheral_aresetn"/>
           </CONNECTIONS>
         </PORT>
-        <PORT CLKFREQUENCY="512000000" DIR="I" NAME="m0_axis_aclk" SIGIS="clk" SIGNAME="adc_clk_512_gen_clk_out1">
+        <PORT CLKFREQUENCY="512000000" DIR="I" NAME="m2_axis_aclk" SIGIS="clk" SIGNAME="adc_clk_512_gen_clk_out1">
           <CONNECTIONS>
             <CONNECTION INSTANCE="adc_clk_512_gen" PORT="clk_out1"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" LEFT="127" NAME="m00_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_afe_adc_tdata">
+        <PORT DIR="O" LEFT="127" NAME="m20_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="adc_dwidth_converter_s_axis_tdata">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="afe_adc_tdata"/>
+            <CONNECTION INSTANCE="adc_dwidth_converter" PORT="s_axis_tdata"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="m00_axis_tvalid" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_afe_adc_tvalid">
+        <PORT DIR="O" NAME="m20_axis_tvalid" SIGIS="undef" SIGNAME="adc_dwidth_converter_s_axis_tvalid">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="afe_adc_tvalid"/>
+            <CONNECTION INSTANCE="adc_dwidth_converter" PORT="s_axis_tvalid"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="m00_axis_tready" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_afe_adc_tready">
+        <PORT DIR="I" NAME="m20_axis_tready" SIGIS="undef" SIGNAME="adc_dwidth_converter_s_axis_tready">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="afe_adc_tready"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" LEFT="127" NAME="m02_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_loopback_adc_tdata">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="loopback_adc_tdata"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="O" NAME="m02_axis_tvalid" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_loopback_adc_tvalid">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="loopback_adc_tvalid"/>
-          </CONNECTIONS>
-        </PORT>
-        <PORT DIR="I" NAME="m02_axis_tready" SIGIS="undef" SIGNAME="adc_axis_mux_wrapper_0_loopback_adc_tready">
-          <CONNECTIONS>
-            <CONNECTION INSTANCE="adc_axis_mux_wrapper_0" PORT="loopback_adc_tready"/>
+            <CONNECTION INSTANCE="adc_dwidth_converter" PORT="s_axis_tready"/>
           </CONNECTIONS>
         </PORT>
         <PORT DIR="I" NAME="s0_axis_aresetn" POLARITY="ACTIVE_LOW" SIGIS="rst" SIGNAME="dac_reset_peripheral_aresetn">
@@ -13445,34 +13953,34 @@
             <CONNECTION INSTANCE="rf_data_converter" PORT="clk_dac0"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="255" NAME="s00_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_rate_converter_0_dac_0_dwidth_converter_m_axis_tdata">
+        <PORT DIR="I" LEFT="255" NAME="s00_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_m_axis_tdata">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_dwidth_converter" PORT="m_axis_tdata"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="m_axis_tdata"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="s00_axis_tvalid" SIGIS="undef" SIGNAME="dac_rate_converter_0_dac_0_dwidth_converter_m_axis_tvalid">
+        <PORT DIR="I" NAME="s00_axis_tvalid" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_m_axis_tvalid">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_dwidth_converter" PORT="m_axis_tvalid"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="m_axis_tvalid"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="s00_axis_tready" SIGIS="undef" SIGNAME="dac_rate_converter_0_dac_0_dwidth_converter_m_axis_tready">
+        <PORT DIR="O" NAME="s00_axis_tready" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_0_m_axis_tready">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="dac_rate_converter_0_dac_0_dwidth_converter" PORT="m_axis_tready"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_0" PORT="m_axis_tready"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" LEFT="255" NAME="s01_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_rate_converter_1_dac_1_dwidth_converter_m_axis_tdata">
+        <PORT DIR="I" LEFT="255" NAME="s01_axis_tdata" RIGHT="0" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_m_axis_tdata">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_dwidth_converter" PORT="m_axis_tdata"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="m_axis_tdata"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="I" NAME="s01_axis_tvalid" SIGIS="undef" SIGNAME="dac_rate_converter_1_dac_1_dwidth_converter_m_axis_tvalid">
+        <PORT DIR="I" NAME="s01_axis_tvalid" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_m_axis_tvalid">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_dwidth_converter" PORT="m_axis_tvalid"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="m_axis_tvalid"/>
           </CONNECTIONS>
         </PORT>
-        <PORT DIR="O" NAME="s01_axis_tready" SIGIS="undef" SIGNAME="dac_rate_converter_1_dac_1_dwidth_converter_m_axis_tready">
+        <PORT DIR="O" NAME="s01_axis_tready" SIGIS="undef" SIGNAME="dac_prescaler_wrapper_1_m_axis_tready">
           <CONNECTIONS>
-            <CONNECTION INSTANCE="dac_rate_converter_1_dac_1_dwidth_converter" PORT="m_axis_tready"/>
+            <CONNECTION INSTANCE="dac_prescaler_wrapper_1" PORT="m_axis_tready"/>
           </CONNECTIONS>
         </PORT>
       </PORTS>
@@ -13529,7 +14037,7 @@
             <PORTMAP LOGICAL="WVALID" PHYSICAL="s_axi_wvalid"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="rf_data_converter_m00_axis" NAME="m00_axis" TYPE="INITIATOR" VLNV="xilinx.com:interface:axis:1.0">
+        <BUSINTERFACE BUSNAME="rf_data_converter_m20_axis" NAME="m20_axis" TYPE="MASTER" VLNV="xilinx.com:interface:axis:1.0">
           <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="16"/>
           <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
           <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
@@ -13544,32 +14052,12 @@
           <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
           <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
           <PORTMAPS>
-            <PORTMAP LOGICAL="TDATA" PHYSICAL="m00_axis_tdata"/>
-            <PORTMAP LOGICAL="TREADY" PHYSICAL="m00_axis_tready"/>
-            <PORTMAP LOGICAL="TVALID" PHYSICAL="m00_axis_tvalid"/>
+            <PORTMAP LOGICAL="TDATA" PHYSICAL="m20_axis_tdata"/>
+            <PORTMAP LOGICAL="TREADY" PHYSICAL="m20_axis_tready"/>
+            <PORTMAP LOGICAL="TVALID" PHYSICAL="m20_axis_tvalid"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="rf_data_converter_m02_axis" NAME="m02_axis" TYPE="INITIATOR" VLNV="xilinx.com:interface:axis:1.0">
-          <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="16"/>
-          <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="TUSER_WIDTH" VALUE="0"/>
-          <PARAMETER NAME="HAS_TREADY" VALUE="1"/>
-          <PARAMETER NAME="HAS_TSTRB" VALUE="0"/>
-          <PARAMETER NAME="HAS_TKEEP" VALUE="0"/>
-          <PARAMETER NAME="HAS_TLAST" VALUE="0"/>
-          <PARAMETER NAME="FREQ_HZ" VALUE="512000000"/>
-          <PARAMETER NAME="PHASE" VALUE="0.0"/>
-          <PARAMETER NAME="CLK_DOMAIN" VALUE="/adc_clk_512_gen_clk_out1"/>
-          <PARAMETER NAME="LAYERED_METADATA" VALUE="undef"/>
-          <PARAMETER NAME="INSERT_VIP" VALUE="0"/>
-          <PORTMAPS>
-            <PORTMAP LOGICAL="TDATA" PHYSICAL="m02_axis_tdata"/>
-            <PORTMAP LOGICAL="TREADY" PHYSICAL="m02_axis_tready"/>
-            <PORTMAP LOGICAL="TVALID" PHYSICAL="m02_axis_tvalid"/>
-          </PORTMAPS>
-        </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="dac_rate_converter_0_dac_0_dwidth_converter_M_AXIS" NAME="s00_axis" TYPE="SLAVE" VLNV="xilinx.com:interface:axis:1.0">
+        <BUSINTERFACE BUSNAME="dac_prescaler_wrapper_0_m_axis" NAME="s00_axis" TYPE="TARGET" VLNV="xilinx.com:interface:axis:1.0">
           <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="32"/>
           <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
           <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
@@ -13589,7 +14077,7 @@
             <PORTMAP LOGICAL="TVALID" PHYSICAL="s00_axis_tvalid"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="dac_rate_converter_1_dac_1_dwidth_converter_M_AXIS" NAME="s01_axis" TYPE="SLAVE" VLNV="xilinx.com:interface:axis:1.0">
+        <BUSINTERFACE BUSNAME="dac_prescaler_wrapper_1_m_axis" NAME="s01_axis" TYPE="TARGET" VLNV="xilinx.com:interface:axis:1.0">
           <PARAMETER NAME="TDATA_NUM_BYTES" VALUE="32"/>
           <PARAMETER NAME="TDEST_WIDTH" VALUE="0"/>
           <PARAMETER NAME="TID_WIDTH" VALUE="0"/>
@@ -13609,12 +14097,12 @@
             <PORTMAP LOGICAL="TVALID" PHYSICAL="s01_axis_tvalid"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="External_Interface_adc0_clk" NAME="adc0_clk" TYPE="TARGET" VLNV="xilinx.com:interface:diff_clock:1.0">
+        <BUSINTERFACE BUSNAME="External_Interface_adc2_clk" NAME="adc2_clk" TYPE="TARGET" VLNV="xilinx.com:interface:diff_clock:1.0">
           <PARAMETER NAME="CAN_DEBUG" VALUE="false"/>
           <PARAMETER NAME="FREQ_HZ" VALUE="409600000.0"/>
           <PORTMAPS>
-            <PORTMAP LOGICAL="CLK_N" PHYSICAL="adc0_clk_n"/>
-            <PORTMAP LOGICAL="CLK_P" PHYSICAL="adc0_clk_p"/>
+            <PORTMAP LOGICAL="CLK_N" PHYSICAL="adc2_clk_n"/>
+            <PORTMAP LOGICAL="CLK_P" PHYSICAL="adc2_clk_p"/>
           </PORTMAPS>
         </BUSINTERFACE>
         <BUSINTERFACE BUSNAME="External_Interface_dac0_clk" NAME="dac0_clk" TYPE="TARGET" VLNV="xilinx.com:interface:diff_clock:1.0">
@@ -13625,16 +14113,10 @@
             <PORTMAP LOGICAL="CLK_P" PHYSICAL="dac0_clk_p"/>
           </PORTMAPS>
         </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="External_Interface_vin0_01" NAME="vin0_01" TYPE="TARGET" VLNV="xilinx.com:interface:diff_analog_io:1.0">
+        <BUSINTERFACE BUSNAME="External_Interface_vin2_01" NAME="vin2_01" TYPE="TARGET" VLNV="xilinx.com:interface:diff_analog_io:1.0">
           <PORTMAPS>
-            <PORTMAP LOGICAL="V_N" PHYSICAL="vin0_01_n"/>
-            <PORTMAP LOGICAL="V_P" PHYSICAL="vin0_01_p"/>
-          </PORTMAPS>
-        </BUSINTERFACE>
-        <BUSINTERFACE BUSNAME="External_Interface_vin0_23" NAME="vin0_23" TYPE="TARGET" VLNV="xilinx.com:interface:diff_analog_io:1.0">
-          <PORTMAPS>
-            <PORTMAP LOGICAL="V_N" PHYSICAL="vin0_23_n"/>
-            <PORTMAP LOGICAL="V_P" PHYSICAL="vin0_23_p"/>
+            <PORTMAP LOGICAL="V_N" PHYSICAL="vin2_01_n"/>
+            <PORTMAP LOGICAL="V_P" PHYSICAL="vin2_01_p"/>
           </PORTMAPS>
         </BUSINTERFACE>
         <BUSINTERFACE BUSNAME="rf_data_converter_vout00" NAME="vout00" TYPE="INITIATOR" VLNV="xilinx.com:interface:diff_analog_io:1.0">
@@ -15875,7 +16357,6 @@
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="ACLK"/>
             <CONNECTION INSTANCE="axi_dma_0" PORT="m_axi_s2mm_aclk"/>
             <CONNECTION INSTANCE="zynq_ultra_ps_e_0" PORT="saxihp0_fpd_aclk"/>
-            <CONNECTION INSTANCE="axi_gpio_adc_sel" PORT="s_axi_aclk"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M01_ACLK"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M02_ACLK"/>
             <CONNECTION INSTANCE="axi_smc" PORT="aclk"/>
@@ -15885,7 +16366,6 @@
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M05_ACLK"/>
             <CONNECTION INSTANCE="axi_timer_0" PORT="s_axi_aclk"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M06_ACLK"/>
-            <CONNECTION INSTANCE="adc_sel_cdc" PORT="src_clk"/>
             <CONNECTION INSTANCE="axi_gpio_capture" PORT="s_axi_aclk"/>
             <CONNECTION INSTANCE="ps8_0_axi_periph" PORT="M07_ACLK"/>
             <CONNECTION INSTANCE="axi_gpio_trigger_sel" PORT="s_axi_aclk"/>
@@ -16068,7 +16548,6 @@
       </BUSINTERFACES>
       <MEMORYMAP>
         <MEMRANGE ADDRESSBLOCK="Reg" BASENAME="C_BASEADDR" BASEVALUE="0xA0000000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA000FFFF" INSTANCE="axi_dma_0" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI_LITE"/>
-        <MEMRANGE ADDRESSBLOCK="Reg" BASENAME="C_BASEADDR" BASEVALUE="0xA0010000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA001FFFF" INSTANCE="axi_gpio_adc_sel" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI"/>
         <MEMRANGE ADDRESSBLOCK="Mem0" BASENAME="C_BASEADDR" BASEVALUE="0xA0020000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA002FFFF" INSTANCE="dds_hier_0_axi_fifo_pinc_0" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI"/>
         <MEMRANGE ADDRESSBLOCK="Mem0" BASENAME="C_BASEADDR" BASEVALUE="0xA0030000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA003FFFF" INSTANCE="dds_hier_0_axi_fifo_scale_0" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI"/>
         <MEMRANGE ADDRESSBLOCK="Reg" BASENAME="C_BASEADDR" BASEVALUE="0xA0040000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA007FFFF" INSTANCE="rf_data_converter" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="s_axi"/>
@@ -16079,10 +16558,11 @@
         <MEMRANGE ADDRESSBLOCK="Mem0" BASENAME="C_BASEADDR" BASEVALUE="0xA00C0000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA00CFFFF" INSTANCE="dds_hier_1_axi_fifo_pinc_1" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI"/>
         <MEMRANGE ADDRESSBLOCK="Mem0" BASENAME="C_BASEADDR" BASEVALUE="0xA00D0000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA00DFFFF" INSTANCE="dds_hier_1_axi_fifo_scale_1" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI"/>
         <MEMRANGE ADDRESSBLOCK="Reg" BASENAME="C_BASEADDR" BASEVALUE="0xA00E0000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA00EFFFF" INSTANCE="axi_gpio_adcio" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI"/>
+        <MEMRANGE ADDRESSBLOCK="Reg" BASENAME="C_BASEADDR" BASEVALUE="0xA00F0000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA00FFFFF" INSTANCE="axi_gpio_dac_scale_0" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI"/>
+        <MEMRANGE ADDRESSBLOCK="Reg" BASENAME="C_BASEADDR" BASEVALUE="0xA0100000" HIGHNAME="C_HIGHADDR" HIGHVALUE="0xA010FFFF" INSTANCE="axi_gpio_dac_scale_1" IS_DATA="TRUE" IS_INSTRUCTION="TRUE" MASTERBUSINTERFACE="M_AXI_HPM0_FPD" MEMTYPE="REGISTER" SLAVEBUSINTERFACE="S_AXI"/>
       </MEMORYMAP>
       <PERIPHERALS>
         <PERIPHERAL INSTANCE="axi_dma_0"/>
-        <PERIPHERAL INSTANCE="axi_gpio_adc_sel"/>
         <PERIPHERAL INSTANCE="dds_hier_0_axi_fifo_pinc_0"/>
         <PERIPHERAL INSTANCE="dds_hier_0_axi_fifo_scale_0"/>
         <PERIPHERAL INSTANCE="rf_data_converter"/>
@@ -16093,6 +16573,8 @@
         <PERIPHERAL INSTANCE="dds_hier_1_axi_fifo_pinc_1"/>
         <PERIPHERAL INSTANCE="dds_hier_1_axi_fifo_scale_1"/>
         <PERIPHERAL INSTANCE="axi_gpio_adcio"/>
+        <PERIPHERAL INSTANCE="axi_gpio_dac_scale_0"/>
+        <PERIPHERAL INSTANCE="axi_gpio_dac_scale_1"/>
       </PERIPHERALS>
     </MODULE>
   </MODULES>
