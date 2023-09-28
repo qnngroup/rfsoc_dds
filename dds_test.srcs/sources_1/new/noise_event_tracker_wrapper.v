@@ -38,7 +38,7 @@ noise_event_tracker_sv_wrapper #(
   .data_in_00_ready(s00_axis_tready),
   .data_in_02(s02_axis_tdata),
   .data_in_02_valid(s02_axis_tvalid),
-  .data_in_02_ready(s02_axis_tready)
+  .data_in_02_ready(s02_axis_tready),
   .config_in(s_axis_config_tdata),
   .config_in_valid(s_axis_config_tvalid),
   .config_in_ready(s_axis_config_tready)

@@ -13,32 +13,24 @@ module noise_event_tracker #(
 ) (
   input wire clk, reset
   Axis_If.Master_Full data_out, // packed collection of samples
-  Axis_If.Slave_Simple data_in_00, // least significant bit of each sample will be trimmed off
+  Axis_If.Slave_Simple data_in_00, // two least significant bits of each sample will be trimmed off
   Axis_If.Slave_Simple data_in_02,
   Axis_If.Slave_Simple config_in // {mode, start, stop, threshold_high, threshold_low}
 );
 
+// always accept transactions
 assign config_in.ready = 1'b1;
 assign data_in_00.ready = 1'b1;
 assign data_in_02.ready = 1'b1;
 
-enum {IDLE, CAPTURE, TRANSFER} state;
+// split up config vector
+logic config_in_mode, config_in_start, config_in_stop;
+assign config_in_mode = config_in.data[2*SAMPLE_WIDTH+2];
+assign config_in_start = config_in.data[2*SAMPLE_WIDTH+1];
+assign config_in_stop = config_in.data[2*SAMPLE_WIDTH];
 
 logic [SAMPLE_WIDTH-1:0] threshold_low, threshold_high;
 logic mode; // 1 for rate compression, 0 for always full rate
-
-logic [AXI_MM_WIDTH-1:0] buffer [BUFFER_DEPTH];
-logic [$clog2(BUFFER_DEPTH)-1:0] write_addr, read_addr;
-logic data_out_valid;
-logic data_out_last;
-
-logic [AXI_MM_WIDTH-1:0] write_word; // write samples to a single wide reg, then
-
-// process config_in updates
-localparam int WORD_SIZE = 2**($clog2(SAMPLE_WIDTH));
-localparam int WORD_SELECT_BITS = $clog2(AXI_MM_WIDTH) - $clog2(SAMPLE_WIDTH);
-
-logic [WORD_SELECT_BITS-1:0] write_word_select;
 
 // update mode and thresholds from config interface
 always_ff @(posedge clk) begin
@@ -48,17 +40,189 @@ always_ff @(posedge clk) begin
     threshold_high <= '0;
   end else begin
     if (config_in.ready && config_in.valid) begin
-      mode <= config_in.data[2*SAMPLE_WIDTH+2:2*SAMPLE_WIDTH+2];
+      mode <= config_in_mode;
       threshold_high <= config_in.data[2*SAMPLE_WIDTH-1:SAMPLE_WIDTH];
       threshold_low <= config_in.data[SAMPLE_WIDTH-1:0];
     end
   end
 end
 
-// state machine update
+//////////////////////////////////////////////////////
+// main datapath and compression logic
+//////////////////////////////////////////////////////
+
+// track the state of the noise in each channel for hysteresis of sample recording:
+// once the noise exceeds the high threshold, record at full rate until the
+// noise dips below the low threshold
+// two bits: one for each channel, set to 1 if high threshold was exceeded
+// reset to 0 if noise level subsequently falls below low threshold
+logic [1:0] noise_level;
+
+// merge data from separate streams into indexable signals
+logic [SAMPLE_WIDTH-1:0] data_in [2];
+logic [1:0] data_in_valid;
+
+assign data_in[0] = data_in_00.data;
+assign data_in[1] = data_in_02.data;
+assign data_in_valid[0] = data_in_00.valid;
+assign data_in_valid[1] = data_in_02.valid;
+
+// datapath signals
+logic [SAMPLE_WIDTH-1:0] data_in_d [2];
+logic [1:0] data_valid_d;
+logic [$clog2(DECIMATION_BELOW_THRESH)-1:0] dec_counter [2];
+logic [SAMPLE_WIDTH-1:0] fifo_out [2];
+logic [1:0] fifo_read;
+logic [1:0] fifo_not_empty;
+
+// apply fifos to merge data from two axi streams
+generate begin: fifo_gen
+  for (genvar i = 0; i < 2; i++) begin
+    Axis_If #(.DWIDTH(SAMPLE_WIDTH)) fifo_in ();
+    Axis_If #(.DWIDTH(SAMPLE_WIDTH)) fifo_out ();
+
+    assign fifo_in.valid = dec_counter[i] == 0;
+    assign fifo_not_empty[i] = fifo_out.valid;
+    assign fifo_out[i] = fifo_out.data;
+    assign fifo_out.ready = fifo_ready[i];
+
+    // ignore fifo_in.ready
+    // input is at 2MS/s, clock is 150MHz so samples are sparse in time
+    // FIFO is purely for arbitration so that if two samples arrive at the
+    // same time, they can be written to the sample buffer sequentially
+
+    always_ff @(posedge clk) begin
+      data_in_d[i] <= data_in[i];
+      data_in_valid_d[i] <= data_in_valid[i];
+      fifo_in.data <= {data_in_d[i][SAMPLE_WIDTH-1:2], i, noise_level[i]};
+      if (reset) begin
+        noise_level[i] <= '0;
+        dec_counter[i] <= '0;
+      end else begin
+        // update noise level register
+        if (data_in_valid[i]) begin
+          if (data_in[i] > threshold_high) begin
+            noise_level[i] <= 1'b1;
+          end
+          if (data_in[i] < threshold_low) begin
+            noise_level[i] <= 1'b0;
+          end
+        end
+        // manage decimation counter
+        if (noise_level[i]) begin
+          dec_counter <= '0;
+        end else begin
+          // noise is low, so update decimation counter
+          if (data_in_valid_d[i]) begin
+            if (dec_counter[i] == DECIMATION_BELOW_THRESH - 1) begin
+              dec_counter[i] <= '0;
+            end else begin
+              dec_counter[i] <= dec_counter[i] + 1'b1;
+            end
+          end
+        end
+      end
+    end
+
+    fifo #(
+      .DATA_WIDTH(SAMPLE_WIDTH),
+      .ADDR_WIDTH(3)
+    ) fifo_i (
+      .clk,
+      .reset,
+      .data_out(fifo_out),
+      .data_in(fifo_in)
+    );
+  end
+endgenerate
+
+//////////////////////////////////////////////////////
+// combine FIFO outputs into a single word
+//////////////////////////////////////////////////////
+
+logic fifo_select;
+always_comb begin
+  if (fifo_not_empty[0]) begin
+    fifo_select = 0;
+    fifo_read = 2'b01;
+  end else begin
+    if (fifo_not_empty[1]) begin
+      fifo_select = 1;
+      fifo_read = 2'b10;
+    end else begin
+      // default to fifo 0
+      fifo_select = 0;
+      fifo_read = 2'b0;
+    end
+  end
+end
+
+// memory read/write bus have the same width (wider than sample width)
+// select appropriate subword range of input word when writing from FIFOs
+localparam int WORD_SIZE = 2**($clog2(SAMPLE_WIDTH));
+localparam int WORD_SELECT_BITS = $clog2(AXI_MM_WIDTH) - $clog2(SAMPLE_WIDTH);
+logic [WORD_SELECT_BITS-1:0] word_select;
+logic [AXI_MM_WIDTH-1:0] data_in_word, data_out_word;
+always_ff @(posedge clk) begin
+  if (reset) begin
+    word_select <= '0;
+    data_in_word <= '0;
+  end else begin
+    if (fifo_not_empty[fifo_select]) begin
+      // word will continuously update and only be read into sample buffer
+      // when a capture is started. yes this is a little inefficient but
+      // I didn't think of it in advance and I don't want to rewrite the input
+      // logic
+      data_in_word[word_select*WORD_SIZE+:WORD_SIZE] <= fifo_out[fifo_select];
+      word_select <= word_select + 1'b1; // rolls over since AXI_MM_WIDTH is a power of 2
+    end
+  end
+end
+
+//////////////////////////////////////////////////////
+// main state machine and sample buffer
+//////////////////////////////////////////////////////
+enum {IDLE, CAPTURE, TRANSFER} state;
+logic [AXI_MM_WIDTH-1:0] buffer [BUFFER_DEPTH];
+logic [$clog2(BUFFER_DEPTH)-1:0] write_addr, read_addr;
+logic data_out_valid; // extra valid and last to match latency of BRAM
+logic data_out_last;
+// state machine
+always_ff @(posedge clk) begin
+  if (reset) begin
+    state <= IDLE;
+  end else begin
+    unique case (state)
+      // config_in.ready is held high, so whenever config_in.valid goes high,
+      // an AXI-stream transaction can take place
+      IDLE: if (config_in.valid && config_in_start) state <= CAPTURE;
+      CAPTURE: begin
+        if ((config_in.valid && config_in_stop)
+            || (write_addr == BUFFER_DEPTH - 1)) begin
+          state <= TRANSFER;
+        end
+      end
+      TRANSFER: if (data_out_last) state <= IDLE;
+    endcase
+  end
+end
+// buffer logic
+// let's actually make the data_out_valid to spec
+// will be a little bit of work, since we want to register the output (so
+// valid will have to be delayed appropriately), but valid shouldn't
+// depend on ready signal from DMA IP (according to spec).
 always_ff @(posedge clk) begin
   if (reset) begin
   end else begin
+    unique case (state)
+      IDLE: begin
+      end
+      CAPTURE: begin
+      end
+      TRANSFER: begin
+      end
+    endcase
+  end
 end
 
 endmodule
