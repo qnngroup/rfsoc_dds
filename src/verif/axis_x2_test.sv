@@ -1,0 +1,1 @@
+../../dds_test.srcs/sim_1/new/axis_x2_test.sv
