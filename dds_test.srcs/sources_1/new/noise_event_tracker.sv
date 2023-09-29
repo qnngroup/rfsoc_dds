@@ -281,7 +281,8 @@ endmodule
 module noise_event_tracker_sv_wrapper #(
   parameter int BUFFER_DEPTH = 1024,
   parameter int SAMPLE_WIDTH = 16,
-  parameter int AXI_MM_WIDTH = 128
+  parameter int AXI_MM_WIDTH = 128,
+  parameter int DECIMATION_BELOW_THRESH = 10000
 ) (
   input wire clk, reset,
 
@@ -298,7 +299,7 @@ module noise_event_tracker_sv_wrapper #(
   input data_in_02_valid,
   output data_in_02_ready,
 
-  input config_in,
+  input [3+2*SAMPLE_WIDTH-1:0] config_in,
   input config_in_valid,
   output config_in_ready
 );
@@ -311,7 +312,8 @@ Axis_If #(.DWIDTH(3+2*SAMPLE_WIDTH)) config_in_if();
 noise_event_tracker #(
   .BUFFER_DEPTH(BUFFER_DEPTH),
   .SAMPLE_WIDTH(SAMPLE_WIDTH),
-  .AXI_MM_WIDTH(AXI_MM_WIDTH)
+  .AXI_MM_WIDTH(AXI_MM_WIDTH),
+  .DECIMATION_BELOW_THRESH(DECIMATION_BELOW_THRESH)
 ) noise_event_tracker_i (
   .clk,
   .reset,

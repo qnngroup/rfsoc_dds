@@ -23,9 +23,9 @@ assign m_axis_tkeep = 16'hffff;
 
 noise_event_tracker_sv_wrapper #(
   .BUFFER_DEPTH(8192),
-  .INPUT_SAMPLE_WIDTH(16),
-  .OUTPUT_SAMPLE_WIDTH(16),
-  .AXI_MM_WIDTH(128)
+  .SAMPLE_WIDTH(16),
+  .AXI_MM_WIDTH(128),
+  .DECIMATION_BELOW_THRESH(10000)
 ) noise_event_tracker_sv_wrapper_i (
   .clk(clk),
   .reset(~reset_n),
