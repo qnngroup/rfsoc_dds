@@ -11,9 +11,9 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="21,217.500 ns"></ZoomStartTime>
-      <ZoomEndTime time="21,970.501 ns"></ZoomEndTime>
-      <Cursor1Time time="21,845.000 ns"></Cursor1Time>
+      <ZoomStartTime time="370.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="4,135.001 ns"></ZoomEndTime>
+      <Cursor1Time time="3,505.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="187"></NameColumnWidth>
@@ -23,6 +23,10 @@
    <wvobject type="array" fp_name="/fifo_test/error_count">
       <obj_property name="ElementShortName">error_count[31:0]</obj_property>
       <obj_property name="ObjectShortName">error_count[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/fifo_test/output_sample">
+      <obj_property name="ElementShortName">output_sample[15:0]</obj_property>
+      <obj_property name="ObjectShortName">output_sample[15:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/fifo_test/reset">
       <obj_property name="ElementShortName">reset</obj_property>
@@ -43,10 +47,6 @@
    <wvobject type="array" fp_name="/fifo_test/input_sample">
       <obj_property name="ElementShortName">input_sample[15:0]</obj_property>
       <obj_property name="ObjectShortName">input_sample[15:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/fifo_test/output_sample">
-      <obj_property name="ElementShortName">output_sample[15:0]</obj_property>
-      <obj_property name="ObjectShortName">output_sample[15:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/fifo_test/CLK_RATE_HZ">
       <obj_property name="ElementShortName">CLK_RATE_HZ[31:0]</obj_property>
@@ -131,6 +131,7 @@
    <wvobject type="array" fp_name="/fifo_test/dut_i/buffer">
       <obj_property name="ElementShortName">buffer[0:31][15:0]</obj_property>
       <obj_property name="ObjectShortName">buffer[0:31][15:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/fifo_test/dut_i/read_addr">
       <obj_property name="ElementShortName">read_addr[5:0]</obj_property>
