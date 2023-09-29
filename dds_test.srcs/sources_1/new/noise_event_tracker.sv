@@ -205,7 +205,7 @@ always_ff @(posedge clk) begin
       IDLE: if (config_in.valid && config_in_start) state <= CAPTURE;
       CAPTURE: begin
         if ((config_in.valid && config_in_stop)
-            || (write_addr == BUFFER_DEPTH - 1)) begin
+            || (data_in_word_valid && (write_addr == BUFFER_DEPTH - 1))) begin
           state <= POSTCAPTURE;
         end
       end
