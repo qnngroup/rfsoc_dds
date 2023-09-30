@@ -28,7 +28,6 @@ always_ff @(posedge clk) begin
   if (reset) begin
     read_addr <= '0;
     write_addr <= '0;
-    data_out.data <= '0;
   end else begin
     if (!full && data_in.valid) begin
       buffer[write_addr[ADDR_WIDTH-1:0]] <= data_in.data;

@@ -22,7 +22,9 @@ noise_event_tracker #(
   .BUFFER_DEPTH(32), // 32x128 = 128 samples from each channel can be stored
   .SAMPLE_WIDTH(16),
   .AXI_MM_WIDTH(128),
-  .DECIMATION_BELOW_THRESH(DEC_RATE) // don't decimate for now
+  .DECIMATION_BELOW_THRESH(DEC_RATE),
+  .COUNT_BITS(40),
+  .TIMESTAMP_BUFFER_DEPTH(8)
 ) dut_i (
   .clk,
   .reset,
@@ -117,24 +119,48 @@ end
 int error_count_00;
 int error_count_02;
 int words_checked;
+int timestamp_words;
+logic data_out_type; // 0 for timestamp, 1 for samples
+logic [63:0] timestamps_received_00 [$];
+logic [63:0] timestamps_received_02 [$];
 logic [15:0] data_received_00 [$];
 logic [15:0] data_received_02 [$];
 // check output
 always @(posedge clk) begin
   if (reset) begin
+    data_out_type = '0;
+    timestamp_words = 0;
     words_checked = 0;
-    error_count_00 = 0;
-    error_count_02 = 0;
   end else begin
     if (data_out_if.valid && data_out_if.ready) begin
-      words_checked = words_checked + 1;
-      for (int i = 0; i < 8; i++) begin
-        if (data_out_if.data[i*16+1]) begin
-          // channel 02
-          data_received_02.push_front(data_out_if.data[i*16+:16]);
-        end else begin
-          // channel 00
-          data_received_00.push_front(data_out_if.data[i*16+:16]);
+      if (data_out_type) begin
+        words_checked = words_checked + 1;
+        for (int i = 0; i < 8; i++) begin
+          if (data_out_if.data[i*16+2]) begin
+            // channel 02
+            data_received_02.push_front(data_out_if.data[i*16+:16]);
+          end else begin
+            // channel 00
+            data_received_00.push_front(data_out_if.data[i*16+:16]);
+          end
+        end
+        if (data_out_if.last) begin
+          data_out_type = 0;
+        end
+      end else begin
+        // save timestamp
+        timestamp_words = timestamp_words + 1;
+        // since counter bits = 40, each word will still be 64 bits even
+        // though addresses are small
+        if (data_out_if.data[127]) begin
+          data_out_type = 1;
+        end
+        for (int i = 0; i < 2; i++) begin
+          if (data_out_if.data[i*64]) begin
+            timestamps_received_02.push_front(data_out_if.data[i*64+:49]);
+          end else begin
+            timestamps_received_00.push_front(data_out_if.data[i*64+:49]);
+          end
         end
       end
     end
@@ -168,6 +194,7 @@ task send_samples_together(input int num_pairs);
 endtask
 
 task do_readout();
+  data_out_if.ready <= 1'b0;
   stop <= 1'b1;
   config_in_if.valid <= 1'b1;
   @(posedge clk);
@@ -184,26 +211,45 @@ task do_readout();
 endtask
 
 task check_output();
-  $info("word count (received: %d, sent: %d)", words_checked, words_stored);
-  $info("ch00 sample count (received: %d, sent: %d)", data_received_00.size(), data_sent_00.size());
-  $info("ch02 sample count (received: %d, sent: %d)", data_received_02.size(), data_sent_02.size());
+  string timestamps;
+  logic [63:0] tstamp_temp;
+  error_count_00 = 0;
+  error_count_02 = 0;
+  $display("word count (received: %d, sent: %d)", words_checked, words_stored);
+  $display("timestamp word count: ", timestamp_words);
+  $display("ch00 timestamp count: ", timestamps_received_00.size());
+  $display("ch02 timestamp count: ", timestamps_received_02.size());
+  timestamps = "ch00 timestamps: ";
+  while (timestamps_received_00.size() > 0) begin
+    tstamp_temp = timestamps_received_00.pop_back();
+    timestamps = {timestamps, $sformatf("\nt = %0d, addr = 0x%x,0x%x (0x%x raw)", tstamp_temp[48-:40], tstamp_temp[5:1], tstamp_temp[8:6], tstamp_temp)};
+  end
+  $display(timestamps);
+  timestamps = "ch02 timestamps: ";
+  while (timestamps_received_02.size() > 0) begin
+    tstamp_temp = timestamps_received_02.pop_back();
+    timestamps = {timestamps, $sformatf("\nt = %0d, addr = 0x%x,0x%x (0x%x raw)", tstamp_temp[48-:40], tstamp_temp[5:1], tstamp_temp[8:6], tstamp_temp)};
+  end
+  $display(timestamps);
+  $display("ch00 sample count (received: %d, sent: %d)", data_received_00.size(), data_sent_00.size());
+  $display("ch02 sample count (received: %d, sent: %d)", data_received_02.size(), data_sent_02.size());
   while (data_received_00.size() > 0 && data_sent_00.size() > 0) begin
-    if ((data_received_00[$] & 16'hfffc) != (data_sent_00[$] & 16'hfffc)) begin
-      $info("ch00 mismatch (got %x, expected %x)", data_received_00[$] & 16'hfffc, data_sent_00[$] & 16'hfffc);
+    if ((data_received_00[$] & 16'hfff8) != (data_sent_00[$] & 16'hfff8)) begin
+      $display("ch00 mismatch (got %x, expected %x)", data_received_00[$] & 16'hfff8, data_sent_00[$] & 16'hfff8);
       error_count_00 = error_count_00 + 1;
     end
     data_sent_00.pop_back();
     data_received_00.pop_back();
   end
   while (data_received_02.size() > 0 && data_sent_02.size() > 0) begin
-    if ((data_received_02[$] & 16'hfffc) != (data_sent_02[$] & 16'hfffc)) begin
-      $info("ch02 mismatch (got %x, expected %x)", data_received_02[$] & 16'hfffc, data_sent_02[$] & 16'hfffc);
+    if ((data_received_02[$] & 16'hfff8) != (data_sent_02[$] & 16'hfff8)) begin
+      $display("ch02 mismatch (got %x, expected %x)", data_received_02[$] & 16'hfff8, data_sent_02[$] & 16'hfff8);
       error_count_02 = error_count_02 + 1;
     end
     data_sent_02.pop_back();
     data_received_02.pop_back();
   end
-  $info("error_count = (ch00: %d, ch02: %d)", error_count_00, error_count_02);
+  $display("error_count = (ch00: %d, ch02: %d)", error_count_00, error_count_02);
 endtask
 
 initial begin
@@ -255,7 +301,7 @@ initial begin
   // stop capture and read out
   do_readout();
   // check everything
-  $info("mode = 0 (no compression) test results:");
+  $display("mode = 0 (no compression) test results:");
   check_output();
 
   ///////////////////////////////////////
@@ -305,7 +351,7 @@ initial begin
   // wrap up
   do_readout();
   // check everything
-  $info("mode = 1 (compression) results:");
+  $display("mode = 1 (compression) results:");
   check_output();
 
   $finish;

@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="570.935000 us"></ZoomStartTime>
-      <ZoomEndTime time="892.335001 us"></ZoomEndTime>
-      <Cursor1Time time="838.735000 us"></Cursor1Time>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="1,557.000001 us"></ZoomEndTime>
+      <Cursor1Time time="85.845000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="187"></NameColumnWidth>
-      <ValueColumnWidth column_width="74"></ValueColumnWidth>
+      <NameColumnWidth column_width="210"></NameColumnWidth>
+      <ValueColumnWidth column_width="101"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="100" />
+   <WVObjectSize size="110" />
    <wvobject type="logic" fp_name="/noise_event_tracker_test/clk">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -198,31 +198,32 @@
          <obj_property name="ObjectShortName">[0][15:0]</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
          <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
          <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
          <obj_property name="AnalogYRangeMin">0.000000</obj_property>
          <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
          <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_in[1]">
          <obj_property name="ElementShortName">[1][15:0]</obj_property>
          <obj_property name="ObjectShortName">[1][15:0]</obj_property>
          <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
          <obj_property name="CellHeight">100</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
          <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
          <obj_property name="AnalogYRangeMin">0.000000</obj_property>
          <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
          <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
          <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
          <obj_property name="AnalogHorizLine">0.000000</obj_property>
-         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
       </wvobject>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_in_valid">
       <obj_property name="ElementShortName">data_in_valid[1:0]</obj_property>
       <obj_property name="ObjectShortName">data_in_valid[1:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_in_d">
       <obj_property name="ElementShortName">data_in_d[0:1][15:0]</obj_property>
@@ -231,23 +232,14 @@
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_in_valid_d">
       <obj_property name="ElementShortName">data_in_valid_d[0:1][1:0]</obj_property>
       <obj_property name="ObjectShortName">data_in_valid_d[0:1][1:0]</obj_property>
-      <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_in_valid_d[0]">
-         <obj_property name="ElementShortName">[0][1:0]</obj_property>
-         <obj_property name="ObjectShortName">[0][1:0]</obj_property>
-         <obj_property name="isExpanded"></obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_in_valid_d[1]">
-         <obj_property name="ElementShortName">[1][1:0]</obj_property>
-         <obj_property name="ObjectShortName">[1][1:0]</obj_property>
-      </wvobject>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/dec_counter">
       <obj_property name="ElementShortName">dec_counter[0:1][6:0]</obj_property>
       <obj_property name="ObjectShortName">dec_counter[0:1][6:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/fifo_out_data">
-      <obj_property name="ElementShortName">fifo_out_data[0:1][15:0]</obj_property>
-      <obj_property name="ObjectShortName">fifo_out_data[0:1][15:0]</obj_property>
+      <obj_property name="ElementShortName">fifo_out_data[0:1][55:0]</obj_property>
+      <obj_property name="ObjectShortName">fifo_out_data[0:1][55:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/fifo_ready">
       <obj_property name="ElementShortName">fifo_ready[1:0]</obj_property>
@@ -260,10 +252,6 @@
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/fifo_select">
       <obj_property name="ElementShortName">fifo_select</obj_property>
       <obj_property name="ObjectShortName">fifo_select</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/word_select">
-      <obj_property name="ElementShortName">word_select[2:0]</obj_property>
-      <obj_property name="ObjectShortName">word_select[2:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_in_word">
       <obj_property name="ElementShortName">data_in_word[127:0]</obj_property>
@@ -281,6 +269,10 @@
       <obj_property name="ElementShortName">buffer[0:31][127:0]</obj_property>
       <obj_property name="ObjectShortName">buffer[0:31][127:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/timestamp_buffer">
+      <obj_property name="ElementShortName">timestamp_buffer[0:7][127:0]</obj_property>
+      <obj_property name="ObjectShortName">timestamp_buffer[0:7][127:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/write_addr">
       <obj_property name="ElementShortName">write_addr[4:0]</obj_property>
       <obj_property name="ObjectShortName">write_addr[4:0]</obj_property>
@@ -293,17 +285,68 @@
       <obj_property name="ElementShortName">read_addr[4:0]</obj_property>
       <obj_property name="ObjectShortName">read_addr[4:0]</obj_property>
    </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/timestamp_write_addr">
+      <obj_property name="ElementShortName">timestamp_write_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">timestamp_write_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/timestamp_read_addr">
+      <obj_property name="ElementShortName">timestamp_read_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">timestamp_read_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/timestamp_read_stop_addr">
+      <obj_property name="ElementShortName">timestamp_read_stop_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">timestamp_read_stop_addr[4:0]</obj_property>
+   </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_out_word">
-      <obj_property name="ElementShortName">data_out_word[0:1][127:0]</obj_property>
-      <obj_property name="ObjectShortName">data_out_word[0:1][127:0]</obj_property>
+      <obj_property name="ElementShortName">data_out_word[127:0]</obj_property>
+      <obj_property name="ObjectShortName">data_out_word[127:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_out_valid">
       <obj_property name="ElementShortName">data_out_valid[2:0]</obj_property>
       <obj_property name="ObjectShortName">data_out_valid[2:0]</obj_property>
    </wvobject>
-   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_out_last">
-      <obj_property name="ElementShortName">data_out_last[1:0]</obj_property>
-      <obj_property name="ObjectShortName">data_out_last[1:0]</obj_property>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/timestamp_out_word">
+      <obj_property name="ElementShortName">timestamp_out_word[127:0]</obj_property>
+      <obj_property name="ObjectShortName">timestamp_out_word[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/timestamp_word_select">
+      <obj_property name="ElementShortName">timestamp_word_select[0:0]</obj_property>
+      <obj_property name="ObjectShortName">timestamp_word_select[0:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/timestamp_in_word">
+      <obj_property name="ElementShortName">timestamp_in_word[127:0]</obj_property>
+      <obj_property name="ObjectShortName">timestamp_in_word[127:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/timestamp_in_word_valid">
+      <obj_property name="ElementShortName">timestamp_in_word_valid</obj_property>
+      <obj_property name="ObjectShortName">timestamp_in_word_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/noise_level">
+      <obj_property name="ElementShortName">noise_level[1:0]</obj_property>
+      <obj_property name="ObjectShortName">noise_level[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/noise_level_d">
+      <obj_property name="ElementShortName">noise_level_d[1:0]</obj_property>
+      <obj_property name="ObjectShortName">noise_level_d[1:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_count">
+      <obj_property name="ElementShortName">sample_count[0:1][39:0]</obj_property>
+      <obj_property name="ObjectShortName">sample_count[0:1][39:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_count[0]">
+         <obj_property name="ElementShortName">[0][39:0]</obj_property>
+         <obj_property name="ObjectShortName">[0][39:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_count[1]">
+         <obj_property name="ElementShortName">[1][39:0]</obj_property>
+         <obj_property name="ObjectShortName">[1][39:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/data_out_type">
+      <obj_property name="ElementShortName">data_out_type</obj_property>
+      <obj_property name="ObjectShortName">data_out_type</obj_property>
    </wvobject>
    <wvobject fp_name="divider183" type="divider">
       <obj_property name="label">fifo0</obj_property>
@@ -318,16 +361,16 @@
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[0].fifo_i /buffer">
-      <obj_property name="ElementShortName">buffer[0:7][15:0]</obj_property>
-      <obj_property name="ObjectShortName">buffer[0:7][15:0]</obj_property>
+      <obj_property name="ElementShortName">buffer[0:3][55:0]</obj_property>
+      <obj_property name="ObjectShortName">buffer[0:3][55:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[0].fifo_i /read_addr">
-      <obj_property name="ElementShortName">read_addr[3:0]</obj_property>
-      <obj_property name="ObjectShortName">read_addr[3:0]</obj_property>
+      <obj_property name="ElementShortName">read_addr[2:0]</obj_property>
+      <obj_property name="ObjectShortName">read_addr[2:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[0].fifo_i /write_addr">
-      <obj_property name="ElementShortName">write_addr[3:0]</obj_property>
-      <obj_property name="ObjectShortName">write_addr[3:0]</obj_property>
+      <obj_property name="ElementShortName">write_addr[2:0]</obj_property>
+      <obj_property name="ObjectShortName">write_addr[2:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[0].fifo_i /full">
       <obj_property name="ElementShortName">full</obj_property>
@@ -346,8 +389,8 @@
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[0].fifo_in /data">
-      <obj_property name="ElementShortName">data[15:0]</obj_property>
-      <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      <obj_property name="ElementShortName">data[55:0]</obj_property>
+      <obj_property name="ObjectShortName">data[55:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[0].fifo_in /ready">
       <obj_property name="ElementShortName">ready</obj_property>
@@ -362,8 +405,8 @@
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[0].fifo_out /data">
-      <obj_property name="ElementShortName">data[15:0]</obj_property>
-      <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      <obj_property name="ElementShortName">data[55:0]</obj_property>
+      <obj_property name="ObjectShortName">data[55:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[0].fifo_out /ready">
       <obj_property name="ElementShortName">ready</obj_property>
@@ -386,16 +429,16 @@
       <obj_property name="ObjectShortName">reset</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[1].fifo_i /buffer">
-      <obj_property name="ElementShortName">buffer[0:7][15:0]</obj_property>
-      <obj_property name="ObjectShortName">buffer[0:7][15:0]</obj_property>
+      <obj_property name="ElementShortName">buffer[0:3][55:0]</obj_property>
+      <obj_property name="ObjectShortName">buffer[0:3][55:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[1].fifo_i /read_addr">
-      <obj_property name="ElementShortName">read_addr[3:0]</obj_property>
-      <obj_property name="ObjectShortName">read_addr[3:0]</obj_property>
+      <obj_property name="ElementShortName">read_addr[2:0]</obj_property>
+      <obj_property name="ObjectShortName">read_addr[2:0]</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[1].fifo_i /write_addr">
-      <obj_property name="ElementShortName">write_addr[3:0]</obj_property>
-      <obj_property name="ObjectShortName">write_addr[3:0]</obj_property>
+      <obj_property name="ElementShortName">write_addr[2:0]</obj_property>
+      <obj_property name="ObjectShortName">write_addr[2:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[1].fifo_i /full">
       <obj_property name="ElementShortName">full</obj_property>
@@ -414,8 +457,8 @@
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[1].fifo_in /data">
-      <obj_property name="ElementShortName">data[15:0]</obj_property>
-      <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      <obj_property name="ElementShortName">data[55:0]</obj_property>
+      <obj_property name="ObjectShortName">data[55:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[1].fifo_in /ready">
       <obj_property name="ElementShortName">ready</obj_property>
@@ -430,8 +473,8 @@
       <obj_property name="DisplayName">label</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[1].fifo_out /data">
-      <obj_property name="ElementShortName">data[15:0]</obj_property>
-      <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      <obj_property name="ElementShortName">data[55:0]</obj_property>
+      <obj_property name="ObjectShortName">data[55:0]</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/\fifo_gen.genblk1[1].fifo_out /ready">
       <obj_property name="ElementShortName">ready</obj_property>
