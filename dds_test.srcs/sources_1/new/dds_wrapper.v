@@ -4,18 +4,18 @@ module dds_wrapper (
   output [1023:0] cos_out_tdata,
   output cos_out_tvalid,
   input cos_out_tready,
-  input [23:0] phase_inc_in_tdata,
+  input [31:0] phase_inc_in_tdata,
   input phase_inc_in_tvalid,
   output phase_inc_in_tready,
-  input [3:0] cos_scale_in_tdata,
+  input [31:0] cos_scale_in_tdata,
   input cos_scale_in_tvalid,
   output cos_scale_in_tready
 );
 
 dds_sv_wrapper #(
-  .PHASE_BITS(24),
+  .PHASE_BITS(32),
   .OUTPUT_WIDTH(16),
-  .QUANT_BITS(12),
+  .QUANT_BITS(20),
   .PARALLEL_SAMPLES(64)
 ) dds_sv_wrapper_i (
   .clk(clk),
@@ -27,7 +27,7 @@ dds_sv_wrapper #(
   .phase_inc_in_data(phase_inc_in_tdata),
   .phase_inc_in_valid(phase_inc_in_tvalid),
   .phase_inc_in_ready(phase_inc_in_tready),
-  .cos_scale_in_data(cos_scale_in_tdata),
+  .cos_scale_in_data(cos_scale_in_tdata[3:0]),
   .cos_scale_in_valid(cos_scale_in_tvalid),
   .cos_scale_in_ready(cos_scale_in_tready)
 );

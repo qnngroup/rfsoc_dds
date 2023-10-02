@@ -14,7 +14,7 @@ module noise_event_tracker_wrapper (
   input s02_axis_tvalid,
   output s02_axis_tready,
 
-  input [34:0] s_axis_config_tdata,
+  input [63:0] s_axis_config_tdata,
   input s_axis_config_tvalid,
   output s_axis_config_tready
 );
@@ -25,7 +25,7 @@ noise_event_tracker_sv_wrapper #(
   .BUFFER_DEPTH(32768),
   .SAMPLE_WIDTH(16),
   .AXI_MM_WIDTH(128),
-  .DECIMATION_BELOW_THRESH(10000),
+  .DECIMATION_BELOW_THRESH(16000),
   .COUNT_BITS(40),
   .TIMESTAMP_BUFFER_DEPTH(1024)
 ) noise_event_tracker_sv_wrapper_i (
@@ -41,7 +41,7 @@ noise_event_tracker_sv_wrapper #(
   .data_in_02(s02_axis_tdata),
   .data_in_02_valid(s02_axis_tvalid),
   .data_in_02_ready(s02_axis_tready),
-  .config_in(s_axis_config_tdata),
+  .config_in(s_axis_config_tdata[34:0]),
   .config_in_valid(s_axis_config_tvalid),
   .config_in_ready(s_axis_config_tready)
 );

@@ -135,7 +135,7 @@ generate begin: fifo_gen
 
     fifo #(
       .DATA_WIDTH(SAMPLE_WIDTH+COUNT_BITS),
-      .ADDR_WIDTH(2) // does not need to be deep at all since samples are arriving at such a low rate
+      .ADDR_WIDTH(5) // does not need to be deep at all since samples are arriving at such a low rate
     ) fifo_i (
       .clk,
       .reset,

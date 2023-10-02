@@ -6,7 +6,9 @@ module dac_prescaler_wrapper (
   input [255:0] s_axis_tdata,
   input s_axis_tvalid,
   output s_axis_tready,
-  input [17:0] scale_factor // 2Q16 (2's complement)
+  input [31:0] s_axis_scale_tdata, // 2Q16 (2's complement)
+  input s_axis_scale_tvalid,
+  output s_axis_scale_tready
 );
 
 dac_prescaler_sv_wrapper #(
@@ -21,7 +23,9 @@ dac_prescaler_sv_wrapper #(
   .data_in(s_axis_tdata),
   .data_in_valid(s_axis_tvalid),
   .data_in_ready(s_axis_tready),
-  .scale_factor(scale_factor)
+  .scale_factor(s_axis_scale_tdata[17:0]),
+  .scale_factor_valid(s_axis_scale_tvalid),
+  .scale_factor_ready(s_axis_scale_tready)
 );
 
 

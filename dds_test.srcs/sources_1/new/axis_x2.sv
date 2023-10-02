@@ -9,9 +9,9 @@ module axis_x2 #(
   Axis_If.Master_Simple data_out
 );
 
-logic [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 1Q15
-logic [2*SAMPLE_WIDTH-1:0] product [PARALLEL_SAMPLES]; // 2Q30
-logic [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 2Q14
+logic signed [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 1Q15
+logic signed [2*SAMPLE_WIDTH-1:0] product [PARALLEL_SAMPLES]; // 2Q30
+logic signed [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 2Q14
 logic [3:0] valid_d;
 
 always_ff @(posedge clk) begin

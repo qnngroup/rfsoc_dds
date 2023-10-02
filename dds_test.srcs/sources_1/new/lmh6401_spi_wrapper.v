@@ -1,6 +1,6 @@
 module lmh6401_spi_wrapper (
   input wire clk, reset_n,
-  input [16:0] data_in_tdata,
+  input [31:0] data_in_tdata,
   input data_in_tvalid,
   output data_in_tready,
   output [1:0] cs_n,
@@ -15,7 +15,7 @@ lmh6401_spi #(
 ) lmh6401_spi_i (
   .clk(clk),
   .reset(~reset_n),
-  .addr_in(data_in_tdata[16:16]),
+  .addr_in(data_in_tdata[16]),
   .data_in(data_in_tdata[15:0]),
   .data_in_valid(data_in_tvalid),
   .data_in_ready(data_in_tready),

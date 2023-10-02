@@ -6,20 +6,22 @@ module dac_prescaler #(
   input wire clk, reset,
   Axis_If.Master_Simple data_out,
   Axis_If.Slave_Simple data_in,
-  input [17:0] scale_factor
+  Axis_If.Slave_Simple scale_factor // 2Q16
 );
 
-logic [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 1Q15
-logic [17:0] scale_factor_reg; // 2Q16
-logic [33:0] product [PARALLEL_SAMPLES]; // 3Q31
-logic [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 1Q15
+logic signed [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 1Q15
+logic signed [17:0] scale_factor_reg; // 2Q16
+logic signed [33:0] product [PARALLEL_SAMPLES]; // 3Q31
+logic signed [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 1Q15
 logic [3:0] valid_d;
 
 always_ff @(posedge clk) begin
   if (reset) begin
     valid_d <= '0;
   end
-  scale_factor_reg <= scale_factor; // always update scale factor
+  if (scale_factor.valid && scale_factor.ready) begin
+    scale_factor_reg <= scale_factor.data; // always update scale factor
+  end
   if (data_in.valid && data_in.ready) begin
     for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
       data_in_reg[i] <= data_in.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH]; // 1Q15*2Q16 = 3Q31
@@ -33,6 +35,7 @@ end
 
 assign data_out.valid = valid_d[3];
 assign data_in.ready = data_out.ready;
+assign scale_factor.ready = 1'b1;
 
 endmodule
 
@@ -47,11 +50,14 @@ module dac_prescaler_sv_wrapper #(
   input [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] data_in,
   input data_in_valid,
   output data_in_ready,
-  input [17:0] scale_factor // 2Q16 (2's complement)
+  input [17:0] scale_factor, // 2Q16 (2's complement)
+  input scale_factor_valid,
+  output scale_factor_ready
 );
 
 Axis_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES)) data_out_if();
 Axis_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES)) data_in_if();
+Axis_If #(.DWIDTH(18)) scale_factor_if();
 
 dac_prescaler #(
   .SAMPLE_WIDTH(SAMPLE_WIDTH),
@@ -61,7 +67,7 @@ dac_prescaler #(
   .reset,
   .data_out(data_out_if),
   .data_in(data_in_if),
-  .scale_factor(scale_factor)
+  .scale_factor(scale_factor_if)
 );
 
 assign data_out = data_out_if.data;
@@ -71,6 +77,10 @@ assign data_out_if.ready = data_out_ready;
 assign data_in_if.data = data_in;
 assign data_in_if.valid = data_in_valid;
 assign data_in_ready = data_in_if.ready;
+
+assign scale_factor_if.data = scale_factor;
+assign scale_factor_if.valid = scale_factor_valid;
+assign scale_factor_ready = scale_factor_if.ready;
 
 endmodule
 
