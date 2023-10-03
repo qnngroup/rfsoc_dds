@@ -1,0 +1,280 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="sample_discriminator_test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="sample_discriminator_test" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="1,313.867 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,692.368 ns"></ZoomEndTime>
+      <Cursor1Time time="1,590.367 ns"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="183"></NameColumnWidth>
+      <ValueColumnWidth column_width="66"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="62" />
+   <wvobject type="logic" fp_name="/sample_discriminator_test/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/threshold_high">
+      <obj_property name="ElementShortName">threshold_high[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_high[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/threshold_low">
+      <obj_property name="ElementShortName">threshold_low[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_low[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/sample_count">
+      <obj_property name="ElementShortName">sample_count[55:0]</obj_property>
+      <obj_property name="ObjectShortName">sample_count[55:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/is_high">
+      <obj_property name="ElementShortName">is_high</obj_property>
+      <obj_property name="ObjectShortName">is_high</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/is_high_d">
+      <obj_property name="ElementShortName">is_high_d</obj_property>
+      <obj_property name="ObjectShortName">is_high_d</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/new_is_high">
+      <obj_property name="ElementShortName">new_is_high</obj_property>
+      <obj_property name="ObjectShortName">new_is_high</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/data_range_low">
+      <obj_property name="ElementShortName">data_range_low[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_range_low[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/data_range_high">
+      <obj_property name="ElementShortName">data_range_high[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_range_high[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/CLK_RATE_HZ">
+      <obj_property name="ElementShortName">CLK_RATE_HZ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLK_RATE_HZ[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider208" type="divider">
+      <obj_property name="label">dut</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/threshold_low">
+      <obj_property name="ElementShortName">threshold_low[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_low[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/threshold_high">
+      <obj_property name="ElementShortName">threshold_high[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_high[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/data_in_reg">
+      <obj_property name="ElementShortName">data_in_reg[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in_reg[15:0]</obj_property>
+      <obj_property name="WaveformStyle">STYLE_ANALOG</obj_property>
+      <obj_property name="CellHeight">100</obj_property>
+      <obj_property name="AnalogYRangeType">ANALOG_YRANGETYPE_AUTO</obj_property>
+      <obj_property name="AnalogYRangeMin">0.000000</obj_property>
+      <obj_property name="AnalogYRRangeMax">0.000000</obj_property>
+      <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
+      <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
+      <obj_property name="AnalogHorizLine">0.000000</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/data_in_valid">
+      <obj_property name="ElementShortName">data_in_valid</obj_property>
+      <obj_property name="ObjectShortName">data_in_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/sample_count">
+      <obj_property name="ElementShortName">sample_count[55:0]</obj_property>
+      <obj_property name="ObjectShortName">sample_count[55:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/is_high">
+      <obj_property name="ElementShortName">is_high</obj_property>
+      <obj_property name="ObjectShortName">is_high</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/is_high_d">
+      <obj_property name="ElementShortName">is_high_d</obj_property>
+      <obj_property name="ObjectShortName">is_high_d</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/new_is_high">
+      <obj_property name="ElementShortName">new_is_high</obj_property>
+      <obj_property name="ObjectShortName">new_is_high</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/subword_sel">
+      <obj_property name="ElementShortName">subword_sel[2:0]</obj_property>
+      <obj_property name="ObjectShortName">subword_sel[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/SAMPLE_WIDTH">
+      <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/CLOCK_WIDTH">
+      <obj_property name="ElementShortName">CLOCK_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLOCK_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/SPLIT_TIMESTAMP_COUNT">
+      <obj_property name="ElementShortName">SPLIT_TIMESTAMP_COUNT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SPLIT_TIMESTAMP_COUNT[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider239" type="divider">
+      <obj_property name="label">data_out_if</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/data_out_if/data">
+      <obj_property name="ElementShortName">data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/data_out_if/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/data_out_if/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/data_out_if/last">
+      <obj_property name="ElementShortName">last</obj_property>
+      <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/data_out_if/DWIDTH">
+      <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider261" type="divider">
+      <obj_property name="label">input_fifo</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/buffer">
+      <obj_property name="ElementShortName">buffer[0:15][71:0]</obj_property>
+      <obj_property name="ObjectShortName">buffer[0:15][71:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/read_addr">
+      <obj_property name="ElementShortName">read_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">read_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/write_addr">
+      <obj_property name="ElementShortName">write_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">write_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/lsbs_equal">
+      <obj_property name="ElementShortName">lsbs_equal</obj_property>
+      <obj_property name="ObjectShortName">lsbs_equal</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider272" type="divider">
+      <obj_property name="label">output_fifo</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/output_fifo_i/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/output_fifo_i/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/output_fifo_i/buffer">
+      <obj_property name="ElementShortName">buffer[0:15][15:0]</obj_property>
+      <obj_property name="ObjectShortName">buffer[0:15][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/output_fifo_i/read_addr">
+      <obj_property name="ElementShortName">read_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">read_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/output_fifo_i/write_addr">
+      <obj_property name="ElementShortName">write_addr[4:0]</obj_property>
+      <obj_property name="ObjectShortName">write_addr[4:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/output_fifo_i/full">
+      <obj_property name="ElementShortName">full</obj_property>
+      <obj_property name="ObjectShortName">full</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/output_fifo_i/empty">
+      <obj_property name="ElementShortName">empty</obj_property>
+      <obj_property name="ObjectShortName">empty</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/output_fifo_i/lsbs_equal">
+      <obj_property name="ElementShortName">lsbs_equal</obj_property>
+      <obj_property name="ObjectShortName">lsbs_equal</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider283" type="divider">
+      <obj_property name="label">output_fifo_in_if</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/output_fifo_in/data">
+      <obj_property name="ElementShortName">data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/output_fifo_in/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/output_fifo_in/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider289" type="divider">
+      <obj_property name="label">input_fifo_out_if</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/input_fifo_out/data">
+      <obj_property name="ElementShortName">data[71:0]</obj_property>
+      <obj_property name="ObjectShortName">data[71:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_out/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_out/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider295" type="divider">
+      <obj_property name="label">input_fifo_in_if</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/input_fifo_in/data">
+      <obj_property name="ElementShortName">data[71:0]</obj_property>
+      <obj_property name="ObjectShortName">data[71:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_in/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/input_fifo_in/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+</wave_config>
