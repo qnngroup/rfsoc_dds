@@ -1,4 +1,4 @@
-// sample discriminator
+// sample discriminator - Reed Foster
 // If input sample is above high threshold (with hysteresis), it is passed through,
 // otherwise it is dropped. If the preceeding sample was below the low threshold,
 // then a timestamp is also sent out after the current sample (indicated by
@@ -15,6 +15,9 @@ module sample_discriminator #(
   Axis_If.Master_Simple data_out,
   Axis_If.Slave_Simple config_in // {threshold_high, threshold_low}
 );
+
+// mask of LSB so we don't erroneously compare with the lower bits of the threshold
+localparam logic [SAMPLE_WIDTH-1:0] DATA_MASK = {{(SAMPLE_WIDTH-1){1'b1}}, 1'b0};
 
 assign config_in.ready = 1'b1;
 assign data_in.ready = 1'b1; // always process new samples; we'll just throw them away later if we don't need them
@@ -52,9 +55,9 @@ always_ff @(posedge clk) begin
       data_in_reg <= data_in.data;
       is_high_d <= is_high;
       sample_count <= sample_count + 1'b1;
-      if (data_in.data > threshold_high) begin
+      if ((data_in.data & DATA_MASK) > threshold_high) begin
         is_high <= 1'b1;
-      end else if (data_in.data < threshold_low) begin
+      end else if ((data_in.data & DATA_MASK) < threshold_low) begin
         is_high <= 1'b0;
       end
     end

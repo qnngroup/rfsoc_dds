@@ -25,9 +25,7 @@ noise_event_tracker_sv_wrapper #(
   .BUFFER_DEPTH(32768),
   .SAMPLE_WIDTH(16),
   .AXI_MM_WIDTH(128),
-  .DECIMATION_BELOW_THRESH(16000),
-  .COUNT_BITS(40),
-  .TIMESTAMP_BUFFER_DEPTH(1024)
+  .CLOCK_WIDTH(40)
 ) noise_event_tracker_sv_wrapper_i (
   .clk(clk),
   .reset(~reset_n),
@@ -41,7 +39,7 @@ noise_event_tracker_sv_wrapper #(
   .data_in_02(s02_axis_tdata),
   .data_in_02_valid(s02_axis_tvalid),
   .data_in_02_ready(s02_axis_tready),
-  .config_in(s_axis_config_tdata[34:0]),
+  .config_in(s_axis_config_tdata[33:0]),
   .config_in_valid(s_axis_config_tvalid),
   .config_in_ready(s_axis_config_tready)
 );

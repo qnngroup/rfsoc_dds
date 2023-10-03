@@ -53,7 +53,9 @@ always @(posedge clk) begin
       is_high_d <= is_high;
       if (data_in_if.data > threshold_high) begin
         is_high <= 1'b1;
-      end 
+      end else if (data_in_if.data < threshold_low) begin
+        is_high <= 1'b0;
+      end
       sample_count <= sample_count + 1'b1;
       data_in_if.data <= $urandom_range(data_range_low, data_range_high);
     end
@@ -93,25 +95,25 @@ endtask
 
 task check_results();
   logic [55:0] tstamp_temp;
+  $display("data_sent.size() = %0d", data_sent.size());
+  $display("data_received.size() = %0d", data_received.size());
   if (data_sent.size() != data_received.size()) begin
     $display("mismatch in amount of sent/received data");
-    $display("data_sent.size() = %0d", data_sent.size());
-    $display("data_received.size() = %0d", data_received.size());
-    for (int i = 0; i < data_sent.size(); i++) begin
+    for (int i = data_sent.size() - 1; i >= 0; i--) begin
       $display("data_sent[%0d] = %x", i, data_sent[i]);
     end
-    for (int i = 0; i < data_received.size(); i++) begin
+    for (int i = data_received.size() - 1; i >= 0; i--) begin
       $display("data_received[%0d] = %x", i, data_received[i]);
     end
   end
+  $display("timestamps_sent.size() = %0d", timestamps_sent.size());
+  $display("timestamps_received.size() = %0d", timestamps_received.size());
   if (timestamps_sent.size()*4 != timestamps_received.size()) begin
     $display("mismatch in amount of sent/received timestamps");
-    $display("timestamps_sent.size() = %0d", timestamps_sent.size());
-    $display("timestamps_received.size() = %0d", timestamps_received.size());
-    for (int i = 0; i < timestamps_sent.size(); i++) begin
+    for (int i = timestamps_sent.size() - 1; i >= 0; i--) begin
       $display("timestamps_sent[%0d] = %x", i, timestamps_sent[i]);
     end
-    for (int i = 0; i < timestamps_received.size(); i++) begin
+    for (int i = timestamps_received.size() - 1; i >= 0; i--) begin
       $display("timestamps_received[%0d] = %x", i, timestamps_received[i]);
     end
   end
@@ -144,6 +146,17 @@ initial begin
   reset <= 1'b0;
   repeat (50) @(posedge clk);
   send_samples(50);
+  repeat (50) @(posedge clk);
+  // change amplitudes and threshold to check sample-rejection
+  data_range_low <= 16'h00ff;
+  data_range_high <= 16'h0fff;
+  threshold_low <= 16'h03ff;
+  threshold_high <= 16'h07ff;
+  config_in_if.valid <= 1'b1;
+  @(posedge clk);
+  config_in_if.valid <= 1'b0;
+  repeat (50) @(posedge clk);
+  send_samples(200);
   repeat (50) @(posedge clk);
   check_results();
   $finish;
