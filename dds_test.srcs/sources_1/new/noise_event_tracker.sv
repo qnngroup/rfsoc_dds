@@ -220,9 +220,7 @@ module noise_event_tracker_sv_wrapper #(
   parameter int BUFFER_DEPTH = 1024,
   parameter int SAMPLE_WIDTH = 16,
   parameter int AXI_MM_WIDTH = 128,
-  parameter int DECIMATION_BELOW_THRESH = 10000,
-  parameter int COUNT_BITS = 40,
-  parameter int TIMESTAMP_BUFFER_DEPTH = 128
+  parameter int CLOCK_WIDTH = 56
 ) (
   input wire clk, reset,
 
@@ -239,7 +237,7 @@ module noise_event_tracker_sv_wrapper #(
   input data_in_02_valid,
   output data_in_02_ready,
 
-  input [3+2*SAMPLE_WIDTH-1:0] config_in,
+  input [2+2*SAMPLE_WIDTH-1:0] config_in,
   input config_in_valid,
   output config_in_ready
 );
@@ -247,15 +245,13 @@ module noise_event_tracker_sv_wrapper #(
 Axis_If #(.DWIDTH(SAMPLE_WIDTH)) data_in_00_if();
 Axis_If #(.DWIDTH(SAMPLE_WIDTH)) data_in_02_if();
 Axis_If #(.DWIDTH(AXI_MM_WIDTH)) data_out_if();
-Axis_If #(.DWIDTH(3+2*SAMPLE_WIDTH)) config_in_if();
+Axis_If #(.DWIDTH(2+2*SAMPLE_WIDTH)) config_in_if();
 
 noise_event_tracker #(
   .BUFFER_DEPTH(BUFFER_DEPTH),
   .SAMPLE_WIDTH(SAMPLE_WIDTH),
   .AXI_MM_WIDTH(AXI_MM_WIDTH),
-  .DECIMATION_BELOW_THRESH(DECIMATION_BELOW_THRESH),
-  .COUNT_BITS(COUNT_BITS),
-  .TIMESTAMP_BUFFER_DEPTH(TIMESTAMP_BUFFER_DEPTH)
+  .CLOCK_WIDTH(CLOCK_WIDTH)
 ) noise_event_tracker_i (
   .clk,
   .reset,
