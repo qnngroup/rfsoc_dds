@@ -30,10 +30,10 @@ noise_event_tracker #(
   .config_in(config_in_if)
 );
 
-logic [15:0] data_sent [$];
-logic [15:0] timestamps_sent [$];
-logic [15:0] data_received [$];
-logic [15:0] timestamps_received [$];
+logic [15:0] data_sent [2][$];
+logic [15:0] timestamps_sent [2][$];
+logic [15:0] data_received [2][$];
+logic [15:0] timestamps_received [2][$];
 
 logic [1:0][55:0] sample_count;
 logic [1:0][15:0] data_in_d;
@@ -57,9 +57,9 @@ always @(posedge clk) begin
     if (data_in_00_if.valid && data_in_00_if.ready) begin
       data_in_d[0] <= data_in_00_if.data;
       is_high_d[0] <= is_high[0];
-      if (data_in_00_if.data > threshold_high) begin
+      if ((data_in_00_if.data & 16'hfffe) > threshold_high) begin
         is_high[0] <= 1'b1;
-      end else if (data_in_00_if.data < threshold_low) begin
+      end else if ((data_in_00_if.data & 16'hfffe) < threshold_low) begin
         is_high[0] <= 1'b0;
       end
       sample_count[0] <= sample_count[0] + 1'b1;
@@ -68,9 +68,9 @@ always @(posedge clk) begin
     if (data_in_02_if.valid && data_in_02_if.ready) begin
       data_in_d[1] <= data_in_02_if.data;
       is_high_d[1] <= is_high[1];
-      if (data_in_02_if.data > threshold_high) begin
+      if ((data_in_02_if.data & 16'hfffe)  > threshold_high) begin
         is_high[1] <= 1'b1;
-      end else if (data_in_02_if.data < threshold_low) begin
+      end else if ((data_in_02_if.data & 16'hfffe) < threshold_low) begin
         is_high[1] <= 1'b0;
       end
       sample_count[1] <= sample_count[1] + 1'b1;
@@ -80,11 +80,11 @@ always @(posedge clk) begin
     for (int i = 0; i < 2; i++) begin
       if (data_in_valid_d[i]) begin
         if (is_high[i]) begin
-          data_sent.push_front({data_in_d[i][15:3], new_is_high[i], 1'b0, 1'(i)});
+          data_sent[i].push_front({data_in_d[i][15:3], new_is_high[i], 1'b0, 1'(i)});
         end
         if (new_is_high[i]) begin
           for (int j = 0; j < 4; j++) begin
-            timestamps_sent.push_front({sample_count[i][14*j+:14], 1'b1, 1'(i)});
+            timestamps_sent[i].push_front({sample_count[i][14*j+:14], 1'b1, 1'(i)});
           end
         end
       end
@@ -93,10 +93,10 @@ always @(posedge clk) begin
       for (int i = 0; i < 8; i++) begin
         if (data_out_if.data[16*i+1]) begin
           // timestamp
-          timestamps_received.push_front(data_out_if.data[16*i+:16]);
+          timestamps_received[data_out_if.data[16*i]].push_front(data_out_if.data[16*i+:16]);
         end else begin
           // data
-          data_received.push_front(data_out_if.data[16*i+:16]);
+          data_received[data_out_if.data[16*i]].push_front(data_out_if.data[16*i+:16]);
         end
       end
     end
@@ -147,52 +147,63 @@ task do_readout();
   config_in_if.valid <= 1'b0;
   repeat (500) @(posedge clk);
   data_out_if.ready <= 1'b1;
-  repeat ($urandom_range(10,50)) @(posedge clk);
+  repeat ($urandom_range(2,6)) @(posedge clk);
   data_out_if.ready <= 1'b0;
-  repeat ($urandom_range(5,15)) @(posedge clk);
+  repeat ($urandom_range(3,8)) @(posedge clk);
   data_out_if.ready <= 1'b1;
   while (!data_out_if.last) @(posedge clk);
+  @(posedge clk);
 endtask
 
-task check_results();
-  logic current_channel;
-  logic [15:0] temp_q [$];
-  $display("data_sent.size() = %0d", data_sent.size());
-  $display("data_received.size() = %0d", data_received.size());
-  if (data_sent.size() != data_received.size()) begin
-    $display("mismatch in amount of sent/received data");
-    // for (int i = data_sent.size() - 1; i >= 0; i--) begin
-    //   $display("data_sent[%0d] = %x", i, data_sent[i]);
-    // end
-    // for (int i = data_received.size() - 1; i >= 0; i--) begin
-    //   $display("data_received[%0d] = %x", i, data_received[i]);
-    // end
-  end
-  $display("timestamps_sent.size() = %0d", timestamps_sent.size());
-  $display("timestamps_received.size() = %0d", timestamps_received.size());
-  if (timestamps_sent.size() != timestamps_received.size()) begin
-    $display("mismatch in amount of sent/received timestamps");
-    // for (int i = timestamps_sent.size() - 1; i >= 0; i--) begin
-    //   $display("timestamps_sent[%0d] = %x", i, timestamps_sent[i]);
-    // end
-    // for (int i = timestamps_received.size() - 1; i >= 0; i--) begin
-    //   $display("timestamps_received[%0d] = %x", i, timestamps_received[i]);
-    // end
-  end
-  while (data_sent.size() > 0 && data_received.size() > 0) begin
-    // data from channel 0 can be reordered with data from channel 2
-    if (data_sent[$] != data_received[$]) begin
-      $display("data mismatch error (received %x, sent %x)", data_received[$], data_sent[$]);
+task check_results(input bit missing_data_okay);
+  for (int i = 0; i < 2; i++) begin
+    $display("checking channel %0d...", i);
+    $display("data_sent[%0d].size() = %0d", i, data_sent[i].size());
+    $display("data_received[%0d].size() = %0d", i, data_received[i].size());
+    if (data_sent[i].size() != data_received[i].size()) begin
+      if (missing_data_okay) begin
+        // if there's intermittent noise, we may have a few missing samples
+        // at the end which don't make it into the buffer; that's okay
+        if (data_sent[i].size() >= data_received[i].size() + 4) begin
+          // however, we should not be missing 4 or more samples
+          $warning("mismatch in amount of sent/received data");
+        end
+      end else begin
+        $warning("mismatch in amount of sent/received data");
+      end
+      // for (int j = data_sent[i].size() - 1; j >= 0; j--) begin
+      //   $display("data_sent[%0d][%0d] = %x", i, j, data_sent[i][j]);
+      // end
+      // for (int j = data_received[i].size() - 1; j >= 0; j--) begin
+      //   $display("data_received[%0d][%0d] = %x", i, j, data_received[i][j]);
+      // end
     end
-    data_sent.pop_back();
-    data_received.pop_back();
-  end
-  while (timestamps_sent.size() > 0 && timestamps_received.size() > 0) begin
-    if (timestamps_sent[$] != timestamps_received[$]) begin
-      $display("timestamp mismatch error (received %x, sent %x)", timestamps_received[$], timestamps_sent[$]);
+    $display("timestamps_sent[%0d].size() = %0d", i, timestamps_sent[i].size());
+    $display("timestamps_received[%0d].size() = %0d", i, timestamps_received[i].size());
+    if (timestamps_sent[i].size() != timestamps_received[i].size()) begin
+      $warning("mismatch in amount of sent/received timestamps");
+      // for (int j = timestamps_sent[i].size() - 1; j >= 0; j--) begin
+      //   $display("timestamps_sent[%0d][%0d] = %x", i, j, timestamps_sent[i][j]);
+      // end
+      // for (int j = timestamps_received[i].size() - 1; j >= 0; j--) begin
+      //   $display("timestamps_received[%0d][%0d] = %x", i, j, timestamps_received[i][j]);
+      // end
     end
-    timestamps_sent.pop_back();
-    timestamps_received.pop_back();
+    while (data_sent[i].size() > 0 && data_received[i].size() > 0) begin
+      // data from channel 0 can be reordered with data from channel 2
+      if (data_sent[i][$] != data_received[i][$]) begin
+        $warning("data mismatch error (received %x, sent %x)", data_received[i][$], data_sent[i][$]);
+      end
+      data_sent[i].pop_back();
+      data_received[i].pop_back();
+    end
+    while (timestamps_sent[i].size() > 0 && timestamps_received[i].size() > 0) begin
+      if (timestamps_sent[i][$] != timestamps_received[i][$]) begin
+        $warning("timestamp mismatch error (received %x, sent %x)", timestamps_received[i][$], timestamps_sent[i][$]);
+      end
+      timestamps_sent[i].pop_back();
+      timestamps_received[i].pop_back();
+    end
   end
 endtask
 
@@ -217,15 +228,17 @@ initial begin
   config_in_if.valid <= 1'b0;
   repeat (100) @(posedge clk);
   // send samples
-  send_samples_together(50);
+  send_samples_together(28); // send extra sample since first one is zero and will get dropped
   repeat (50) @(posedge clk);
-  send_samples_separate(30);
+  send_samples_separate(35);
+  repeat (50) @(posedge clk);
+  send_samples_together(18);
   repeat (50) @(posedge clk);
   do_readout();
   $display("######################################################");
   $display("# checking results for test with constant noise      #");
   $display("######################################################");
-  check_results();
+  check_results(1'b0);
   // change amplitudes and threshold to check sample-rejection
   data_range_low <= 16'h00ff;
   data_range_high <= 16'h0fff;
@@ -242,14 +255,14 @@ initial begin
   start <= 1'b0;
   config_in_if.valid <= 1'b0;
   repeat (50) @(posedge clk);
-  send_samples_together(200);
+  send_samples_together(300);
   repeat (50) @(posedge clk);
-  send_samples_separate(200);
+  send_samples_separate(240);
   do_readout();
   $display("######################################################");
   $display("# checking results for test with intermittent noise  #");
   $display("######################################################");
-  check_results();
+  check_results(1'b1);
   $finish;
 end
 

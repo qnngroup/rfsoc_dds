@@ -25,7 +25,7 @@ noise_event_tracker_sv_wrapper #(
   .BUFFER_DEPTH(32768),
   .SAMPLE_WIDTH(16),
   .AXI_MM_WIDTH(128),
-  .CLOCK_WIDTH(40)
+  .CLOCK_WIDTH(56)
 ) noise_event_tracker_sv_wrapper_i (
   .clk(clk),
   .reset(~reset_n),

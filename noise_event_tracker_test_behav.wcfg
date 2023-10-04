@@ -11,15 +11,76 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
-      <ZoomEndTime time="13.980001 us"></ZoomEndTime>
-      <Cursor1Time time="1.000000 us"></Cursor1Time>
+      <ZoomStartTime time="12,479.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="14,040.001 ns"></ZoomEndTime>
+      <Cursor1Time time="13,135.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="210"></NameColumnWidth>
       <ValueColumnWidth column_width="97"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="39" />
+   <WVObjectSize size="92" />
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/start">
+      <obj_property name="ElementShortName">start</obj_property>
+      <obj_property name="ObjectShortName">start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/stop">
+      <obj_property name="ElementShortName">stop</obj_property>
+      <obj_property name="ObjectShortName">stop</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/threshold_high">
+      <obj_property name="ElementShortName">threshold_high[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_high[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/threshold_low">
+      <obj_property name="ElementShortName">threshold_low[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_low[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/sample_count">
+      <obj_property name="ElementShortName">sample_count[1:0][55:0]</obj_property>
+      <obj_property name="ObjectShortName">sample_count[1:0][55:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/data_in_d">
+      <obj_property name="ElementShortName">data_in_d[1:0][15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in_d[1:0][15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/data_in_valid_d">
+      <obj_property name="ElementShortName">data_in_valid_d[1:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in_valid_d[1:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/is_high">
+      <obj_property name="ElementShortName">is_high[1:0]</obj_property>
+      <obj_property name="ObjectShortName">is_high[1:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/is_high_d">
+      <obj_property name="ElementShortName">is_high_d[1:0]</obj_property>
+      <obj_property name="ObjectShortName">is_high_d[1:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/new_is_high">
+      <obj_property name="ElementShortName">new_is_high[1:0]</obj_property>
+      <obj_property name="ObjectShortName">new_is_high[1:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/data_range_low">
+      <obj_property name="ElementShortName">data_range_low[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_range_low[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/data_range_high">
+      <obj_property name="ElementShortName">data_range_high[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_range_high[15:0]</obj_property>
+   </wvobject>
    <wvobject fp_name="divider749" type="divider">
       <obj_property name="label">dut</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -79,6 +140,7 @@
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_out_valid">
       <obj_property name="ElementShortName">data_out_valid[2:0]</obj_property>
       <obj_property name="ObjectShortName">data_out_valid[2:0]</obj_property>
+      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/data_word_select">
       <obj_property name="ElementShortName">data_word_select[2:0]</obj_property>
@@ -91,6 +153,22 @@
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/data_in_word_valid">
       <obj_property name="ElementShortName">data_in_word_valid</obj_property>
       <obj_property name="ObjectShortName">data_in_word_valid</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider795" type="divider">
+      <obj_property name="label">cfg_if</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/config_in_if/data">
+      <obj_property name="ElementShortName">data[33:0]</obj_property>
+      <obj_property name="ObjectShortName">data[33:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/config_in_if/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/config_in_if/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
    </wvobject>
    <wvobject fp_name="divider750" type="divider">
       <obj_property name="label">ch_00_disc_out</obj_property>
@@ -175,5 +253,145 @@
    <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/data_out/last">
       <obj_property name="ElementShortName">last</obj_property>
       <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider780" type="divider">
+      <obj_property name="label">ch_00_disc</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/threshold_low">
+      <obj_property name="ElementShortName">threshold_low[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_low[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/threshold_high">
+      <obj_property name="ElementShortName">threshold_high[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_high[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/data_in_reg">
+      <obj_property name="ElementShortName">data_in_reg[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in_reg[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/data_in_valid">
+      <obj_property name="ElementShortName">data_in_valid</obj_property>
+      <obj_property name="ObjectShortName">data_in_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/sample_count">
+      <obj_property name="ElementShortName">sample_count[55:0]</obj_property>
+      <obj_property name="ObjectShortName">sample_count[55:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/is_high">
+      <obj_property name="ElementShortName">is_high</obj_property>
+      <obj_property name="ObjectShortName">is_high</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/is_high_d">
+      <obj_property name="ElementShortName">is_high_d</obj_property>
+      <obj_property name="ObjectShortName">is_high_d</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/new_is_high">
+      <obj_property name="ElementShortName">new_is_high</obj_property>
+      <obj_property name="ObjectShortName">new_is_high</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/subword_sel">
+      <obj_property name="ElementShortName">subword_sel[2:0]</obj_property>
+      <obj_property name="ObjectShortName">subword_sel[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/SAMPLE_WIDTH">
+      <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/CLOCK_WIDTH">
+      <obj_property name="ElementShortName">CLOCK_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLOCK_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/SPLIT_TIMESTAMP_COUNT">
+      <obj_property name="ElementShortName">SPLIT_TIMESTAMP_COUNT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SPLIT_TIMESTAMP_COUNT[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/config_in/data">
+      <obj_property name="ElementShortName">data[31:0]</obj_property>
+      <obj_property name="ObjectShortName">data[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/config_in/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/config_in/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/config_in/last">
+      <obj_property name="ElementShortName">last</obj_property>
+      <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_00/config_in/DWIDTH">
+      <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider831" type="divider">
+      <obj_property name="label">ch_02_disc</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/threshold_low">
+      <obj_property name="ElementShortName">threshold_low[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_low[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/threshold_high">
+      <obj_property name="ElementShortName">threshold_high[15:0]</obj_property>
+      <obj_property name="ObjectShortName">threshold_high[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/data_in_reg">
+      <obj_property name="ElementShortName">data_in_reg[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data_in_reg[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/data_in_valid">
+      <obj_property name="ElementShortName">data_in_valid</obj_property>
+      <obj_property name="ObjectShortName">data_in_valid</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/sample_count">
+      <obj_property name="ElementShortName">sample_count[55:0]</obj_property>
+      <obj_property name="ObjectShortName">sample_count[55:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/is_high">
+      <obj_property name="ElementShortName">is_high</obj_property>
+      <obj_property name="ObjectShortName">is_high</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/is_high_d">
+      <obj_property name="ElementShortName">is_high_d</obj_property>
+      <obj_property name="ObjectShortName">is_high_d</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/new_is_high">
+      <obj_property name="ElementShortName">new_is_high</obj_property>
+      <obj_property name="ObjectShortName">new_is_high</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/subword_sel">
+      <obj_property name="ElementShortName">subword_sel[2:0]</obj_property>
+      <obj_property name="ObjectShortName">subword_sel[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/SAMPLE_WIDTH">
+      <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/CLOCK_WIDTH">
+      <obj_property name="ElementShortName">CLOCK_WIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLOCK_WIDTH[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/noise_event_tracker_test/dut_i/sample_discriminator_ch_02/SPLIT_TIMESTAMP_COUNT">
+      <obj_property name="ElementShortName">SPLIT_TIMESTAMP_COUNT[31:0]</obj_property>
+      <obj_property name="ObjectShortName">SPLIT_TIMESTAMP_COUNT[31:0]</obj_property>
    </wvobject>
 </wave_config>
