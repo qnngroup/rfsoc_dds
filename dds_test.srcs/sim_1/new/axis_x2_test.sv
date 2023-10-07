@@ -8,8 +8,9 @@ logic clk = 0;
 localparam CLK_RATE_HZ = 100_000_000;
 always #(0.5s/CLK_RATE_HZ) clk = ~clk;
 
-localparam int SAMPLE_WIDTH = 16;
+localparam int SAMPLE_WIDTH = 18;
 localparam int PARALLEL_SAMPLES = 2;
+localparam int SAMPLE_FRAC_BITS = 16;
 
 Axis_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES)) data_out_if();
 Axis_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES)) data_in_if();
@@ -17,11 +18,10 @@ Axis_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES)) data_in_if();
 localparam int LATENCY = 4;
 logic [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] data_out_test [LATENCY];
 
-assign data_out_if.ready = 1;
-
 initial begin
   reset <= 1'b1;
   data_in_if.valid <= 1'b0;
+  data_out_if.ready <= 1'b1;
   repeat (100) @(posedge clk);
   reset <= 1'b0;
   repeat (500) @(posedge clk);
@@ -30,25 +30,44 @@ initial begin
   data_in_if.valid <= 1'b0;
   repeat (10) @(posedge clk);
   data_in_if.valid <= 1'b1;
+  repeat (10) @(posedge clk);
+  data_out_if.ready <= 1'b0;
+  repeat (10) @(posedge clk);
+  data_out_if.ready <= 1'b1;
+  repeat (20) @(posedge clk);
+  data_out_if.ready <= 1'b0;
+  repeat (10) @(posedge clk);
+  data_in_if.valid <= 1'b0;
+  repeat (5) @(posedge clk);
+  data_out_if.ready <= 1'b1;
+  repeat (5) @(posedge clk);
+  data_in_if.valid <= 1'b1;
   repeat (1000) @(posedge clk);
   $info("error_count = %d", error_count);
   $finish;
 end
 
-typedef logic [SAMPLE_WIDTH-1:0] uint_t;
+typedef logic signed [SAMPLE_WIDTH-1:0] int_t;
+
+real d_in;
 
 always @(posedge clk) begin
   if (reset) begin
     data_in_if.data <= '0;
-  end else if (data_in_if.ready && data_in_if.valid) begin
-    for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
-      data_in_if.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= $urandom_range({SAMPLE_WIDTH{1'b1}});
+  end else begin
+    if (data_in_if.ready && data_in_if.valid) begin
+      for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
+        data_in_if.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= $urandom_range({SAMPLE_WIDTH{1'b1}});
+      end
     end
-    for (int j = 0; j < LATENCY-1; j++) begin
-      data_out_test[j] <= data_out_test[j+1];
-    end
-    for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
-      data_out_test[LATENCY-1][i*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= uint_t'(((real'(data_in_if.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH])/(2.0**15))**2) * 2.0**14);
+    if (data_out_if.ready) begin
+      for (int j = 0; j < LATENCY-1; j++) begin
+        data_out_test[j] <= data_out_test[j+1];
+      end
+      for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
+        d_in = real'(int_t'(data_in_if.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH]));
+        data_out_test[LATENCY-1][i*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= int_t'(((d_in/(2.0**SAMPLE_FRAC_BITS))**2) * 2.0**SAMPLE_FRAC_BITS);
+      end
     end
   end
 end

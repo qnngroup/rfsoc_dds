@@ -22,7 +22,7 @@ localparam logic [SAMPLE_WIDTH-1:0] DATA_MASK = {{(SAMPLE_WIDTH-1){1'b1}}, 1'b0}
 assign config_in.ready = 1'b1;
 assign data_in.ready = 1'b1; // always process new samples; we'll just throw them away later if we don't need them
 
-logic [SAMPLE_WIDTH-1:0] threshold_low, threshold_high;
+logic signed [SAMPLE_WIDTH-1:0] threshold_low, threshold_high;
 logic [SAMPLE_WIDTH-1:0] data_in_reg;
 logic data_in_valid;
 logic [CLOCK_WIDTH-1:0] sample_count;
@@ -55,9 +55,9 @@ always_ff @(posedge clk) begin
       data_in_reg <= data_in.data;
       is_high_d <= is_high;
       sample_count <= sample_count + 1'b1;
-      if ((data_in.data & DATA_MASK) > threshold_high) begin
+      if (signed'(data_in.data & DATA_MASK) > threshold_high) begin
         is_high <= 1'b1;
-      end else if ((data_in.data & DATA_MASK) < threshold_low) begin
+      end else if (signed'(data_in.data & DATA_MASK) < threshold_low) begin
         is_high <= 1'b0;
       end
     end

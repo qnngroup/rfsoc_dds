@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="1,313.867 ns"></ZoomStartTime>
-      <ZoomEndTime time="1,692.368 ns"></ZoomEndTime>
-      <Cursor1Time time="1,590.367 ns"></Cursor1Time>
+      <ZoomStartTime time="1,516.167 ns"></ZoomStartTime>
+      <ZoomEndTime time="1,869.168 ns"></ZoomEndTime>
+      <Cursor1Time time="1,599.167 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
-      <NameColumnWidth column_width="183"></NameColumnWidth>
-      <ValueColumnWidth column_width="66"></ValueColumnWidth>
+      <NameColumnWidth column_width="208"></NameColumnWidth>
+      <ValueColumnWidth column_width="100"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="62" />
+   <WVObjectSize size="68" />
    <wvobject type="logic" fp_name="/sample_discriminator_test/clk">
       <obj_property name="ElementShortName">clk</obj_property>
       <obj_property name="ObjectShortName">clk</obj_property>
@@ -95,6 +95,7 @@
       <obj_property name="AnalogInterpolation">ANALOG_INTERPOLATION_HOLD</obj_property>
       <obj_property name="AnalogOffscale">ANALOG_OFFSCALE_HIDE</obj_property>
       <obj_property name="AnalogHorizLine">0.000000</obj_property>
+      <obj_property name="Radix">SIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="logic" fp_name="/sample_discriminator_test/dut_i/data_in_valid">
       <obj_property name="ElementShortName">data_in_valid</obj_property>
@@ -127,10 +128,35 @@
    <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/CLOCK_WIDTH">
       <obj_property name="ElementShortName">CLOCK_WIDTH[31:0]</obj_property>
       <obj_property name="ObjectShortName">CLOCK_WIDTH[31:0]</obj_property>
+      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/SPLIT_TIMESTAMP_COUNT">
       <obj_property name="ElementShortName">SPLIT_TIMESTAMP_COUNT[31:0]</obj_property>
       <obj_property name="ObjectShortName">SPLIT_TIMESTAMP_COUNT[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="divider1288" type="divider">
+      <obj_property name="label">data_in_if</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/data_in_if/data">
+      <obj_property name="ElementShortName">data[15:0]</obj_property>
+      <obj_property name="ObjectShortName">data[15:0]</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/data_in_if/ready">
+      <obj_property name="ElementShortName">ready</obj_property>
+      <obj_property name="ObjectShortName">ready</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/data_in_if/valid">
+      <obj_property name="ElementShortName">valid</obj_property>
+      <obj_property name="ObjectShortName">valid</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/sample_discriminator_test/data_in_if/last">
+      <obj_property name="ElementShortName">last</obj_property>
+      <obj_property name="ObjectShortName">last</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/sample_discriminator_test/data_in_if/DWIDTH">
+      <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+      <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
    </wvobject>
    <wvobject fp_name="divider239" type="divider">
       <obj_property name="label">data_out_if</obj_property>
@@ -171,7 +197,6 @@
    <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/buffer">
       <obj_property name="ElementShortName">buffer[0:15][71:0]</obj_property>
       <obj_property name="ObjectShortName">buffer[0:15][71:0]</obj_property>
-      <obj_property name="isExpanded"></obj_property>
    </wvobject>
    <wvobject type="array" fp_name="/sample_discriminator_test/dut_i/input_fifo_i/read_addr">
       <obj_property name="ElementShortName">read_addr[4:0]</obj_property>

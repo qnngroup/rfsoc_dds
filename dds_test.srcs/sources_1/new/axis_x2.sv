@@ -2,16 +2,17 @@
 // computes x^2 on axi-stream data
 module axis_x2 #(
   parameter int SAMPLE_WIDTH = 16,
-  parameter int PARALLEL_SAMPLES = 1
+  parameter int PARALLEL_SAMPLES = 1,
+  parameter int SAMPLE_FRAC_BITS = 16
 ) (
   input wire clk, reset,
   Axis_If.Slave_Simple data_in,
   Axis_If.Master_Simple data_out
 );
 
-logic signed [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 1Q15
-logic signed [2*SAMPLE_WIDTH-1:0] product [PARALLEL_SAMPLES]; // 2Q30
-logic signed [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 2Q14
+logic signed [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 0Q16
+logic signed [2*SAMPLE_WIDTH-1:0] product [PARALLEL_SAMPLES]; // 0Q32
+logic signed [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 0Q16
 logic [3:0] valid_d;
 
 always_ff @(posedge clk) begin
@@ -20,9 +21,13 @@ always_ff @(posedge clk) begin
   end else begin
     if (data_in.valid && data_in.ready) begin
       for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
-        data_in_reg[i] <= data_in.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH]; // 1Q15
-        product[i] <= data_in_reg[i]*data_in_reg[i]; // 1Q15*1Q15 = 2Q30
-        product_d[i] <= product[i][2*SAMPLE_WIDTH-1-:SAMPLE_WIDTH]; // 2Q14
+        data_in_reg[i] <= data_in.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH]; // 0Q16
+      end
+    end
+    if (data_out.ready) begin
+      for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
+        product[i] <= data_in_reg[i]*data_in_reg[i]; // 0Q16*0Q16 = 0Q32
+        product_d[i] <= product[i][SAMPLE_WIDTH+SAMPLE_FRAC_BITS-1-:SAMPLE_WIDTH]; // 0Q16
         data_out.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= product_d[i];
       end
       valid_d <= {valid_d[2:0], data_in.valid};

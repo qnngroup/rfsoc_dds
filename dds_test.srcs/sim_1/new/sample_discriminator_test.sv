@@ -6,7 +6,7 @@ localparam CLK_RATE_HZ = 100_000_000;
 always #(0.5s/CLK_RATE_HZ) clk = ~clk;
 
 logic reset;
-logic [15:0] threshold_high, threshold_low;
+logic signed [15:0] threshold_high, threshold_low;
 
 Axis_If #(.DWIDTH(32)) config_in_if();
 Axis_If #(.DWIDTH(16)) data_in_if();
@@ -51,9 +51,9 @@ always @(posedge clk) begin
     if (data_in_if.valid && data_in_if.ready) begin
       data_in_d <= data_in_if.data;
       is_high_d <= is_high;
-      if (data_in_if.data > threshold_high) begin
+      if (signed'(data_in_if.data) > threshold_high) begin
         is_high <= 1'b1;
-      end else if (data_in_if.data < threshold_low) begin
+      end else if (signed'(data_in_if.data) < threshold_low) begin
         is_high <= 1'b0;
       end
       sample_count <= sample_count + 1'b1;

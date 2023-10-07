@@ -16,7 +16,7 @@ module noise_event_tracker #(
   parameter int BUFFER_DEPTH = 1024, // size will be BUFFER_DEPTH x AXI_MM_WIDTH
   parameter int SAMPLE_WIDTH = 16,
   parameter int AXI_MM_WIDTH = 128,
-  parameter int CLOCK_WIDTH = 56
+  parameter int CLOCK_WIDTH = 42
 ) (
   input wire clk, reset,
   Axis_If.Master_Full data_out, // collection of samples
@@ -220,7 +220,7 @@ module noise_event_tracker_sv_wrapper #(
   parameter int BUFFER_DEPTH = 1024,
   parameter int SAMPLE_WIDTH = 16,
   parameter int AXI_MM_WIDTH = 128,
-  parameter int CLOCK_WIDTH = 56
+  parameter int CLOCK_WIDTH = 42
 ) (
   input wire clk, reset,
 

@@ -1,7 +1,10 @@
 // dac prescaler
 module dac_prescaler #(
   parameter int SAMPLE_WIDTH = 16,
-  parameter int PARALLEL_SAMPLES = 16
+  parameter int PARALLEL_SAMPLES = 16,
+  parameter int SCALE_WIDTH = 18,
+  parameter int SAMPLE_FRAC_BITS = 16,
+  parameter int SCALE_FRAC_BITS = 16
 ) (
   input wire clk, reset,
   Axis_If.Master_Simple data_out,
@@ -9,10 +12,10 @@ module dac_prescaler #(
   Axis_If.Slave_Simple scale_factor // 2Q16
 );
 
-logic signed [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 1Q15
-logic signed [17:0] scale_factor_reg; // 2Q16
-logic signed [33:0] product [PARALLEL_SAMPLES]; // 3Q31
-logic signed [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 1Q15
+logic signed [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 0Q16
+logic signed [SCALE_WIDTH-1:0] scale_factor_reg; // 2Q16
+logic signed [SAMPLE_WIDTH+SCALE_WIDTH-1:0] product [PARALLEL_SAMPLES]; // 2Q32
+logic signed [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 0Q16
 logic [3:0] valid_d;
 
 always_ff @(posedge clk) begin
@@ -24,9 +27,13 @@ always_ff @(posedge clk) begin
   end
   if (data_in.valid && data_in.ready) begin
     for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
-      data_in_reg[i] <= data_in.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH]; // 1Q15*2Q16 = 3Q31
-      product[i] <= data_in_reg[i]*scale_factor_reg; // 3Q31
-      product_d[i] <= product[i][31-:SAMPLE_WIDTH]; // 1Q15
+      data_in_reg[i] <= data_in.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH]; // 0Q16*2Q16 = 2Q32
+    end
+  end
+  if (data_out.ready) begin
+    for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
+      product[i] <= data_in_reg[i]*scale_factor_reg; // 2Q32
+      product_d[i] <= product[i][SAMPLE_WIDTH+SCALE_FRAC_BITS-1-:SAMPLE_WIDTH]; // 0Q16
       data_out.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= product_d[i];
     end
     valid_d <= {valid_d[2:0], data_in.valid};
@@ -41,7 +48,10 @@ endmodule
 
 module dac_prescaler_sv_wrapper #(
   parameter int SAMPLE_WIDTH = 16,
-  parameter int PARALLEL_SAMPLES = 16
+  parameter int PARALLEL_SAMPLES = 16,
+  parameter int SCALE_WIDTH = 18,
+  parameter int SAMPLE_FRAC_BITS = 16,
+  parameter int SCALE_FRAC_BITS = 16
 ) (
   input wire clk, reset,
   output [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] data_out,
@@ -50,18 +60,21 @@ module dac_prescaler_sv_wrapper #(
   input [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] data_in,
   input data_in_valid,
   output data_in_ready,
-  input [17:0] scale_factor, // 2Q16 (2's complement)
+  input [SCALE_WIDTH-1:0] scale_factor, // 2Q16 (2's complement)
   input scale_factor_valid,
   output scale_factor_ready
 );
 
 Axis_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES)) data_out_if();
 Axis_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES)) data_in_if();
-Axis_If #(.DWIDTH(18)) scale_factor_if();
+Axis_If #(.DWIDTH(SCALE_WIDTH)) scale_factor_if();
 
 dac_prescaler #(
   .SAMPLE_WIDTH(SAMPLE_WIDTH),
-  .PARALLEL_SAMPLES(PARALLEL_SAMPLES)
+  .PARALLEL_SAMPLES(PARALLEL_SAMPLES),
+  .SCALE_WIDTH(SCALE_WIDTH),
+  .SAMPLE_FRAC_BITS(SAMPLE_FRAC_BITS),
+  .SCALE_FRAC_BITS(SCALE_FRAC_BITS)
 ) dac_prescaler_i (
   .clk,
   .reset,
