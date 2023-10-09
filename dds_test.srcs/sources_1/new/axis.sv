@@ -1,12 +1,13 @@
 // axi-stream interface
 interface Axis_If #(
-  parameter DWIDTH = 32
+  parameter DWIDTH = 32,
+  parameter PARALLEL_CHANNELS = 1
 );
 
-logic [DWIDTH - 1:0]  data;
-logic                 ready;
-logic                 valid;
-logic                 last;
+logic [PARALLEL_CHANNELS-1:0][DWIDTH - 1:0]  data;
+logic [PARALLEL_CHANNELS-1:0]                ready;
+logic [PARALLEL_CHANNELS-1:0]                valid;
+logic [PARALLEL_CHANNELS-1:0]                last;
 
 modport Master_Full (
   input   ready,
