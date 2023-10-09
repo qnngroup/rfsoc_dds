@@ -24,9 +24,6 @@ class DDSOverlay(Overlay):
             time.sleep(0.5)
         # get IPs
         self.dma_recv = self.axi_dma_0.recvchannel
-        self.capture_trig = self.axi_gpio_capture.channel1[0]
-        self.trigger_mode = self.axi_gpio_trigger_sel.channel1[0]
-        self.adc_select = self.axi_gpio_adc_sel.channel1[0]
         self.pinc = [self.dds_hier_0.axi_fifo_pinc_0, self.dds_hier_1.axi_fifo_pinc_1]
         self.cos_scale = [self.dds_hier_0.axi_fifo_scale_0, self.dds_hier_1.axi_fifo_scale_1]
         self.timer = self.axi_timer_0
