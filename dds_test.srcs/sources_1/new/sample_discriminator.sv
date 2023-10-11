@@ -1,31 +1,39 @@
 // sample discriminator - Reed Foster
-// If input sample is above high threshold (with hysteresis), it is passed through,
+// If input sample is above some threshold (w/ hysteresis), it is passed through,
 // otherwise it is dropped. If the preceeding sample was below the low threshold,
-// then a timestamp is also sent out after the current sample (indicated by
-// setting some flag bits)
-// data format (LSB 1'bx is channel index)
-// sample: {sample[15:3], 1'bx, 1'b0, 1'bx} bit 2 1'bx is new_is_high
-// timestamp (4 successive transactions): {clock[i*14+:14], 1'b1, 1'bx} for i = 0..3
+// then a timestamp is also sent out
+// The timestamp also contains a count of saved samples up to the event that triggered
+// the creation of the timestamp.
+// This allows the samples to be associated with specific sample that was saved.
+// The sample count is reset every time a new capture is started.
 module sample_discriminator #( 
   parameter int SAMPLE_WIDTH = 16,
-  parameter int CLOCK_WIDTH = 56 // rolls over roughly every 10 years
+  parameter int PARALLEL_SAMPLES = 16,
+  parameter int N_CHANNELS = 8,
+  parameter int SAMPLE_INDEX_WIDTH = 14, // ideally keep the sum of this and CLOCK_WIDTH at most 64
+  parameter int CLOCK_WIDTH = 50 // rolls over roughly every 3 days at 4GS/s
 ) (
   input wire clk, reset,
-  Axis_If.Slave_Simple data_in,
-  Axis_If.Master_Simple data_out,
-  Axis_If.Slave_Simple config_in // {threshold_high, threshold_low}
+  Axis_Parallel_If.Slave_Simple data_in,
+  Axis_Parallel_If.Master_Simple data_out,
+  Axis_Parallel_If.Master_Simple timestamps_out,
+  Axis_If.Slave_Simple config_in, // {threshold_high, threshold_low} for each channel
+  input wire sample_index_reset
 );
 
-// mask of LSB so we don't erroneously compare with the lower bits of the threshold
-localparam logic [SAMPLE_WIDTH-1:0] DATA_MASK = {{(SAMPLE_WIDTH-1){1'b1}}, 1'b0};
+localparam int TIMESTAMP_WIDTH = SAMPLE_INDEX_WIDTH + CLOCK_WIDTH;
 
 assign config_in.ready = 1'b1;
-assign data_in.ready = 1'b1; // always process new samples; we'll just throw them away later if we don't need them
+assign data_in.ready = '1; // don't apply backpressure
 
-logic signed [SAMPLE_WIDTH-1:0] threshold_low, threshold_high;
-logic [SAMPLE_WIDTH-1:0] data_in_reg;
-logic data_in_valid;
-logic [CLOCK_WIDTH-1:0] sample_count;
+logic signed [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_low, threshold_high;
+logic [N_CHANNELS-1:0][PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_in_reg, data_out_reg;
+logic [N_CHANNELS-1:0] data_in_valid, data_out_valid;
+logic [N_CHANNELS-1:0][CLOCK_WIDTH-1:0] timer, timer_d;
+logic [N_CHANNELS-1:0][SAMPLE_INDEX_WIDTH-1:0] sample_index;
+
+logic [N_CHANNELS-1:0] is_high, is_high_d;
+logic [N_CHANNELS-1:0] new_is_high;
 
 // update thresholds from config interface
 always_ff @(posedge clk) begin
@@ -34,95 +42,83 @@ always_ff @(posedge clk) begin
     threshold_high <= '0;
   end else begin
     if (config_in.valid) begin
-      threshold_high <= config_in.data[2*SAMPLE_WIDTH-1:SAMPLE_WIDTH];
-      threshold_low <= config_in.data[SAMPLE_WIDTH-1:0];
+      for (int i = 0; i < N_CHANNELS; i++) begin
+        threshold_high[i] <= config_in.data[2*SAMPLE_WIDTH*(i+1)+:SAMPLE_WIDTH];
+        threshold_low[i] <= config_in.data[2*SAMPLE_WIDTH*i+:SAMPLE_WIDTH];
+      end
     end
   end
 end
 
-logic is_high, is_high_d;
-logic new_is_high;
-assign new_is_high = is_high & (!is_high_d);
+// if we're dealing with multiple parallel samples, check to see if any of
+// them exceed the high threshold or if all of them are below the low
+// threshold
+logic [N_CHANNELS-1:0] any_above_high, all_below_low;
+always_comb begin
+  for (int i = 0; i < N_CHANNELS; i++) begin
+    any_above_high[i] = 1'b0;
+    all_below_low[i] = 1'b1;
+    for (int j = 0; j < PARALLEL_SAMPLES; j++) begin
+      if (signed'(data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH]) > threshold_high[i]) begin
+        any_above_high[i] = 1'b1;
+      end
+      if (signed'(data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH]) > threshold_low[i]) begin
+        all_below_low[i] = 1'b0;
+      end
+    end
+  end
+end
 
 always_ff @(posedge clk) begin
+  // pipeline stage for timer to match sample_index delay
+  new_is_high <= is_high & (~is_high_d);
+  timestamps_out.valid <= new_is_high;
+  timer_d <= timer;
+  for (int i = 0; i < N_CHANNELS; i++) begin
+    timestamps_out.data[i] <= {timer_d[i], sample_index[i]};
+  end
+
+  // pipeline stage to match latency of is_high SR flipflop
+  data_in_valid <= data_in.valid;
+  data_in_reg <= data_in.data;
+
+  // is_high_d
+  is_high_d <= is_high;
+
+  // match delay of sample_index
+  data_out_reg <= data_in_reg;
+  data_out.data <= data_out_reg;
+  data_out_valid <= data_in_valid & is_high;
+  data_out.valid <= data_out_valid;
+
+  // is_high SR flipflop, sample_index, and timer
   if (reset) begin
     is_high <= '0;
     is_high_d <= '0;
-    sample_count <= '0;
+    timer <= '0;
+    sample_index <= '0;
   end else begin
-    data_in_valid <= data_in.valid;
-    if (data_in.valid) begin
-      data_in_reg <= data_in.data;
-      is_high_d <= is_high;
-      sample_count <= sample_count + 1'b1;
-      if (signed'(data_in.data & DATA_MASK) > threshold_high) begin
-        is_high <= 1'b1;
-      end else if (signed'(data_in.data & DATA_MASK) < threshold_low) begin
-        is_high <= 1'b0;
+    for (int i = 0; i < N_CHANNELS; i++) begin
+      // update sample_index
+      if (sample_index_reset) begin
+        sample_index[i] <= '0;
+      end else if (data_in_valid[i] && is_high[i]) begin
+        sample_index[i] <= sample_index[i] + 1'b1;
+      end
+      // update timer
+      if (data_in.valid[i]) begin
+        timer[i] <= timer[i] + 1'b1;
+      end
+      // update is_high
+      if (any_above_high[i]) begin
+        is_high[i] <= 1'b1;
+      end else if (all_below_low) begin
+        is_high[i] <= 1'b0;
       end
     end
   end
 end
 
-Axis_If #(.DWIDTH(SAMPLE_WIDTH+CLOCK_WIDTH)) input_fifo_in ();
-Axis_If #(.DWIDTH(SAMPLE_WIDTH+CLOCK_WIDTH)) input_fifo_out ();
-Axis_If #(.DWIDTH(SAMPLE_WIDTH)) output_fifo_in ();
 
-fifo #(
-  .DATA_WIDTH(SAMPLE_WIDTH+CLOCK_WIDTH),
-  .ADDR_WIDTH(4) // add some buffer in case we get several samples with alternating noise in a row
-) input_fifo_i (
-  .clk,
-  .reset,
-  .data_out(input_fifo_out),
-  .data_in(input_fifo_in)
-);
-
-localparam int SPLIT_TIMESTAMP_COUNT = CLOCK_WIDTH / (SAMPLE_WIDTH - 2);
-logic [$clog2(SPLIT_TIMESTAMP_COUNT+1)-1:0] subword_sel;
-
-assign input_fifo_in.data = {sample_count, data_in_reg[SAMPLE_WIDTH-1:2], new_is_high, data_in_reg[0]};
-assign input_fifo_in.valid = data_in_valid & is_high;
-assign input_fifo_out.ready = ((!input_fifo_out.data[1]) || (subword_sel == SPLIT_TIMESTAMP_COUNT))
-                                && input_fifo_out.valid;
-assign output_fifo_in.valid = input_fifo_out.valid;
-
-always_comb begin
-  if (subword_sel == 0) begin
-    // set bit 1 to 0 to indicate the word contains a sample
-    // sample: {sample[15:3], 1'bx, 1'b0, 1'bx} bit 2 1'bx is new_is_high
-    output_fifo_in.data = {input_fifo_out.data[SAMPLE_WIDTH-1:3],
-                            input_fifo_out.data[1], 1'b0, input_fifo_out.data[0]};
-  end else begin
-    // set bit 1 to 1 to indicate the word contains a timestamp
-    // timestamp (4 successive transactions): {clock[i*14+:14], 1'b1, 1'bx} for i = 0..3
-    output_fifo_in.data = {input_fifo_out.data[2+subword_sel*(SAMPLE_WIDTH-2)+:(SAMPLE_WIDTH-2)],
-                            1'b1, input_fifo_out.data[0]};
-  end
-end
-
-always_ff @(posedge clk) begin
-  if (reset) begin
-    subword_sel <= '0;
-  end else begin
-    if (input_fifo_out.valid && input_fifo_out.data[1]) begin
-      if (subword_sel == SPLIT_TIMESTAMP_COUNT) begin
-        subword_sel <= '0;
-      end else begin
-        subword_sel <= subword_sel + 1'b1;
-      end
-    end
-  end
-end
-
-fifo #(
-  .DATA_WIDTH(SAMPLE_WIDTH),
-  .ADDR_WIDTH(4)
-) output_fifo_i (
-  .clk,
-  .reset,
-  .data_out(data_out),
-  .data_in(output_fifo_in)
-);
 
 endmodule
