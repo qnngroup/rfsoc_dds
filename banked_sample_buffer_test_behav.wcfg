@@ -1,0 +1,1379 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="banked_sample_buffer_test_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="banked_sample_buffer_test" />
+            <top_module name="glbl" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="0.385000 us"></ZoomStartTime>
+      <ZoomEndTime time="788.885001 us"></ZoomEndTime>
+      <Cursor1Time time="407.885000 us"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="210"></NameColumnWidth>
+      <ValueColumnWidth column_width="81"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="20" />
+   <wvobject type="logic" fp_name="/banked_sample_buffer_test/clk">
+      <obj_property name="ElementShortName">clk</obj_property>
+      <obj_property name="ObjectShortName">clk</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/banked_sample_buffer_test/reset">
+      <obj_property name="ElementShortName">reset</obj_property>
+      <obj_property name="ObjectShortName">reset</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/banked_sample_buffer_test/start">
+      <obj_property name="ElementShortName">start</obj_property>
+      <obj_property name="ObjectShortName">start</obj_property>
+   </wvobject>
+   <wvobject type="logic" fp_name="/banked_sample_buffer_test/stop">
+      <obj_property name="ElementShortName">stop</obj_property>
+      <obj_property name="ObjectShortName">stop</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/banked_sample_buffer_test/banking_mode">
+      <obj_property name="ElementShortName">banking_mode[2:0]</obj_property>
+      <obj_property name="ObjectShortName">banking_mode[2:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/banked_sample_buffer_test/sample_count">
+      <obj_property name="ElementShortName">sample_count[0:7][31:0]</obj_property>
+      <obj_property name="ObjectShortName">sample_count[0:7][31:0]</obj_property>
+   </wvobject>
+   <wvobject type="array" fp_name="/banked_sample_buffer_test/CLK_RATE_HZ">
+      <obj_property name="ElementShortName">CLK_RATE_HZ[31:0]</obj_property>
+      <obj_property name="ObjectShortName">CLK_RATE_HZ[31:0]</obj_property>
+   </wvobject>
+   <wvobject type="group" fp_name="group1457">
+      <obj_property name="label">dut_i</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/banking_mode">
+         <obj_property name="ElementShortName">banking_mode[1:0]</obj_property>
+         <obj_property name="ObjectShortName">banking_mode[1:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/banks_full">
+         <obj_property name="ElementShortName">banks_full[7:0]</obj_property>
+         <obj_property name="ObjectShortName">banks_full[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/banks_stop">
+         <obj_property name="ElementShortName">banks_stop</obj_property>
+         <obj_property name="ObjectShortName">banks_stop</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/bank_select">
+         <obj_property name="ElementShortName">bank_select[2:0]</obj_property>
+         <obj_property name="ObjectShortName">bank_select[2:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].valid_d ">
+         <obj_property name="ElementShortName">\bank_i[0].valid_d </obj_property>
+         <obj_property name="ObjectShortName">\bank_i[0].valid_d </obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].full_offset ">
+         <obj_property name="ElementShortName">\bank_i[0].full_offset [2:0]</obj_property>
+         <obj_property name="ObjectShortName">\bank_i[0].full_offset [2:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].valid_d ">
+         <obj_property name="ElementShortName">\bank_i[1].valid_d </obj_property>
+         <obj_property name="ObjectShortName">\bank_i[1].valid_d </obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].full_offset ">
+         <obj_property name="ElementShortName">\bank_i[1].full_offset [2:0]</obj_property>
+         <obj_property name="ObjectShortName">\bank_i[1].full_offset [2:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].valid_d ">
+         <obj_property name="ElementShortName">\bank_i[2].valid_d </obj_property>
+         <obj_property name="ObjectShortName">\bank_i[2].valid_d </obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].full_offset ">
+         <obj_property name="ElementShortName">\bank_i[2].full_offset [2:0]</obj_property>
+         <obj_property name="ObjectShortName">\bank_i[2].full_offset [2:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].valid_d ">
+         <obj_property name="ElementShortName">\bank_i[3].valid_d </obj_property>
+         <obj_property name="ObjectShortName">\bank_i[3].valid_d </obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].full_offset ">
+         <obj_property name="ElementShortName">\bank_i[3].full_offset [2:0]</obj_property>
+         <obj_property name="ObjectShortName">\bank_i[3].full_offset [2:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].valid_d ">
+         <obj_property name="ElementShortName">\bank_i[4].valid_d </obj_property>
+         <obj_property name="ObjectShortName">\bank_i[4].valid_d </obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].full_offset ">
+         <obj_property name="ElementShortName">\bank_i[4].full_offset [2:0]</obj_property>
+         <obj_property name="ObjectShortName">\bank_i[4].full_offset [2:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].valid_d ">
+         <obj_property name="ElementShortName">\bank_i[5].valid_d </obj_property>
+         <obj_property name="ObjectShortName">\bank_i[5].valid_d </obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].full_offset ">
+         <obj_property name="ElementShortName">\bank_i[5].full_offset [2:0]</obj_property>
+         <obj_property name="ObjectShortName">\bank_i[5].full_offset [2:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].valid_d ">
+         <obj_property name="ElementShortName">\bank_i[6].valid_d </obj_property>
+         <obj_property name="ObjectShortName">\bank_i[6].valid_d </obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].full_offset ">
+         <obj_property name="ElementShortName">\bank_i[6].full_offset [2:0]</obj_property>
+         <obj_property name="ObjectShortName">\bank_i[6].full_offset [2:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].valid_d ">
+         <obj_property name="ElementShortName">\bank_i[7].valid_d </obj_property>
+         <obj_property name="ObjectShortName">\bank_i[7].valid_d </obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].full_offset ">
+         <obj_property name="ElementShortName">\bank_i[7].full_offset [2:0]</obj_property>
+         <obj_property name="ObjectShortName">\bank_i[7].full_offset [2:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/N_CHANNELS">
+         <obj_property name="ElementShortName">N_CHANNELS[31:0]</obj_property>
+         <obj_property name="ObjectShortName">N_CHANNELS[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/N_BANKING_MODES">
+         <obj_property name="ElementShortName">N_BANKING_MODES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">N_BANKING_MODES[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1455">
+      <obj_property name="label">data_in</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/data">
+         <obj_property name="ElementShortName">data[7:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[7:0][15:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/ready">
+         <obj_property name="ElementShortName">ready[7:0]</obj_property>
+         <obj_property name="ObjectShortName">ready[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/valid">
+         <obj_property name="ElementShortName">valid[7:0]</obj_property>
+         <obj_property name="ObjectShortName">valid[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/last">
+         <obj_property name="ElementShortName">last[7:0]</obj_property>
+         <obj_property name="ObjectShortName">last[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/ok">
+         <obj_property name="ElementShortName">ok[7:0]</obj_property>
+         <obj_property name="ObjectShortName">ok[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/PARALLEL_CHANNELS">
+         <obj_property name="ElementShortName">PARALLEL_CHANNELS[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_CHANNELS[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1454">
+      <obj_property name="label">data_out</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_out/data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/data_out/ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/data_out/valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/data_out/last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/data_out/ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/data_out/DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1453">
+      <obj_property name="label">config_in</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/config_in/data">
+         <obj_property name="ElementShortName">data[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/config_in/ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/config_in/valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/config_in/last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/config_in/ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/config_in/DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1452">
+      <obj_property name="label">bank_0</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /full">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /state">
+         <obj_property name="ElementShortName">state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /buffer">
+         <obj_property name="ElementShortName">buffer[0:1023][15:0]</obj_property>
+         <obj_property name="ObjectShortName">buffer[0:1023][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /write_addr">
+         <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /read_addr">
+         <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /read_addr_d">
+         <obj_property name="ElementShortName">read_addr_d[1:0][9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr_d[1:0][9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /data_out_d">
+         <obj_property name="ElementShortName">data_out_d[3:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_d[3:0][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /data_out_valid">
+         <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /data_out_last">
+         <obj_property name="ElementShortName">data_out_last[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_last[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /buffer_has_data">
+         <obj_property name="ElementShortName">buffer_has_data</obj_property>
+         <obj_property name="ObjectShortName">buffer_has_data</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /readout_begun">
+         <obj_property name="ElementShortName">readout_begun</obj_property>
+         <obj_property name="ObjectShortName">readout_begun</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1548" type="divider">
+         <obj_property name="label">din</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1547" type="divider">
+         <obj_property name="label">dout</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1546">
+      <obj_property name="label">bank_1</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /full">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /state">
+         <obj_property name="ElementShortName">state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /buffer">
+         <obj_property name="ElementShortName">buffer[0:1023][15:0]</obj_property>
+         <obj_property name="ObjectShortName">buffer[0:1023][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /write_addr">
+         <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /read_addr">
+         <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /read_addr_d">
+         <obj_property name="ElementShortName">read_addr_d[1:0][9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr_d[1:0][9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /data_out_d">
+         <obj_property name="ElementShortName">data_out_d[3:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_d[3:0][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /data_out_valid">
+         <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /data_out_last">
+         <obj_property name="ElementShortName">data_out_last[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_last[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /buffer_has_data">
+         <obj_property name="ElementShortName">buffer_has_data</obj_property>
+         <obj_property name="ObjectShortName">buffer_has_data</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /readout_begun">
+         <obj_property name="ElementShortName">readout_begun</obj_property>
+         <obj_property name="ObjectShortName">readout_begun</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1544" type="divider">
+         <obj_property name="label">d_in</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_in /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_in /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_in /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_in /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_in /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_in /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1545" type="divider">
+         <obj_property name="label">d_out</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_out /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_out /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_out /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_out /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_out /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_out /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1473">
+      <obj_property name="label">dut_i_all_banks_out</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/data">
+         <obj_property name="ElementShortName">data[7:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[7:0][15:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/ready">
+         <obj_property name="ElementShortName">ready[7:0]</obj_property>
+         <obj_property name="ObjectShortName">ready[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/valid">
+         <obj_property name="ElementShortName">valid[7:0]</obj_property>
+         <obj_property name="ObjectShortName">valid[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/last">
+         <obj_property name="ElementShortName">last[7:0]</obj_property>
+         <obj_property name="ObjectShortName">last[7:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/ok">
+         <obj_property name="ElementShortName">ok[7:0]</obj_property>
+         <obj_property name="ObjectShortName">ok[7:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/PARALLEL_CHANNELS">
+         <obj_property name="ElementShortName">PARALLEL_CHANNELS[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_CHANNELS[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1628">
+      <obj_property name="label">bank_2</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /full">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /first">
+         <obj_property name="ElementShortName">first</obj_property>
+         <obj_property name="ObjectShortName">first</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /state">
+         <obj_property name="ElementShortName">state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /buffer">
+         <obj_property name="ElementShortName">buffer[0:1023][15:0]</obj_property>
+         <obj_property name="ObjectShortName">buffer[0:1023][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /write_addr">
+         <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /read_addr">
+         <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /read_addr_d">
+         <obj_property name="ElementShortName">read_addr_d[1:0][9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr_d[1:0][9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /data_out_d">
+         <obj_property name="ElementShortName">data_out_d[3:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_d[3:0][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /data_out_valid">
+         <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /data_out_last">
+         <obj_property name="ElementShortName">data_out_last[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_last[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /buffer_has_data">
+         <obj_property name="ElementShortName">buffer_has_data</obj_property>
+         <obj_property name="ObjectShortName">buffer_has_data</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /readout_begun">
+         <obj_property name="ElementShortName">readout_begun</obj_property>
+         <obj_property name="ObjectShortName">readout_begun</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1614" type="divider">
+         <obj_property name="label">d_in</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_in /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_in /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_in /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_in /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_in /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_in /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1621" type="divider">
+         <obj_property name="label">d_out</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_out /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_out /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_out /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_out /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_out /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_out /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1662">
+      <obj_property name="label">bank_3</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /full">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /first">
+         <obj_property name="ElementShortName">first</obj_property>
+         <obj_property name="ObjectShortName">first</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /state">
+         <obj_property name="ElementShortName">state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /buffer">
+         <obj_property name="ElementShortName">buffer[0:1023][15:0]</obj_property>
+         <obj_property name="ObjectShortName">buffer[0:1023][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /write_addr">
+         <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /read_addr">
+         <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /read_addr_d">
+         <obj_property name="ElementShortName">read_addr_d[1:0][9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr_d[1:0][9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /data_out_d">
+         <obj_property name="ElementShortName">data_out_d[3:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_d[3:0][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /data_out_valid">
+         <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /data_out_last">
+         <obj_property name="ElementShortName">data_out_last[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_last[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /buffer_has_data">
+         <obj_property name="ElementShortName">buffer_has_data</obj_property>
+         <obj_property name="ObjectShortName">buffer_has_data</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /readout_begun">
+         <obj_property name="ElementShortName">readout_begun</obj_property>
+         <obj_property name="ObjectShortName">readout_begun</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_i /SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1648" type="divider">
+         <obj_property name="label">d_in</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_in /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_in /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_in /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_in /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_in /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_in /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1655" type="divider">
+         <obj_property name="label">d_out</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_out /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_out /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_out /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_out /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_out /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[3].bank_out /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1696">
+      <obj_property name="label">bank_4</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /full">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /first">
+         <obj_property name="ElementShortName">first</obj_property>
+         <obj_property name="ObjectShortName">first</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /state">
+         <obj_property name="ElementShortName">state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /buffer">
+         <obj_property name="ElementShortName">buffer[0:1023][15:0]</obj_property>
+         <obj_property name="ObjectShortName">buffer[0:1023][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /write_addr">
+         <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /read_addr">
+         <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /read_addr_d">
+         <obj_property name="ElementShortName">read_addr_d[1:0][9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr_d[1:0][9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /data_out_d">
+         <obj_property name="ElementShortName">data_out_d[3:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_d[3:0][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /data_out_valid">
+         <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /data_out_last">
+         <obj_property name="ElementShortName">data_out_last[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_last[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /buffer_has_data">
+         <obj_property name="ElementShortName">buffer_has_data</obj_property>
+         <obj_property name="ObjectShortName">buffer_has_data</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /readout_begun">
+         <obj_property name="ElementShortName">readout_begun</obj_property>
+         <obj_property name="ObjectShortName">readout_begun</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_i /SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1682" type="divider">
+         <obj_property name="label">d_in</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_in /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_in /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_in /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_in /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_in /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_in /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1689" type="divider">
+         <obj_property name="label">d_out</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_out /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_out /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_out /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_out /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_out /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[4].bank_out /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1730">
+      <obj_property name="label">bank_5</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /full">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /first">
+         <obj_property name="ElementShortName">first</obj_property>
+         <obj_property name="ObjectShortName">first</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /state">
+         <obj_property name="ElementShortName">state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /buffer">
+         <obj_property name="ElementShortName">buffer[0:1023][15:0]</obj_property>
+         <obj_property name="ObjectShortName">buffer[0:1023][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /write_addr">
+         <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /read_addr">
+         <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /read_addr_d">
+         <obj_property name="ElementShortName">read_addr_d[1:0][9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr_d[1:0][9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /data_out_d">
+         <obj_property name="ElementShortName">data_out_d[3:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_d[3:0][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /data_out_valid">
+         <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /data_out_last">
+         <obj_property name="ElementShortName">data_out_last[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_last[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /buffer_has_data">
+         <obj_property name="ElementShortName">buffer_has_data</obj_property>
+         <obj_property name="ObjectShortName">buffer_has_data</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /readout_begun">
+         <obj_property name="ElementShortName">readout_begun</obj_property>
+         <obj_property name="ObjectShortName">readout_begun</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_i /SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1716" type="divider">
+         <obj_property name="label">d_in</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_in /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_in /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_in /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_in /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_in /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_in /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1717" type="divider">
+         <obj_property name="label">d_out</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_out /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_out /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_out /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_out /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_out /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[5].bank_out /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1764">
+      <obj_property name="label">bank_6</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /full">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /first">
+         <obj_property name="ElementShortName">first</obj_property>
+         <obj_property name="ObjectShortName">first</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /state">
+         <obj_property name="ElementShortName">state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /buffer">
+         <obj_property name="ElementShortName">buffer[0:1023][15:0]</obj_property>
+         <obj_property name="ObjectShortName">buffer[0:1023][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /write_addr">
+         <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /read_addr">
+         <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /read_addr_d">
+         <obj_property name="ElementShortName">read_addr_d[1:0][9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr_d[1:0][9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /data_out_d">
+         <obj_property name="ElementShortName">data_out_d[3:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_d[3:0][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /data_out_valid">
+         <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /data_out_last">
+         <obj_property name="ElementShortName">data_out_last[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_last[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /buffer_has_data">
+         <obj_property name="ElementShortName">buffer_has_data</obj_property>
+         <obj_property name="ObjectShortName">buffer_has_data</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /readout_begun">
+         <obj_property name="ElementShortName">readout_begun</obj_property>
+         <obj_property name="ObjectShortName">readout_begun</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1750" type="divider">
+         <obj_property name="label">d_in</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_in /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_in /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_in /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_in /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_in /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_in /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1757" type="divider">
+         <obj_property name="label">d_out</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_out /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_out /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_out /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_out /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_out /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_out /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+   <wvobject type="group" fp_name="group1798">
+      <obj_property name="label">bank_7</obj_property>
+      <obj_property name="DisplayName">label</obj_property>
+      <obj_property name="isExpanded"></obj_property>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /clk">
+         <obj_property name="ElementShortName">clk</obj_property>
+         <obj_property name="ObjectShortName">clk</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /reset">
+         <obj_property name="ElementShortName">reset</obj_property>
+         <obj_property name="ObjectShortName">reset</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /start">
+         <obj_property name="ElementShortName">start</obj_property>
+         <obj_property name="ObjectShortName">start</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /stop">
+         <obj_property name="ElementShortName">stop</obj_property>
+         <obj_property name="ObjectShortName">stop</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /full">
+         <obj_property name="ElementShortName">full</obj_property>
+         <obj_property name="ObjectShortName">full</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /first">
+         <obj_property name="ElementShortName">first</obj_property>
+         <obj_property name="ObjectShortName">first</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /state">
+         <obj_property name="ElementShortName">state[31:0]</obj_property>
+         <obj_property name="ObjectShortName">state[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /buffer">
+         <obj_property name="ElementShortName">buffer[0:1023][15:0]</obj_property>
+         <obj_property name="ObjectShortName">buffer[0:1023][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /write_addr">
+         <obj_property name="ElementShortName">write_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">write_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /read_addr">
+         <obj_property name="ElementShortName">read_addr[9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr[9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /read_addr_d">
+         <obj_property name="ElementShortName">read_addr_d[1:0][9:0]</obj_property>
+         <obj_property name="ObjectShortName">read_addr_d[1:0][9:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /data_out_d">
+         <obj_property name="ElementShortName">data_out_d[3:0][15:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_d[3:0][15:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /data_out_valid">
+         <obj_property name="ElementShortName">data_out_valid[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_valid[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /data_out_last">
+         <obj_property name="ElementShortName">data_out_last[3:0]</obj_property>
+         <obj_property name="ObjectShortName">data_out_last[3:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /buffer_has_data">
+         <obj_property name="ElementShortName">buffer_has_data</obj_property>
+         <obj_property name="ObjectShortName">buffer_has_data</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /readout_begun">
+         <obj_property name="ElementShortName">readout_begun</obj_property>
+         <obj_property name="ObjectShortName">readout_begun</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /BUFFER_DEPTH">
+         <obj_property name="ElementShortName">BUFFER_DEPTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">BUFFER_DEPTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /PARALLEL_SAMPLES">
+         <obj_property name="ElementShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+         <obj_property name="ObjectShortName">PARALLEL_SAMPLES[31:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /SAMPLE_WIDTH">
+         <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1784" type="divider">
+         <obj_property name="label">d_in</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_in /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_in /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_in /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_in /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_in /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_in /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+      <wvobject fp_name="divider1791" type="divider">
+         <obj_property name="label">d_out</obj_property>
+         <obj_property name="DisplayName">label</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_out /data">
+         <obj_property name="ElementShortName">data[15:0]</obj_property>
+         <obj_property name="ObjectShortName">data[15:0]</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_out /ready">
+         <obj_property name="ElementShortName">ready</obj_property>
+         <obj_property name="ObjectShortName">ready</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_out /valid">
+         <obj_property name="ElementShortName">valid</obj_property>
+         <obj_property name="ObjectShortName">valid</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_out /last">
+         <obj_property name="ElementShortName">last</obj_property>
+         <obj_property name="ObjectShortName">last</obj_property>
+      </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_out /ok">
+         <obj_property name="ElementShortName">ok</obj_property>
+         <obj_property name="ObjectShortName">ok</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_out /DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+      </wvobject>
+   </wvobject>
+</wave_config>
