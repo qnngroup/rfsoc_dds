@@ -91,7 +91,7 @@ task do_readout(input bit wait_for_last, input int wait_cycles);
   @(posedge clk);
 endtask
 
-task check_results();
+task check_results(input int banking_mode);
   logic [15:0] temp_sample;
   int current_channel, n_samples;
   for (int i = 0; i < 8; i++) begin
@@ -111,9 +111,16 @@ task check_results();
       data_received.pop_back();
     end
   end
-  for (int i = 0; i < 8; i++) begin
+  for (int i = 0; i < (1 << banking_mode); i++) begin
+    // make sure there are no remaining samples in data_sent queues
+    // corresponding to channels which are enabled as per banking_mode
+    if (data_sent[i].size() > 0) begin
+      $warning("leftover samples in data_sent[%0d]: %0d", i, data_sent[i].size());
+    end
+  end
+  for (int i = (1 << banking_mode); i < 8; i++) begin
     // flush out any remaining samples in data_sent queue
-    // TODO actually implement a check to make sure we got everything we sent
+    $display("removing %0d samples from data_sent[%0d]", data_sent[i].size(), i);
     while (data_sent[i].size() > 0) data_sent[i].pop_back();
   end
 endtask
@@ -142,7 +149,7 @@ initial begin
   $display("# checking results for test with a few samples at    #");
   $display("# full rate, with only channel 0 enabled             #");
   $display("######################################################");
-  check_results();
+  check_results(0);
   // do more tests
 
   // start
@@ -160,7 +167,7 @@ initial begin
   $display("# checking results for test with many samples at     #");
   $display("# full rate, with only channel 0 enabled             #");
   $display("######################################################");
-  check_results();
+  check_results(0);
 
   // start
   start <= 1'b1;
@@ -178,7 +185,7 @@ initial begin
   $display("# checking results for test with a few samples at    #");
   $display("# full rate, with channels 0 and 1 enabled           #");
   $display("######################################################");
-  check_results();
+  check_results(1);
 
   // start
   start <= 1'b1;
@@ -196,7 +203,7 @@ initial begin
   $display("# checking results for test with many samples at     #");
   $display("# full rate, with channels 0 and 1 enabled           #");
   $display("######################################################");
-  check_results();
+  check_results(1);
 
   // start
   start <= 1'b1;
@@ -214,7 +221,7 @@ initial begin
   $display("# checking results for test with a few samples at    #");
   $display("# full rate, with channels 0-3 enabled               #");
   $display("######################################################");
-  check_results();
+  check_results(2);
 
   // start
   start <= 1'b1;
@@ -232,7 +239,7 @@ initial begin
   $display("# checking results for test with many samples at     #");
   $display("# full rate, with channels 0-3 enabled               #");
   $display("######################################################");
-  check_results();
+  check_results(2);
 
   // start
   start <= 1'b1;
@@ -250,7 +257,7 @@ initial begin
   $display("# checking results for test with a few samples at    #");
   $display("# full rate, with all channels enabled               #");
   $display("######################################################");
-  check_results();
+  check_results(3);
 
   // start
   start <= 1'b1;
@@ -268,7 +275,7 @@ initial begin
   $display("# checking results for test with many samples at     #");
   $display("# full rate, with all channels enabled               #");
   $display("######################################################");
-  check_results();
+  check_results(3);
   $finish;
 end
 
