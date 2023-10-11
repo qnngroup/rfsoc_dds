@@ -1,1 +1,0 @@
-../../dds_test.srcs/sim_1/new/noise_event_tracker_test.sv
