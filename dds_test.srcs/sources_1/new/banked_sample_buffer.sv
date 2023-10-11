@@ -18,6 +18,8 @@ assign config_in.ready = 1'b1;
 // e.g. for 8 channels, single-channel mode, dual-channel, 4-channel, and 8-channel modes
 localparam int N_BANKING_MODES = $clog2(N_CHANNELS) + 1;
 logic [$clog2(N_BANKING_MODES)-1:0] banking_mode;
+logic [$clog2(N_CHANNELS):0] n_active_channels; // extra bit so we can represent N_CHANNELS
+assign n_active_channels = 1'b1 << banking_mode;
 logic start, stop;
 
 always_ff @(posedge clk) begin
@@ -56,6 +58,8 @@ always_comb begin
   end
 end
 logic [$clog2(N_CHANNELS)-1:0] bank_select;
+logic [$clog2(N_CHANNELS)-1:0] active_channel_id;
+assign active_channel_id = bank_select % n_active_channels;
 
 // bundle of axistreams for each bank output
 Axis_Parallel_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES), .PARALLEL_CHANNELS(N_CHANNELS)) all_banks_out ();
@@ -70,7 +74,7 @@ always_ff @(posedge clk) begin
       if (banks_first[bank_select]) begin
         // first word from each bank contains the number of samples that were stored in the bank
         // use least significant bits of data output to encode which channel the data came from
-        data_out.data <= {all_banks_out.data[bank_select][PARALLEL_SAMPLES*SAMPLE_WIDTH-$clog2(N_CHANNELS)-1:0], bank_select % (1'b1 << banking_mode)};
+        data_out.data <= {all_banks_out.data[bank_select][PARALLEL_SAMPLES*SAMPLE_WIDTH-$clog2(N_CHANNELS)-1:0], active_channel_id};
       end else begin
         data_out.data <= all_banks_out.data[bank_select];
       end
@@ -142,25 +146,15 @@ generate
     // mux the channels of data_in depending on banking_mode
     logic valid_d; // match latency of registered data input
     // when chaining banks in series, which bank should the current bank i wait for
-    logic [$clog2(N_CHANNELS)-1:0] full_offset;
     always_comb begin
-      // for example, with N_CHANNELS = 8, there are 4 different banking modes
-      // 0: only channel 0 is enabled (all buffers are chained in series)
-      // 1: only channels 0, 1 are enabled (chain between every 2nd buffer)
-      // 2: channels 0-3 are enabled (chain between every 4th buffer)
-      // 3: all channels are enabled (no chaining)
-      // if banking_mode == 3, then 1 << banking_mode == N_CHANNELS, so full_offset = 0
-      // if full_offset > 0, then chain based on full_offset, otherwise just
-      // directly connect valid
-      full_offset = 1 << banking_mode;
-      if ((full_offset != N_CHANNELS) && (i >= full_offset)) begin
-        bank_in.valid = valid_d & banks_full[i - full_offset];
+      if ((n_active_channels != N_CHANNELS) && (i >= n_active_channels)) begin
+        bank_in.valid = valid_d & banks_full[i - n_active_channels];
       end else begin
         bank_in.valid = valid_d;
       end
     end
     always_ff @(posedge clk) begin
-      bank_in.data <= data_in.data[i % (1 << banking_mode)];
+      bank_in.data <= data_in.data[i % n_active_channels];
       valid_d <= data_in.valid[i];
     end
   end
