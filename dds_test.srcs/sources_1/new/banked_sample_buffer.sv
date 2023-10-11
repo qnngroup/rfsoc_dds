@@ -8,7 +8,8 @@ module banked_sample_buffer #(
   input wire clk, reset,
   Axis_Parallel_If.Slave_Simple data_in, // all channels in parallel
   Axis_If.Master_Full data_out,
-  Axis_If.Slave_Simple config_in // {banking_mode, start, stop}
+  Axis_If.Slave_Simple config_in, // {banking_mode, start, stop}
+  output logic capture_started
 );
 
 // never apply backpressure to discriminator or ADC
@@ -21,6 +22,7 @@ logic [$clog2(N_BANKING_MODES)-1:0] banking_mode;
 logic [$clog2(N_CHANNELS):0] n_active_channels; // extra bit so we can represent N_CHANNELS
 assign n_active_channels = 1'b1 << banking_mode;
 logic start, stop;
+assign capture_started = start;
 
 always_ff @(posedge clk) begin
   if (reset) begin
@@ -48,10 +50,11 @@ always_comb begin
   if (stop) begin
     banks_stop = 1'b1;
   end else begin
-    // mask so only the final bank filling up can stop capture
-    // if banking_mode == 0: 1 << N_CHANNELS
-    // if banking_mode == 1: 3 << (N_CHANNELS - 1)
-    // if banking_mode == 2: 7 << (N_CHANNELS - 2)
+    // capture is only stopped when (one of) the final bank(s) fills up
+    // use the appropriate mask on banks_full to decide when to stop capture
+    // if banking_mode == 0: mask = 1 << N_CHANNELS
+    // if banking_mode == 1: mask = 3 << (N_CHANNELS - 1)
+    // if banking_mode == 2: mask = 7 << (N_CHANNELS - 2)
     // ...
     full_mask = ((2 << banking_mode) - 1) << (N_CHANNELS - banking_mode);
     banks_stop = |(full_mask & banks_full);
@@ -155,7 +158,7 @@ generate
     end
     always_ff @(posedge clk) begin
       bank_in.data <= data_in.data[i % n_active_channels];
-      valid_d <= data_in.valid[i];
+      valid_d <= data_in.valid[i % n_active_channels];
     end
   end
 endgenerate

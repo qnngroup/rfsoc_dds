@@ -55,18 +55,19 @@ always @(posedge clk) begin
   end
 end
 
-task send_samples_full_rate(input int n_samples);
-  data_in.valid <= '1;
-  repeat (n_samples) begin
-    @(posedge clk);
-  end
-  data_in.valid <= '0;
-endtask
-
-task send_samples_rand_arrivals(input int n_cycles);
-  repeat (n_cycles) begin
-    data_in.valid <= $urandom_range(1<<8);
-    @(posedge clk);
+task send_samples(input int n_samples, input bit rand_arrivals);
+  if (rand_arrivals) begin
+    repeat (n_samples) begin
+      data_in.valid <= $urandom_range(1<<8);
+      @(posedge clk);
+    end
+    data_in.valid <= '0;
+  end else begin
+    data_in.valid <= '1;
+    repeat (n_samples) begin
+      @(posedge clk);
+    end
+    data_in.valid <= '0;
   end
 endtask
 
@@ -125,6 +126,16 @@ task check_results(input int banking_mode);
   end
 endtask
 
+task start_acq_with_banking_mode(input int mode);
+  start <= 1'b1;
+  banking_mode <= mode;
+  config_in.valid <= 1'b1;
+  @(posedge clk);
+  start <= 1'b0;
+  config_in.valid <= 1'b0;
+  repeat (100) @(posedge clk);
+endtask
+
 initial begin
   reset <= 1'b1;
   start <= 1'b0;
@@ -134,148 +145,88 @@ initial begin
   repeat (100) @(posedge clk);
   reset <= 1'b0;
   repeat (50) @(posedge clk);
-  // start
-  start <= 1'b1;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  start <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
-  // send samples
-  send_samples_full_rate(3);
-  repeat (50) @(posedge clk);
-  do_readout(1'b1, 500);
-  $display("######################################################");
-  $display("# checking results for test with a few samples at    #");
-  $display("# full rate, with only channel 0 enabled             #");
-  $display("######################################################");
-  check_results(0);
-  // do more tests
 
-  // start
-  start <= 1'b1;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  start <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
-  // send samples
-  send_samples_full_rate(1024*7+24);
-  repeat (50) @(posedge clk);
-  do_readout(1'b1, 500);
-  $display("######################################################");
-  $display("# checking results for test with many samples at     #");
-  $display("# full rate, with only channel 0 enabled             #");
-  $display("######################################################");
-  check_results(0);
+  for (int i = 0; i < 2; i++) begin
+    start_acq_with_banking_mode(0);
+    send_samples(37, i);
+    repeat (50) @(posedge clk);
+    do_readout(1'b1, 500);
+    $display("######################################################");
+    $display("# checking results for test with a few samples at    #");
+    $display("# full rate, with only channel 0 enabled             #");
+    $display("######################################################");
+    check_results(0);
 
-  // start
-  start <= 1'b1;
-  banking_mode <= 3'b1;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  start <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
-  // send samples
-  send_samples_full_rate(25);
-  repeat (50) @(posedge clk);
-  do_readout(1'b1, 500);
-  $display("######################################################");
-  $display("# checking results for test with a few samples at    #");
-  $display("# full rate, with channels 0 and 1 enabled           #");
-  $display("######################################################");
-  check_results(1);
+    start_acq_with_banking_mode(0);
+    send_samples(1024*7+24, i);
+    repeat (50) @(posedge clk);
+    do_readout(1'b1, 500);
+    $display("######################################################");
+    $display("# checking results for test with many samples at     #");
+    $display("# full rate, with only channel 0 enabled             #");
+    $display("######################################################");
+    check_results(0);
 
-  // start
-  start <= 1'b1;
-  banking_mode <= 3'b1;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  start <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
-  // send samples
-  send_samples_full_rate(512*7+12);
-  repeat (50) @(posedge clk);
-  do_readout(1'b1, 500);
-  $display("######################################################");
-  $display("# checking results for test with many samples at     #");
-  $display("# full rate, with channels 0 and 1 enabled           #");
-  $display("######################################################");
-  check_results(1);
+    start_acq_with_banking_mode(1);
+    send_samples(25, i);
+    repeat (50) @(posedge clk);
+    do_readout(1'b1, 500);
+    $display("######################################################");
+    $display("# checking results for test with a few samples at    #");
+    $display("# full rate, with channels 0 and 1 enabled           #");
+    $display("######################################################");
+    check_results(1);
 
-  // start
-  start <= 1'b1;
-  banking_mode <= 3'b10;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  start <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
-  // send samples
-  send_samples_full_rate(4);
-  repeat (50) @(posedge clk);
-  do_readout(1'b1, 500);
-  $display("######################################################");
-  $display("# checking results for test with a few samples at    #");
-  $display("# full rate, with channels 0-3 enabled               #");
-  $display("######################################################");
-  check_results(2);
+    start_acq_with_banking_mode(1);
+    send_samples(512*7+12, i);
+    repeat (50) @(posedge clk);
+    do_readout(1'b1, 500);
+    $display("######################################################");
+    $display("# checking results for test with many samples at     #");
+    $display("# full rate, with channels 0 and 1 enabled           #");
+    $display("######################################################");
+    check_results(1);
 
-  // start
-  start <= 1'b1;
-  banking_mode <= 3'b10;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  start <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
-  // send samples
-  send_samples_full_rate(256*7+6);
-  repeat (50) @(posedge clk);
-  do_readout(1'b1, 500);
-  $display("######################################################");
-  $display("# checking results for test with many samples at     #");
-  $display("# full rate, with channels 0-3 enabled               #");
-  $display("######################################################");
-  check_results(2);
+    start_acq_with_banking_mode(2);
+    send_samples(40, i);
+    repeat (50) @(posedge clk);
+    do_readout(1'b1, 500);
+    $display("######################################################");
+    $display("# checking results for test with a few samples at    #");
+    $display("# full rate, with channels 0-3 enabled               #");
+    $display("######################################################");
+    check_results(2);
 
-  // start
-  start <= 1'b1;
-  banking_mode <= 3'b11;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  start <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
-  // send samples
-  send_samples_full_rate(49);
-  repeat (50) @(posedge clk);
-  do_readout(1'b1, 500);
-  $display("######################################################");
-  $display("# checking results for test with a few samples at    #");
-  $display("# full rate, with all channels enabled               #");
-  $display("######################################################");
-  check_results(3);
+    start_acq_with_banking_mode(2);
+    send_samples(256*7+6, i);
+    repeat (50) @(posedge clk);
+    do_readout(1'b1, 500);
+    $display("######################################################");
+    $display("# checking results for test with many samples at     #");
+    $display("# full rate, with channels 0-3 enabled               #");
+    $display("######################################################");
+    check_results(2);
 
-  // start
-  start <= 1'b1;
-  banking_mode <= 3'b11;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  start <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
-  // send samples
-  send_samples_full_rate(128*7+3);
-  repeat (50) @(posedge clk);
-  do_readout(1'b1, 500);
-  $display("######################################################");
-  $display("# checking results for test with many samples at     #");
-  $display("# full rate, with all channels enabled               #");
-  $display("######################################################");
-  check_results(3);
+    start_acq_with_banking_mode(3);
+    send_samples(49, i);
+    repeat (50) @(posedge clk);
+    do_readout(1'b1, 500);
+    $display("######################################################");
+    $display("# checking results for test with a few samples at    #");
+    $display("# full rate, with all channels enabled               #");
+    $display("######################################################");
+    check_results(3);
+
+    start_acq_with_banking_mode(3);
+    send_samples(128*7+3, i);
+    repeat (50) @(posedge clk);
+    do_readout(1'b1, 500);
+    $display("######################################################");
+    $display("# checking results for test with many samples at     #");
+    $display("# full rate, with all channels enabled               #");
+    $display("######################################################");
+    check_results(3);
+  end
   $finish;
 end
 
