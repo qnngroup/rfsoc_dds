@@ -26,14 +26,18 @@ localparam int TIMESTAMP_WIDTH = SAMPLE_INDEX_WIDTH + CLOCK_WIDTH;
 assign config_in.ready = 1'b1;
 assign data_in.ready = '1; // don't apply backpressure
 
-logic signed [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_low, threshold_high;
-logic [N_CHANNELS-1:0][PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_in_reg, data_out_reg;
-logic [N_CHANNELS-1:0] data_in_valid, data_out_valid;
+typedef logic signed [SAMPLE_WIDTH-1:0] signed_sample_t;
+
+logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_low, threshold_high;
+logic [N_CHANNELS-1:0][PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_in_reg;
+logic [N_CHANNELS-1:0] data_in_valid;
 logic [N_CHANNELS-1:0][CLOCK_WIDTH-1:0] timer, timer_d;
 logic [N_CHANNELS-1:0][SAMPLE_INDEX_WIDTH-1:0] sample_index;
 
 logic [N_CHANNELS-1:0] is_high, is_high_d;
 logic [N_CHANNELS-1:0] new_is_high;
+
+assign new_is_high = is_high & (~is_high_d);
 
 // update thresholds from config interface
 always_ff @(posedge clk) begin
@@ -41,9 +45,9 @@ always_ff @(posedge clk) begin
     threshold_low <= '0;
     threshold_high <= '0;
   end else begin
-    if (config_in.valid) begin
+    if (config_in.ok) begin
       for (int i = 0; i < N_CHANNELS; i++) begin
-        threshold_high[i] <= config_in.data[2*SAMPLE_WIDTH*(i+1)+:SAMPLE_WIDTH];
+        threshold_high[i] <= config_in.data[2*SAMPLE_WIDTH*i+SAMPLE_WIDTH+:SAMPLE_WIDTH];
         threshold_low[i] <= config_in.data[2*SAMPLE_WIDTH*i+:SAMPLE_WIDTH];
       end
     end
@@ -59,10 +63,10 @@ always_comb begin
     any_above_high[i] = 1'b0;
     all_below_low[i] = 1'b1;
     for (int j = 0; j < PARALLEL_SAMPLES; j++) begin
-      if (signed'(data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH]) > threshold_high[i]) begin
+      if (signed_sample_t'(data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH]) > signed_sample_t'(threshold_high[i])) begin
         any_above_high[i] = 1'b1;
       end
-      if (signed'(data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH]) > threshold_low[i]) begin
+      if (signed_sample_t'(data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH]) > signed_sample_t'(threshold_low[i])) begin
         all_below_low[i] = 1'b0;
       end
     end
@@ -71,9 +75,8 @@ end
 
 always_ff @(posedge clk) begin
   // pipeline stage for timer to match sample_index delay
-  new_is_high <= is_high & (~is_high_d);
-  timestamps_out.valid <= new_is_high;
   timer_d <= timer;
+  timestamps_out.valid <= new_is_high;
   for (int i = 0; i < N_CHANNELS; i++) begin
     timestamps_out.data[i] <= {timer_d[i], sample_index[i]};
   end
@@ -86,10 +89,8 @@ always_ff @(posedge clk) begin
   is_high_d <= is_high;
 
   // match delay of sample_index
-  data_out_reg <= data_in_reg;
-  data_out.data <= data_out_reg;
-  data_out_valid <= data_in_valid & is_high;
-  data_out.valid <= data_out_valid;
+  data_out.data <= data_in_reg;
+  data_out.valid <= data_in_valid & is_high;
 
   // is_high SR flipflop, sample_index, and timer
   if (reset) begin
@@ -112,13 +113,11 @@ always_ff @(posedge clk) begin
       // update is_high
       if (any_above_high[i]) begin
         is_high[i] <= 1'b1;
-      end else if (all_below_low) begin
+      end else if (all_below_low[i]) begin
         is_high[i] <= 1'b0;
       end
     end
   end
 end
-
-
 
 endmodule
