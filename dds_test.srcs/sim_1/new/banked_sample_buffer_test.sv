@@ -5,6 +5,10 @@ logic clk = 0;
 localparam CLK_RATE_HZ = 100_000_000;
 always #(0.5s/CLK_RATE_HZ) clk = ~clk;
 
+localparam int N_CHANNELS = 8;
+localparam int PARALLEL_SAMPLES = 1;
+localparam int SAMPLE_WIDTH = 16;
+
 logic reset;
 
 logic start, stop;
@@ -12,15 +16,15 @@ logic [2:0] banking_mode;
 
 assign config_in.data = {banking_mode, start, stop};
 
-Axis_Parallel_If #(.DWIDTH(16), .PARALLEL_CHANNELS(8)) data_in ();
-Axis_If #(.DWIDTH(16)) data_out ();
-Axis_If #(.DWIDTH(4)) config_in ();
+Axis_Parallel_If #(.DWIDTH(PARALLEL_SAMPLES*SAMPLE_WIDTH), .PARALLEL_CHANNELS(N_CHANNELS)) data_in ();
+Axis_If #(.DWIDTH(PARALLEL_SAMPLES*SAMPLE_WIDTH)) data_out ();
+Axis_If #(.DWIDTH(2+$clog2($clog2(N_CHANNELS)+1))) config_in ();
 
 banked_sample_buffer #(
-  .N_CHANNELS(8),
+  .N_CHANNELS(N_CHANNELS),
   .BUFFER_DEPTH(1024),
-  .PARALLEL_SAMPLES(1),
-  .SAMPLE_WIDTH(16)
+  .PARALLEL_SAMPLES(PARALLEL_SAMPLES),
+  .SAMPLE_WIDTH(SAMPLE_WIDTH)
 ) dut_i (
   .clk,
   .reset,
@@ -30,12 +34,12 @@ banked_sample_buffer #(
 );
 
 
-int sample_count [8];
-logic [15:0] data_sent [8][$];
-logic [15:0] data_received [$];
+int sample_count [N_CHANNELS];
+logic [PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_sent [N_CHANNELS][$];
+logic [PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_received [$];
 
 always @(posedge clk) begin
-  for (int i = 0; i < 8; i++) begin
+  for (int i = 0; i < N_CHANNELS; i++) begin
     if (reset) begin
       sample_count[i] <= 0;
       data_in.data[i] <= '0;
@@ -43,7 +47,9 @@ always @(posedge clk) begin
       if (data_in.ok[i]) begin
         // send new data
         sample_count[i] <= sample_count[i] + 1;
-        data_in.data[i] <= $urandom_range(1<<16);
+        for (int j = 0; j < PARALLEL_SAMPLES; j++) begin
+          data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= $urandom_range({SAMPLE_WIDTH{1'b1}});
+        end
         // save data that was sent
         data_sent[i].push_front(data_in.data[i]);
       end
@@ -56,12 +62,29 @@ always @(posedge clk) begin
 end
 
 task send_samples(input int n_samples, input bit rand_arrivals);
+  int samples_sent [N_CHANNELS];
+  logic [N_CHANNELS-1:0] done;
   if (rand_arrivals) begin
-    repeat (n_samples) begin
-      data_in.valid <= $urandom_range(1<<8);
+    // reset
+    done = '0;
+    for (int i = 0; i < N_CHANNELS; i++) begin
+      samples_sent[i] = 0;
+    end
+    while (~done) begin
+      for (int i = 0; i < N_CHANNELS; i++) begin
+        if (data_in.valid[i]) begin
+          if (samples_sent[i] == n_samples - 1) begin
+            done[i] = 1'b1;
+          end else begin
+            samples_sent[i] = samples_sent[i] + 1'b1;
+          end
+        end
+      end
+      data_in.valid <= $urandom_range((1<<N_CHANNELS) - 1) & (~done);
       @(posedge clk);
     end
     data_in.valid <= '0;
+    @(posedge clk);
   end else begin
     data_in.valid <= '1;
     repeat (n_samples) begin
@@ -90,19 +113,21 @@ task do_readout(input bit wait_for_last, input int wait_cycles);
     repeat (wait_cycles) @(posedge clk);
   end
   @(posedge clk);
+  //data_out.ready <= 1'b0;
 endtask
 
 task check_results(input int banking_mode);
-  logic [15:0] temp_sample;
+  logic [SAMPLE_WIDTH*PARALLEL_SAMPLES:0] temp_sample;
   int current_channel, n_samples;
-  for (int i = 0; i < 8; i++) begin
+  for (int i = 0; i < N_CHANNELS; i++) begin
     $display("data_sent[%0d].size() = %0d", i, data_sent[i].size());
   end
   $display("data_received.size() = %0d", data_received.size());
   while (data_received.size() > 0) begin
-    temp_sample = data_received.pop_back();
-    current_channel = temp_sample & 3'h7;
-    n_samples = temp_sample >> 3;
+    current_channel = data_received.pop_back();
+    n_samples = data_received.pop_back();
+    //current_channel = temp_sample & 3'h7;
+    //n_samples = temp_sample >> 3;
     $display("processing new bank with %0d samples from channel %0d", n_samples, current_channel);
     for (int i = 0; i < n_samples; i++) begin
       if (data_sent[current_channel][$] != data_received[$]) begin
@@ -119,7 +144,7 @@ task check_results(input int banking_mode);
       $warning("leftover samples in data_sent[%0d]: %0d", i, data_sent[i].size());
     end
   end
-  for (int i = (1 << banking_mode); i < 8; i++) begin
+  for (int i = (1 << banking_mode); i < N_CHANNELS; i++) begin
     // flush out any remaining samples in data_sent queue
     $display("removing %0d samples from data_sent[%0d]", data_sent[i].size(), i);
     while (data_sent[i].size() > 0) data_sent[i].pop_back();
@@ -159,7 +184,7 @@ initial begin
 
     start_acq_with_banking_mode(0);
     send_samples(1024*7+24, i);
-    repeat (50) @(posedge clk);
+    repeat (8000) @(posedge clk);
     do_readout(1'b1, 500);
     $display("######################################################");
     $display("# checking results for test with many samples at     #");
@@ -179,7 +204,7 @@ initial begin
 
     start_acq_with_banking_mode(1);
     send_samples(512*7+12, i);
-    repeat (50) @(posedge clk);
+    repeat (4000) @(posedge clk);
     do_readout(1'b1, 500);
     $display("######################################################");
     $display("# checking results for test with many samples at     #");
@@ -199,7 +224,7 @@ initial begin
 
     start_acq_with_banking_mode(2);
     send_samples(256*7+6, i);
-    repeat (50) @(posedge clk);
+    repeat (2000) @(posedge clk);
     do_readout(1'b1, 500);
     $display("######################################################");
     $display("# checking results for test with many samples at     #");
@@ -219,7 +244,7 @@ initial begin
 
     start_acq_with_banking_mode(3);
     send_samples(128*7+3, i);
-    repeat (50) @(posedge clk);
+    repeat (1000) @(posedge clk);
     do_readout(1'b1, 500);
     $display("######################################################");
     $display("# checking results for test with many samples at     #");
@@ -312,6 +337,7 @@ task do_readout(input bit wait_for_last);
     repeat (500) @(posedge clk);
   end
   @(posedge clk);
+  data_out.ready <= 1'b0;
 endtask
 
 task check_results();

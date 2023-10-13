@@ -9,7 +9,8 @@ module banked_sample_buffer #(
   Axis_Parallel_If.Slave_Simple data_in, // all channels in parallel
   Axis_If.Master_Full data_out,
   Axis_If.Slave_Simple config_in, // {banking_mode, start, stop}
-  output logic capture_started
+  input wire stop_aux, // input from other buffer for parallel operation of separate buffers
+  output logic capture_started, buffer_full
 );
 
 // never apply backpressure to discriminator or ADC
@@ -42,12 +43,14 @@ always_ff @(posedge clk) begin
   end
 end
 
-logic [N_CHANNELS-1:0] banks_full;
+logic [N_CHANNELS-1:0] banks_full, banks_full_latch;
 logic [N_CHANNELS-1:0] full_mask;
 logic [N_CHANNELS-1:0] banks_first;
 logic banks_stop;
+// output a flag when the buffer fills up so we can stop other buffers running in parallel
+assign buffer_full = |(full_mask & banks_full);
 always_comb begin
-  if (stop) begin
+  if (stop || stop_aux) begin
     banks_stop = 1'b1;
   end else begin
     // capture is only stopped when (one of) the final bank(s) fills up
@@ -60,6 +63,32 @@ always_comb begin
     banks_stop = |(full_mask & banks_full);
   end
 end
+
+// latch banks_full
+// banks_full_latch pretends previous banks are still full even after they've been fully read out.
+// when arriving data is sparse in time, a previous bank may be read out
+// before the currently selected bank is done capturing samples, causing it to
+// erroneously stop sample capture (since it's data_in.valid signal goes low)
+// *essentially*: as soon as a bank is full, treat it as if it's full until all of the banks
+// are read out (instead of treating it as no longer full once it is read out)
+always_ff @(posedge clk) begin
+  if (reset) begin
+    banks_full_latch <= '0;
+  end else begin
+    if (data_out.last && data_out.ok) begin
+      // reset when we're done reading out all banks
+      banks_full_latch <= '0;
+    end else begin
+      for (int i = 0; i < N_CHANNELS; i++) begin
+        if (banks_full[i]) begin
+          banks_full_latch[i] <= 1'b1;
+        end
+      end
+    end
+  end
+end
+
+// select which buffer we're actively reading out
 logic [$clog2(N_CHANNELS)-1:0] bank_select;
 logic [$clog2(N_CHANNELS)-1:0] active_channel_id;
 assign active_channel_id = bank_select % n_active_channels;
@@ -67,28 +96,39 @@ assign active_channel_id = bank_select % n_active_channels;
 // bundle of axistreams for each bank output
 Axis_Parallel_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES), .PARALLEL_CHANNELS(N_CHANNELS)) all_banks_out ();
 
-// mux outputs
+logic first;
+logic [PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_out_reg;
+
+// output the active channel id at the beginning of the transfer
+assign data_out.data = first ? active_channel_id : data_out_reg;
+// delay by a clock cycle to match latency of data_out_reg
 always_ff @(posedge clk) begin
   if (reset) begin
-    data_out.data <= '0;
+    first <= 1'b0;
+  end else begin
+    first <= banks_first[bank_select];
+  end
+end
+
+// mux outputs from banks
+always_ff @(posedge clk) begin
+  if (reset) begin
+    data_out_reg <= '0;
     data_out.valid <= 1'b0;
   end else begin
     if (data_out.ready) begin
-      if (banks_first[bank_select]) begin
-        // first word from each bank contains the number of samples that were stored in the bank
-        // use least significant bits of data output to encode which channel the data came from
-        data_out.data <= {all_banks_out.data[bank_select][PARALLEL_SAMPLES*SAMPLE_WIDTH-$clog2(N_CHANNELS)-1:0], active_channel_id};
-      end else begin
-        data_out.data <= all_banks_out.data[bank_select];
-      end
+      data_out_reg <= all_banks_out.data[bank_select];
       data_out.valid <= all_banks_out.valid[bank_select];
     end
   end
 end
+
 // only take last signal from the final bank, and only when the final bank is selected
 always_ff @(posedge clk) begin
   data_out.last <= (bank_select == N_CHANNELS - 1) && all_banks_out.last[bank_select];
 end
+
+// only supply a ready signal to the bank currently selected for readout
 always_comb begin
   for (int i = 0; i < N_CHANNELS; i++) begin
     if (i == bank_select) begin
@@ -99,7 +139,7 @@ always_comb begin
   end
 end
 
-// update which output is selected
+// update which bank is selected for the output
 always_ff @(posedge clk) begin
   if (reset) begin
     bank_select <= '0;
@@ -151,7 +191,7 @@ generate
     // when chaining banks in series, which bank should the current bank i wait for
     always_comb begin
       if ((n_active_channels != N_CHANNELS) && (i >= n_active_channels)) begin
-        bank_in.valid = valid_d & banks_full[i - n_active_channels];
+        bank_in.valid = valid_d & (banks_full[i - n_active_channels] | banks_full_latch[i - n_active_channels]);
       end else begin
         bank_in.valid = valid_d;
       end
@@ -177,10 +217,12 @@ module buffer_bank #(
   output logic full, first
 );
 
-enum {IDLE, CAPTURE, PRETRANSFER, TRANSFER} state;
+enum {IDLE, CAPTURE, POSTCAPTURE, PRETRANSFER, TRANSFER} state;
 // IDLE: wait for start (either from user or from previous bank filling up in
 // a high-memory, low-channel count banking mode)
 // CAPTURE: save samples until full or until stop is supplied
+// POSTCAPTURE: output an empty sample (to be overwritten by
+// banked_sample_buffer with the channel index)
 // PRETRANSFER: output number of captured samples
 // TRANSFER: output samples
 
@@ -204,9 +246,10 @@ always_ff @(posedge clk) begin
   end else begin
     unique case (state)
       IDLE: if (start) state <= CAPTURE;
-      CAPTURE: if (stop || (data_in.valid && (write_addr == BUFFER_DEPTH - 1))) state <= PRETRANSFER;
+      CAPTURE: if (stop || (data_in.ok && (write_addr == BUFFER_DEPTH - 1))) state <= POSTCAPTURE;
+      POSTCAPTURE: if (data_out.ok) state <= PRETRANSFER;
       // only transition after successfully sending out number of captured samples:
-      PRETRANSFER: if (data_out.valid && data_out.ready) begin
+      PRETRANSFER: if (data_out.ok) begin
         if (data_out.last) begin
           // no data was saved, so there's nothing to send
           state <= IDLE;
@@ -256,8 +299,17 @@ always_ff @(posedge clk) begin
           end
         end
       end
-      PRETRANSFER: begin
+      POSTCAPTURE: begin
         first <= 1'b1;
+        data_out_d[3] <= '1;
+        if (data_out.ok) begin
+          data_out_valid[3] <= 1'b0;
+        end else begin
+          data_out_valid[3] <= 1'b1;
+        end
+      end
+      PRETRANSFER: begin
+        first <= '0;
         if (write_addr > 0) begin
           data_out_d[3] <= write_addr;
         end else if (buffer_has_data) begin
@@ -267,7 +319,7 @@ always_ff @(posedge clk) begin
           data_out_d[3] <= '0; // we don't have any data to send
           data_out_last[3] <= 1'b1;
         end
-        if (data_out.ready) begin
+        if (data_out.ok) begin
           // transaction will go through, so we should reset data_out_valid so
           // that we don't accidentally send the sample count twice
           data_out_valid[3] <= 1'b0;
@@ -305,5 +357,70 @@ always_ff @(posedge clk) begin
     endcase
   end
 end
+
+endmodule
+
+module banked_sample_buffer_sv #(
+  parameter int N_CHANNELS = 2,
+  parameter int BUFFER_DEPTH = 8192,
+  parameter int PARALLEL_SAMPLES = 16,
+  parameter int SAMPLE_WIDTH = 16
+) (
+  input wire clk, reset,
+
+  input [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] s00_axis_tdata,
+  input s00_axis_tvalid,
+  output s00_axis_tready,
+
+  input [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] s01_axis_tdata,
+  input s01_axis_tvalid,
+  output s01_axis_tready,
+
+  output [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] m_axis_tdata,
+  output m_axis_tvalid,
+  output m_axis_tlast,
+  input m_axis_tready,
+
+  input [$clog2($clog2(N_CHANNELS)+1)+2-1:0] cfg_axis_tdata,
+  input cfg_axis_tvalid,
+  output cfg_axis_tready,
+
+  output capture_started
+);
+
+Axis_Parallel_If #(.DWIDTH(PARALLEL_SAMPLES*SAMPLE_WIDTH), .PARALLEL_CHANNELS(N_CHANNELS)) data_in ();
+Axis_If #(.DWIDTH(PARALLEL_SAMPLES*SAMPLE_WIDTH)) data_out ();
+Axis_If #(.DWIDTH($clog2($clog2(N_CHANNELS)+1)+2)) config_in ();
+
+assign data_in.data[0] = s00_axis_tdata;
+assign data_in.valid[0] = s00_axis_tvalid;
+assign s00_axis_tready = data_in.ready[0];
+
+assign data_in.data[1] = s01_axis_tdata;
+assign data_in.valid[1] = s01_axis_tvalid;
+assign s01_axis_tready = data_in.ready[1];
+
+assign m_axis_tdata = data_out.data;
+assign m_axis_tvalid = data_out.valid;
+assign m_axis_tlast = data_out.last;
+assign data_out.ready = m_axis_tready;
+
+assign config_in.data = cfg_axis_tdata;
+assign config_in.valid = cfg_axis_tvalid;
+assign cfg_axis_tready = config_in.ready;
+
+banked_sample_buffer #(
+  .N_CHANNELS(N_CHANNELS),
+  .BUFFER_DEPTH(BUFFER_DEPTH),
+  .PARALLEL_SAMPLES(PARALLEL_SAMPLES),
+  .SAMPLE_WIDTH(SAMPLE_WIDTH)
+) buffer_i (
+  .clk,
+  .reset,
+  .data_in,
+  .data_out,
+  .config_in,
+  .capture_started
+);
 
 endmodule
