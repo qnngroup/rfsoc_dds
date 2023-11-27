@@ -1,5 +1,9 @@
 // width converter
-// constructs multiple DOWN -> UP resizers in parallel to operate at high throughput
+// constructs a single UP -> DOWN resizer
+// The UP resizer always accepts samples, so it can run at full rate.
+// Therefore, the rate of the input is limited by the output rate.
+// If DOWN > UP, then the input must stall occasionally, which is to be
+// expected.
 module axis_width_converter #(
   parameter int DWIDTH_IN = 192,
   parameter int UP = 4,
@@ -23,13 +27,13 @@ axis_upsizer #(
 );
 
 axis_downsizer #(
-  .DWIDTH(DWIDTH_IN),
+  .DWIDTH(DWIDTH_IN*UP),
   .DOWN(DOWN)
-) up_i (
+) down_i (
   .clk,
   .reset,
   .data_in(data),
-  .data_out,
+  .data_out
 );
 
 endmodule

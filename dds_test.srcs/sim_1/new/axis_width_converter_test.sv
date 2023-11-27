@@ -10,14 +10,14 @@ int error_count;
 
 localparam int DWIDTH_DOWN_IN = 256;
 localparam int DWIDTH_UP_IN = 16;
-localparam int DWIDTH_COMB_IN = 192;
+localparam int DWIDTH_COMB_IN = 24;
 localparam int DOWN = 4;
 localparam int UP = 8;
 localparam int COMB_UP = 4;
 localparam int COMB_DOWN = 3;
 
-let max(a,b) = (a > b) ? a : b;
-localparam int DWIDTH = max(max(max(DWIDTH_DOWN_IN, DWIDTH_UP_IN*UP), (DWIDTH_COMB_IN*COMB_UP)/COMB_DOWN), DWIDTH_COMB_IN);
+`define MAX(A,B) (A > B) ? A : B
+localparam int DWIDTH = `MAX(`MAX(`MAX(DWIDTH_DOWN_IN, DWIDTH_UP_IN*UP), (DWIDTH_COMB_IN*COMB_UP)/COMB_DOWN), DWIDTH_COMB_IN);
 
 Axis_If #(.DWIDTH(DWIDTH_DOWN_IN)) downsizer_in ();
 Axis_If #(.DWIDTH(DWIDTH_DOWN_IN/DOWN)) downsizer_out ();
@@ -83,29 +83,37 @@ assign downsizer_out.ready = out_ready[0];
 assign upsizer_out.ready = out_ready[1];
 assign comb_out.ready = out_ready[2];
 
+logic [2:0] in_valid;
+assign downsizer_in.valid = in_valid[0];
+assign upsizer_in.valid = in_valid[1];
+assign comb_in.valid = in_valid[2];
+
 logic [1:0][2:0] last;
-assign last[0][0] = downsizer_in.last;
-assign last[0][1] = upsizer_in.last;
-assign last[0][2] = comb_in.last;
+assign downsizer_in.last = last[0][0];
+assign upsizer_in.last = last[0][1];
+assign comb_in.last = last[0][2];
 assign last[1][0] = downsizer_out.last;
 assign last[1][1] = upsizer_out.last;
 assign last[1][2] = comb_out.last;
 
 localparam [1:0][2:0][31:0] NUM_WORDS = '{
-  '{DOWN, 1, COMB_DOWN},
-  '{1, UP, COMB_UP}
+  '{COMB_UP, UP, 1},      // output words
+  '{COMB_DOWN, 1, DOWN}   // input words
 };
 
 localparam [2:0][31:0] WORD_SIZE = '{
-  DWIDTH_DOWN_IN/DOWN,      // downsizer
+  DWIDTH_COMB_IN/COMB_DOWN, // both
   DWIDTH_UP_IN,             // upsizer
-  DWIDTH_COMB_IN/COMB_DOWN  // both
+  DWIDTH_DOWN_IN/DOWN       // downsizer
 };
+
+localparam MAX_WORD_SIZE = `MAX(`MAX(WORD_SIZE[0],WORD_SIZE[1]),WORD_SIZE[2]);
+logic [MAX_WORD_SIZE-1:0] sent_word, received_word;
 
 // update data and track sent/received samples
 always_ff @(posedge clk) begin
   if (reset) begin
-    data_in <= '0;
+    data[1] <= '0;
   end else begin
     for (int i = 0; i < 3; i++) begin
       // inputs
@@ -115,7 +123,10 @@ always_ff @(posedge clk) begin
         end
         // save data that was sent, split up into individual "words"
         for (int j = 0; j < NUM_WORDS[0][i]; j++) begin
-          sent[i].push_front(data[0][i][j*WORD_SIZE[i]+:WORD_SIZE[i]]);
+          for (int k = 0; k < WORD_SIZE[i]; k++) begin
+            sent_word[k] = data[0][i][j*WORD_SIZE[i]+k];
+          end
+          sent[i].push_front(sent_word);
         end
         if (last[0][i]) begin
           last_sent[i].push_front(sent[i].size());
@@ -125,7 +136,10 @@ always_ff @(posedge clk) begin
       if (ok[1][i]) begin
         // save data that was received, split up into individual "words"
         for (int j = 0; j < NUM_WORDS[1][i]; j++) begin
-          received[i].push_front(data[1][i][j*WORD_SIZE[i]+:WORD_SIZE[i]]);
+          for (int k = 0; k < WORD_SIZE[i]; k++) begin
+            received_word[k] = data[1][i][j*WORD_SIZE[i]+k];
+          end
+          received[i].push_front(received_word);
         end
         if (last[1][i]) begin
           last_received[i].push_front(received[i].size());
@@ -183,7 +197,7 @@ task check_dut(input int dut_select);
   while (sent[dut_select].size() > 0 && received[dut_select].size() > 0) begin
     if (sent[dut_select][$] != received[dut_select][$]) begin
       error_count = error_count + 1;
-      $warning("data mismatch error (received %x, sent %x)", received[dut_select][$], sent[dut_select][$]);
+      $warning("data mismatch error (received %x, sent %x)", received[dut_select][$] & ((1 << WORD_SIZE[dut_select]) - 1), sent[dut_select][$] & ((1 << WORD_SIZE[dut_select]) - 1));
     end
     sent[dut_select].pop_back();
     received[dut_select].pop_back();
@@ -193,17 +207,21 @@ endtask
 // actually do the test
 initial begin
   reset <= 1'b1;
-  
-  downsizer_in.valid <= '0;
-  upsizer_in.valid <= '0;
-  comb_in.valid <= '0;
 
+  // reset input valid
+  in_valid <= '0;
+  // reset input last
   last[0] <= '0;
+  // set readout mode to off for all DUTs(readout disabled)
   readout_mode <= '0;
+  // reset input data
+  data[0] <= '0;
 
   repeat (50) @(posedge clk);
   reset <= 1'b0;
   repeat (50) @(posedge clk);
+
+  // do test
   for (int i = 0; i < 3; i++) begin
     $display("#################################################");
     unique case (i)
@@ -213,56 +231,45 @@ initial begin
     endcase
     $display("#################################################");
     for (int j = 1; j <= 2; j++) begin
+      // cycle between continuously-high and randomly toggling ready signal on output interface 
       readout_mode[i] <= j;
       unique case (i)
         0: begin
-          downsizer_in.send_samples(clk, 5, 1'b1, 1'b0);
-          downsizer_in.send_samples(clk, 8, 1'b0, 1'b0);
-          downsizer_in.send_samples(clk, 7, 1'b1, 1'b0);
+          // send 5 samples with random arrivals
+          downsizer_in.send_samples(clk, 5, 1'b1, 1'b1);
+          // send 8 samples all at once
+          downsizer_in.send_samples(clk, 8, 1'b0, 1'b1);
+          // send 10 samples with random arrivals
+          downsizer_in.send_samples(clk, 10, 1'b1, 1'b1);
         end
         1: begin
-          upsizer_in.send_samples(clk, 5, 1'b1, 1'b0);
-          upsizer_in.send_samples(clk, 8, 1'b0, 1'b0);
-          upsizer_in.send_samples(clk, 7, 1'b1, 1'b0);
+          upsizer_in.send_samples(clk, 5, 1'b1, 1'b1);
+          upsizer_in.send_samples(clk, 8, 1'b0, 1'b1);
+          upsizer_in.send_samples(clk, 10, 1'b1, 1'b1);
         end
         2: begin
-          comb_in.send_samples(clk, 5, 1'b1, 1'b0);
-          comb_in.send_samples(clk, 8, 1'b0, 1'b0);
-          comb_in.send_samples(clk, 7, 1'b1, 1'b0);
+          comb_in.send_samples(clk, 5, 1'b1, 1'b1);
+          comb_in.send_samples(clk, 8, 1'b0, 1'b1);
+          comb_in.send_samples(clk, 10, 1'b1, 1'b1);
         end
+      endcase
       last[0][i] <= 1'b1;
-      downsizer_in.valid <= 1'b1;
-      do begin @(posedge clk); end while (!downsizer_in.ok);
-      last[0][0] <= 1'b0;
-      downsizer_in.valid <= 1'b0;
-      // check downsizer
-      do begin @(posedge clk); end while (!(downsizer_out.last && downsizer_out.ok));
-      check_downsizer();
+      in_valid[i] <= 1'b1;
+      // wait until last is actually registered by the DUT before deasserting it
+      do begin @(posedge clk); end while (!ok[0][i]);
+      last[0][i] <= 1'b0;
+      in_valid[i] <= 1'b0;
+
+      // read out everything, waiting until last signal on DUT output
+      do begin @(posedge clk); end while (!(last[1][i] && ok[1][i]));
+      // check the output data matches the input
+      check_dut(i);
       repeat (100) @(posedge clk);
     end
+    // disable readout of DUT when finished
     readout_mode[i] <= '0;
   end
-  repeat (10) @(posedge clk);
-  $display("#################################################");
-  $display("# finished testing downsizer, testing upsizer   #");
-  $display("#################################################");
-  // check upsizer
-  for (int i = 1; i <= 2; i++) begin
-    upsizer_readout_mode <= i;
-    upsizer_in.send_samples(clk, 27, 1'b1, 1'b0);
-    upsizer_in.send_samples(clk, 19, 1'b0, 1'b0);
-    upsizer_in.send_samples(clk, 17, 1'b1, 1'b0);
-    upsizer_in.last <= 1'b1;
-    upsizer_in.valid <= 1'b1;
-    do begin @(posedge clk); end while (!upsizer_in.ok);
-    upsizer_in.last <= 1'b0;
-    upsizer_in.valid <= 1'b0;
-    // check upsizer
-    do begin @(posedge clk); end while (!(upsizer_out.last && upsizer_out.ok));
-    check_upsizer();
-    repeat (100) @(posedge clk);
-  end
-  upsizer_readout_mode <= 2'b00;
+
   $display("#################################################");
   if (error_count == 0) begin
     $display("# finished with zero errors");
