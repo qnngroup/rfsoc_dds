@@ -11,15 +11,15 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="8,669.000 ns"></ZoomStartTime>
-      <ZoomEndTime time="10,212.001 ns"></ZoomEndTime>
-      <Cursor1Time time="8,827.000 ns"></Cursor1Time>
+      <ZoomStartTime time="1,002.828334 us"></ZoomStartTime>
+      <ZoomEndTime time="1,683.828335 us"></ZoomEndTime>
+      <Cursor1Time time="1,259.995000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="219"></NameColumnWidth>
       <ValueColumnWidth column_width="106"></ValueColumnWidth>
    </column_width_setting>
-   <WVObjectSize size="14" />
+   <WVObjectSize size="10" />
    <wvobject type="group" fp_name="group682">
       <obj_property name="label">test</obj_property>
       <obj_property name="DisplayName">label</obj_property>
@@ -32,11 +32,37 @@
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
       </wvobject>
+      <wvobject type="array" fp_name="/axis_width_converter_test/sent_word">
+         <obj_property name="ElementShortName">sent_word[63:0]</obj_property>
+         <obj_property name="ObjectShortName">sent_word[63:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/axis_width_converter_test/received_word">
+         <obj_property name="ElementShortName">received_word[63:0]</obj_property>
+         <obj_property name="ObjectShortName">received_word[63:0]</obj_property>
+      </wvobject>
+      <wvobject type="array" fp_name="/axis_width_converter_test/data">
+         <obj_property name="ElementShortName">data[1:0][2:0][255:0]</obj_property>
+         <obj_property name="ObjectShortName">data[1:0][2:0][255:0]</obj_property>
+         <wvobject type="array" fp_name="/axis_width_converter_test/data[1]">
+            <obj_property name="ElementShortName">[1][2:0][255:0]</obj_property>
+            <obj_property name="ObjectShortName">[1][2:0][255:0]</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/axis_width_converter_test/data[0]">
+            <obj_property name="ElementShortName">[0][2:0][255:0]</obj_property>
+            <obj_property name="ObjectShortName">[0][2:0][255:0]</obj_property>
+            <obj_property name="isExpanded"></obj_property>
+         </wvobject>
+      </wvobject>
+      <wvobject type="array" fp_name="/axis_width_converter_test/DWIDTH">
+         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
+      </wvobject>
    </wvobject>
    <wvobject type="group" fp_name="group689">
       <obj_property name="label">downsizer_in</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="array" fp_name="/axis_width_converter_test/downsizer_in/data">
          <obj_property name="ElementShortName">data[255:0]</obj_property>
          <obj_property name="ObjectShortName">data[255:0]</obj_property>
@@ -189,39 +215,12 @@
          <obj_property name="ObjectShortName">counter[2:0]</obj_property>
       </wvobject>
    </wvobject>
-   <wvobject type="array" fp_name="/axis_width_converter_test/sent_word">
-      <obj_property name="ElementShortName">sent_word[63:0]</obj_property>
-      <obj_property name="ObjectShortName">sent_word[63:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/axis_width_converter_test/received_word">
-      <obj_property name="ElementShortName">received_word[63:0]</obj_property>
-      <obj_property name="ObjectShortName">received_word[63:0]</obj_property>
-   </wvobject>
-   <wvobject type="array" fp_name="/axis_width_converter_test/data">
-      <obj_property name="ElementShortName">data[1:0][2:0][255:0]</obj_property>
-      <obj_property name="ObjectShortName">data[1:0][2:0][255:0]</obj_property>
-      <wvobject type="array" fp_name="/axis_width_converter_test/data[1]">
-         <obj_property name="ElementShortName">[1][2:0][255:0]</obj_property>
-         <obj_property name="ObjectShortName">[1][2:0][255:0]</obj_property>
-         <obj_property name="isExpanded"></obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/axis_width_converter_test/data[0]">
-         <obj_property name="ElementShortName">[0][2:0][255:0]</obj_property>
-         <obj_property name="ObjectShortName">[0][2:0][255:0]</obj_property>
-         <obj_property name="isExpanded"></obj_property>
-      </wvobject>
-   </wvobject>
-   <wvobject type="array" fp_name="/axis_width_converter_test/DWIDTH">
-      <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
-      <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
-      <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
-   </wvobject>
    <wvobject type="group" fp_name="group1038">
       <obj_property name="label">comb_in</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <wvobject type="array" fp_name="/axis_width_converter_test/comb_in/data">
-         <obj_property name="ElementShortName">data[191:0]</obj_property>
-         <obj_property name="ObjectShortName">data[191:0]</obj_property>
+         <obj_property name="ElementShortName">data[23:0]</obj_property>
+         <obj_property name="ObjectShortName">data[23:0]</obj_property>
       </wvobject>
       <wvobject type="logic" fp_name="/axis_width_converter_test/comb_in/ready">
          <obj_property name="ElementShortName">ready</obj_property>
@@ -244,8 +243,8 @@
       <obj_property name="label">comb_out</obj_property>
       <obj_property name="DisplayName">label</obj_property>
       <wvobject type="array" fp_name="/axis_width_converter_test/comb_out/data">
-         <obj_property name="ElementShortName">data[255:0]</obj_property>
-         <obj_property name="ObjectShortName">data[255:0]</obj_property>
+         <obj_property name="ElementShortName">data[31:0]</obj_property>
+         <obj_property name="ObjectShortName">data[31:0]</obj_property>
       </wvobject>
       <wvobject type="logic" fp_name="/axis_width_converter_test/comb_out/ready">
          <obj_property name="ElementShortName">ready</obj_property>
@@ -267,7 +266,6 @@
    <wvobject type="group" fp_name="group1052">
       <obj_property name="label">comb_dut</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="logic" fp_name="/axis_width_converter_test/comb_dut_i/clk">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
@@ -300,8 +298,8 @@
             <obj_property name="ObjectShortName">reset</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/axis_width_converter_test/comb_dut_i/up_i/data_reg">
-            <obj_property name="ElementShortName">data_reg[3:0][191:0]</obj_property>
-            <obj_property name="ObjectShortName">data_reg[3:0][191:0]</obj_property>
+            <obj_property name="ElementShortName">data_reg[3:0][23:0]</obj_property>
+            <obj_property name="ObjectShortName">data_reg[3:0][23:0]</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/axis_width_converter_test/comb_dut_i/up_i/counter">
             <obj_property name="ElementShortName">counter[1:0]</obj_property>
@@ -323,6 +321,7 @@
       <wvobject type="group" fp_name="group1073">
          <obj_property name="label">comb_dut_down</obj_property>
          <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
          <wvobject type="logic" fp_name="/axis_width_converter_test/comb_dut_i/down_i/clk">
             <obj_property name="ElementShortName">clk</obj_property>
             <obj_property name="ObjectShortName">clk</obj_property>
@@ -332,8 +331,8 @@
             <obj_property name="ObjectShortName">reset</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/axis_width_converter_test/comb_dut_i/down_i/data_reg">
-            <obj_property name="ElementShortName">data_reg[2:0][63:0]</obj_property>
-            <obj_property name="ObjectShortName">data_reg[2:0][63:0]</obj_property>
+            <obj_property name="ElementShortName">data_reg[2:0][31:0]</obj_property>
+            <obj_property name="ObjectShortName">data_reg[2:0][31:0]</obj_property>
          </wvobject>
          <wvobject type="logic" fp_name="/axis_width_converter_test/comb_dut_i/down_i/valid_reg">
             <obj_property name="ElementShortName">valid_reg</obj_property>
@@ -358,22 +357,26 @@
          <wvobject type="array" fp_name="/axis_width_converter_test/comb_dut_i/down_i/DWIDTH">
             <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
             <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/axis_width_converter_test/comb_dut_i/down_i/DOWN">
             <obj_property name="ElementShortName">DOWN[31:0]</obj_property>
             <obj_property name="ObjectShortName">DOWN[31:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/axis_width_converter_test/comb_dut_i/down_i/DWIDTH_OUT">
             <obj_property name="ElementShortName">DWIDTH_OUT[31:0]</obj_property>
             <obj_property name="ObjectShortName">DWIDTH_OUT[31:0]</obj_property>
+            <obj_property name="Radix">UNSIGNEDDECRADIX</obj_property>
          </wvobject>
       </wvobject>
       <wvobject type="group" fp_name="group1085">
          <obj_property name="label">comb_dut_up_out</obj_property>
          <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
          <wvobject type="array" fp_name="/axis_width_converter_test/comb_dut_i/data/data">
-            <obj_property name="ElementShortName">data[767:0]</obj_property>
-            <obj_property name="ObjectShortName">data[767:0]</obj_property>
+            <obj_property name="ElementShortName">data[95:0]</obj_property>
+            <obj_property name="ObjectShortName">data[95:0]</obj_property>
          </wvobject>
          <wvobject type="logic" fp_name="/axis_width_converter_test/comb_dut_i/data/ready">
             <obj_property name="ElementShortName">ready</obj_property>
