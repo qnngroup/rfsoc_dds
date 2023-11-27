@@ -126,7 +126,7 @@ always_ff @(posedge clk) begin
           for (int k = 0; k < WORD_SIZE[i]; k++) begin
             sent_word[k] = data[0][i][j*WORD_SIZE[i]+k];
           end
-          sent[i].push_front(sent_word);
+          sent[i].push_front(sent_word & ((1 << WORD_SIZE[i]) - 1));
         end
         if (last[0][i]) begin
           last_sent[i].push_front(sent[i].size());
@@ -139,7 +139,7 @@ always_ff @(posedge clk) begin
           for (int k = 0; k < WORD_SIZE[i]; k++) begin
             received_word[k] = data[1][i][j*WORD_SIZE[i]+k];
           end
-          received[i].push_front(received_word);
+          received[i].push_front(received_word & ((1 << WORD_SIZE[i]) - 1));
         end
         if (last[1][i]) begin
           last_received[i].push_front(received[i].size());
@@ -187,17 +187,49 @@ task check_dut(input int dut_select);
   $display("received[%0d].size() = %0d", dut_select, received[dut_select].size());
   $display("last_sent[%0d].size() = %0d", dut_select, last_sent[dut_select].size());
   $display("last_received[%0d].size() = %0d", dut_select, last_received[dut_select].size());
-  // check downsizer
   while (last_sent[dut_select].size() > 0 && last_received[dut_select].size() > 0) begin
     $display("last_sent, last_received: %0d, %0d", last_sent[dut_select][$], last_received[dut_select][$]);
     last_sent[dut_select].pop_back();
     last_received[dut_select].pop_back();
   end
+  // check we got the right amount of data
+  if (received[dut_select].size() < sent[dut_select].size()) begin
+    $warning("mismatch in number of received/sent words, received fewer words than sent (received %d, sent %d)", received[dut_select].size(), sent[dut_select].size());
+    error_count = error_count + 1;
+  end
+  unique case (dut_select)
+    0: begin
+      if (received[dut_select].size() > sent[dut_select].size()) begin
+        $warning("mismatch in number of received/sent words, received more words than sent (received %d, sent %d)", received[dut_select].size(), sent[dut_select].size());
+        error_count = error_count + 1;
+      end
+    end
+    1: begin
+      if (received[dut_select].size() - sent[dut_select].size() >= UP) begin
+        $warning("mismatch in number of received/sent words, received more than UP words more than sent (received %d, sent %d)", received[dut_select].size(), sent[dut_select].size());
+        error_count = error_count + 1;
+      end
+    end
+    2: begin
+      if (received[dut_select].size() - sent[dut_select].size() >= COMB_UP*COMB_DOWN) begin
+        $warning("mismatch in number of received/sent words, received more than COMB_UP*COMB_DOWN words more than sent (received %d, sent %d)", received[dut_select].size(), sent[dut_select].size());
+        error_count = error_count + 1;
+      end
+    end
+  endcase
+  // remove invalid subwords if an incomplete word was sent at the end
+  if (dut_select > 0) begin
+    // do nothing for downsizer; it cannot have invalid subwords
+    while (received[dut_select].size() > sent[dut_select].size()) begin
+      received[dut_select].pop_front();
+    end
+  end
+
   // check data
   while (sent[dut_select].size() > 0 && received[dut_select].size() > 0) begin
     if (sent[dut_select][$] != received[dut_select][$]) begin
       error_count = error_count + 1;
-      $warning("data mismatch error (received %x, sent %x)", received[dut_select][$] & ((1 << WORD_SIZE[dut_select]) - 1), sent[dut_select][$] & ((1 << WORD_SIZE[dut_select]) - 1));
+      $warning("data mismatch error (received %x, sent %x)", received[dut_select][$], sent[dut_select][$]);
     end
     sent[dut_select].pop_back();
     received[dut_select].pop_back();
@@ -230,41 +262,43 @@ initial begin
       2: $display("# testing combined upsizer/downsizer            #");
     endcase
     $display("#################################################");
-    for (int j = 1; j <= 2; j++) begin
-      // cycle between continuously-high and randomly toggling ready signal on output interface 
-      readout_mode[i] <= j;
-      unique case (i)
-        0: begin
-          // send 5 samples with random arrivals
-          downsizer_in.send_samples(clk, 5, 1'b1, 1'b1);
-          // send 8 samples all at once
-          downsizer_in.send_samples(clk, 8, 1'b0, 1'b1);
-          // send 10 samples with random arrivals
-          downsizer_in.send_samples(clk, 10, 1'b1, 1'b1);
-        end
-        1: begin
-          upsizer_in.send_samples(clk, 5, 1'b1, 1'b1);
-          upsizer_in.send_samples(clk, 8, 1'b0, 1'b1);
-          upsizer_in.send_samples(clk, 10, 1'b1, 1'b1);
-        end
-        2: begin
-          comb_in.send_samples(clk, 5, 1'b1, 1'b1);
-          comb_in.send_samples(clk, 8, 1'b0, 1'b1);
-          comb_in.send_samples(clk, 10, 1'b1, 1'b1);
-        end
-      endcase
-      last[0][i] <= 1'b1;
-      in_valid[i] <= 1'b1;
-      // wait until last is actually registered by the DUT before deasserting it
-      do begin @(posedge clk); end while (!ok[0][i]);
-      last[0][i] <= 1'b0;
-      in_valid[i] <= 1'b0;
+    repeat (50) begin
+      for (int j = 1; j <= 2; j++) begin
+        // cycle between continuously-high and randomly toggling ready signal on output interface 
+        readout_mode[i] <= j;
+        unique case (i)
+          0: begin
+            // send samples with random arrivals
+            downsizer_in.send_samples(clk, $urandom_range(3,100), 1'b1, 1'b1);
+            // send samples all at once
+            downsizer_in.send_samples(clk, $urandom_range(3,100), 1'b0, 1'b1);
+            // send samples with random arrivals
+            downsizer_in.send_samples(clk, $urandom_range(3,100), 1'b1, 1'b1);
+          end
+          1: begin
+            upsizer_in.send_samples(clk, $urandom_range(3,100), 1'b1, 1'b1);
+            upsizer_in.send_samples(clk, $urandom_range(3,100), 1'b0, 1'b1);
+            upsizer_in.send_samples(clk, $urandom_range(3,100), 1'b1, 1'b1);
+          end
+          2: begin
+            comb_in.send_samples(clk, $urandom_range(3,100), 1'b1, 1'b1);
+            comb_in.send_samples(clk, $urandom_range(3,100), 1'b0, 1'b1);
+            comb_in.send_samples(clk, $urandom_range(3,100), 1'b1, 1'b1);
+          end
+        endcase
+        last[0][i] <= 1'b1;
+        in_valid[i] <= 1'b1;
+        // wait until last is actually registered by the DUT before deasserting it
+        do begin @(posedge clk); end while (!ok[0][i]);
+        last[0][i] <= 1'b0;
+        in_valid[i] <= 1'b0;
 
-      // read out everything, waiting until last signal on DUT output
-      do begin @(posedge clk); end while (!(last[1][i] && ok[1][i]));
-      // check the output data matches the input
-      check_dut(i);
-      repeat (100) @(posedge clk);
+        // read out everything, waiting until last signal on DUT output
+        do begin @(posedge clk); end while (!(last[1][i] && ok[1][i]));
+        // check the output data matches the input
+        check_dut(i);
+        repeat (100) @(posedge clk);
+      end
     end
     // disable readout of DUT when finished
     readout_mode[i] <= '0;

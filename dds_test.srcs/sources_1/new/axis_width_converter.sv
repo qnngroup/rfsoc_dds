@@ -103,8 +103,6 @@ logic [$clog2(UP)-1:0] counter;
 
 assign data_in.ready = data_out.ready;
 assign data_out.data = data_reg;
-//assign data_out.valid = (counter == UP - 1) | data_in.last;
-//assign data_out.last = data_in.last;
 
 always_ff @(posedge clk) begin
   if (reset) begin
@@ -119,7 +117,8 @@ always_ff @(posedge clk) begin
     end
     if (data_in.ok) begin
       data_reg[counter] <= data_in.data;
-      if (counter == UP - 1) begin
+      if ((counter == UP - 1) || data_in.last) begin
+        // reset counter when we get the last word
         counter <= '0;
       end else begin
         counter <= counter + 1'b1;
