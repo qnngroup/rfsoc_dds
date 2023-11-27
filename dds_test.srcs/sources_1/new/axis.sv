@@ -87,4 +87,29 @@ modport Slave_Simple (
   output  ok
 );
 
+task automatic send_samples(
+  ref clk,
+  input int n_samples,
+  input bit rand_arrivals,
+  input bit reset_valid
+);
+  int samples_sent;
+  // reset
+  samples_sent = 0;
+  valid <= 1'b1;
+  while (samples_sent < n_samples) begin
+    if (ok) begin
+      samples_sent = samples_sent + 1'b1;
+    end
+    if (rand_arrivals) begin
+      valid <= $urandom() & 1'b1;
+    end // else do nothing; intf.valid is already 1'b1
+    @(posedge clk);
+  end
+  if (reset_valid) begin
+    valid <= '0;
+    @(posedge clk);
+  end
+endtask
+
 endinterface
