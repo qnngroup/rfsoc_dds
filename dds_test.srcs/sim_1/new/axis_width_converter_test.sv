@@ -6,7 +6,7 @@ logic clk = 0;
 localparam CLK_RATE_HZ = 100_000_000;
 always #(0.5s/CLK_RATE_HZ) clk = ~clk;
 
-int error_count;
+int error_count = 0;
 
 localparam int DWIDTH_DOWN_IN = 256;
 localparam int DWIDTH_UP_IN = 16;

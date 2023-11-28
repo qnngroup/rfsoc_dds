@@ -5,11 +5,13 @@ logic clk = 0;
 localparam CLK_RATE_HZ = 100_000_000;
 always #(0.5s/CLK_RATE_HZ) clk = ~clk;
 
+logic reset;
+
+int error_count = 0;
+
 localparam int N_CHANNELS = 8;
 localparam int PARALLEL_SAMPLES = 1;
 localparam int SAMPLE_WIDTH = 16;
-
-logic reset;
 
 logic start, stop;
 logic [2:0] banking_mode;
@@ -267,6 +269,8 @@ always #(0.5s/CLK_RATE_HZ) clk = ~clk;
 
 logic reset;
 
+int error_count = 0;
+
 logic start, stop;
 logic full;
 
@@ -291,6 +295,7 @@ int sample_count;
 logic [15:0] data_sent [$];
 logic [15:0] data_received [$];
 
+// send data to DUT and save data that was sent/received
 always @(posedge clk) begin
   if (reset) begin
     sample_count <= 0;
@@ -301,7 +306,7 @@ always @(posedge clk) begin
       sample_count <= sample_count + 1;
       data_in.data <= $urandom_range(1<<16);
     end
-    // save data that was sent
+    // save data that was sent/received
     if (data_in.valid) begin
       data_sent.push_front(data_in.data);
     end
@@ -320,40 +325,49 @@ task send_samples(input int n_samples, input int delay);
   end
 endtask
 
-task do_readout(input bit wait_for_last);
+task automatic do_readout(input bit rand_ready, input int timeout);
+  int cycle_count;
+  cycle_count = 0;
   data_out.ready <= 1'b0;
   stop <= 1'b1;
   @(posedge clk);
   stop <= 1'b0;
+  // wait a bit before actually doing the readout
   repeat (500) @(posedge clk);
   data_out.ready <= 1'b1;
-  repeat ($urandom_range(2,4)) @(posedge clk);
-  data_out.ready <= 1'b0;
-  repeat ($urandom_range(1,3)) @(posedge clk);
-  data_out.ready <= 1'b1;
-  if (wait_for_last) begin
-    while (!data_out.last) @(posedge clk);
-  end else begin
-    repeat (500) @(posedge clk);
+  // give up after timeout clock cycles if last is not achieved
+  while ((!(data_out.last & data_out.ok)) & (cycle_count < timeout)) begin
+    @(posedge clk);
+    cycle_count = cycle_count + 1;
+    if (rand_ready) begin
+      data_out.ready <= $urandom() & 1'b1;
+    end
   end
   @(posedge clk);
   data_out.ready <= 1'b0;
 endtask
 
+// check that the DUT correctly saved everything
 task check_results();
+  // pop first sample received since it is intended to be overwritten in
+  // multibank buffer
+  data_received.pop_back();
   $display("data_sent.size() = %0d", data_sent.size());
   $display("data_received.size() = %0d", data_received.size());
   if ((data_sent.size() + 1) != data_received.size()) begin
     $warning("mismatch in amount of sent/received data");
+    error_count = error_count + 1;
   end
   if (data_received[$] != data_sent.size()) begin
     $warning("incorrect sample count reported by buffer");
+    error_count = error_count + 1;
   end
   data_received.pop_back(); // remove sample count
   while (data_sent.size() > 0 && data_received.size() > 0) begin
     // data from channel 0 can be reordered with data from channel 2
     if (data_sent[$] != data_received[$]) begin
       $warning("data mismatch error (received %x, sent %x)", data_received[$], data_sent[$]);
+      error_count = error_count + 1;
     end
     data_sent.pop_back();
     data_received.pop_back();
@@ -374,9 +388,11 @@ initial begin
   start <= 1'b0;
   repeat (100) @(posedge clk);
   // send samples
-  send_samples(128, 3);
+  data_in.send_samples(clk, 32, 1'b1, 1'b1);
+  data_in.send_samples(clk, 64, 1'b0, 1'b1);
+  data_in.send_samples(clk, 32, 1'b1, 1'b1);
   repeat (50) @(posedge clk);
-  do_readout(1'b1);
+  do_readout(1'b1, 100000);
   $display("######################################################");
   $display("# checking results for test with a few samples       #");
   $display("######################################################");
@@ -390,9 +406,9 @@ initial begin
   start <= 1'b0;
   repeat (100) @(posedge clk);
   // send samples
-  send_samples(1, 4);
+  data_in.send_samples(clk, 1, 1'b0, 1'b1);
   repeat (50) @(posedge clk);
-  do_readout(1'b0); // don't wait for last signal
+  do_readout(1'b1, 1000);
   $display("######################################################");
   $display("# checking results for test with one sample          #");
   $display("######################################################");
@@ -406,7 +422,7 @@ initial begin
   repeat (100) @(posedge clk);
   // don't send samples
   repeat (50) @(posedge clk);
-  do_readout(1'b0); // don't wait for last signal
+  do_readout(1'b1, 1000);
   $display("######################################################");
   $display("# checking results for test with no samples          #");
   $display("######################################################");
@@ -419,14 +435,26 @@ initial begin
   start <= 1'b0;
   repeat (100) @(posedge clk);
   // send samples
-  send_samples(1024, 1);
+  data_in.send_samples(clk, 256, 1'b1, 1'b1);
+  data_in.send_samples(clk, 512, 1'b0, 1'b1);
+  data_in.send_samples(clk, 256, 1'b1, 1'b1);
   repeat (50) @(posedge clk);
-  do_readout(1'b1);
+  do_readout(1'b1, 100000);
   $display("######################################################");
   $display("# checking results for test with 1024 samples        #");
+  $display("# (full buffer)                                      #");
   $display("######################################################");
   check_results();
   repeat (500) @(posedge clk);
+
+  $display("#################################################");
+  if (error_count == 0) begin
+    $display("# finished with zero errors");
+  end else begin
+    $error("# finished with %0d errors", error_count);
+    $display("#################################################");
+  end
+  $display("#################################################");
   $finish;
 
 end

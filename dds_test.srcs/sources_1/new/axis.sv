@@ -42,6 +42,41 @@ modport Slave_Simple (
   output  ok
 );
 
+task automatic send_samples(
+  ref clk,
+  input int n_samples,
+  input bit rand_arrivals,
+  input bit reset_valid
+);
+  int samples_sent [PARALLEL_CHANNELS];
+  logic [PARALLEL_CHANNELS-1:0] done;
+  // reset
+  done = '0;
+  for (int i = 0; i < PARALLEL_CHANNELS; i++) begin
+    samples_sent[i] = 0;
+  end
+  valid <= '1; // enable all channels
+  while (~done) begin
+    @(posedge clk);
+    for (int i = 0; i < PARALLEL_CHANNELS; i++) begin
+      if (ok[i]) begin
+        if (samples_sent[i] == n_samples - 1) begin
+          done[i] = 1'b1;
+        end else begin
+          samples_sent[i] = samples_sent[i] + 1;
+        end
+      end
+    end
+    if (rand_arrivals) begin
+      valid <= $urandom_range((1 << PARALLEL_CHANNELS) - 1) & (~done);
+    end
+  end
+  if (reset_valid) begin
+    valid <= '0;
+    @(posedge clk);
+  end
+endtask
+
 endinterface
 
 // single axi-stream interface

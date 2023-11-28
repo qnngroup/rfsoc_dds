@@ -7,6 +7,8 @@ always #(0.5s/CLK_RATE_HZ) clk = ~clk;
 
 logic reset;
 
+int error_count = 0;
+
 localparam int N_CHANNELS = 2;
 localparam int SAMPLE_WIDTH = 16;
 localparam int PARALLEL_SAMPLES = 4;
@@ -50,6 +52,7 @@ logic [SAMPLE_INDEX_WIDTH+CLOCK_WIDTH-1:0] timestamps_received [N_CHANNELS][$];
 
 logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] data_range_low, data_range_high;
 
+// save data that was sent to DUT
 always @(posedge clk) begin
   if (reset) begin
     data_in.data <= '0;
@@ -71,42 +74,14 @@ always @(posedge clk) begin
   end
 end
 
+// always accept data, which is the expected behavior of the sample buffer
+// that will be connected to the sample discriminator
 assign data_out.ready = '1;
 assign timestamps_out.ready = '1;
 
-task send_samples(input int n_samples, input bit rand_arrivals);
-  int samples_sent [N_CHANNELS];
-  logic [N_CHANNELS-1:0] done;
-  if (rand_arrivals) begin
-    // reset
-    done = '0;
-    for (int i = 0; i < N_CHANNELS; i++) begin
-      samples_sent[i] = 0;
-    end
-    while (~done) begin
-      for (int i = 0; i < N_CHANNELS; i++) begin
-        if (data_in.valid[i]) begin
-          if (samples_sent[i] == n_samples - 1) begin
-            done[i] = 1'b1;
-          end else begin
-            samples_sent[i] = samples_sent[i] + 1'b1;
-          end
-        end
-      end
-      data_in.valid <= $urandom_range((1<<N_CHANNELS) - 1) & (~done);
-      @(posedge clk);
-    end
-    data_in.valid <= '0;
-    @(posedge clk);
-  end else begin
-    data_in.valid <= '1;
-    repeat (n_samples) begin
-      @(posedge clk);
-    end
-    data_in.valid <= '0;
-  end
-endtask
-
+// helper function to check if any of the parallel samples are above the high threshold
+// needed to replicate the behavior of the DUT which starts saving samples as
+// soon as a sample arrives which is above the high threshold
 function logic any_above_high (
   input logic [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] samples_in,
   input logic [SAMPLE_WIDTH-1:0] threshold_high
@@ -119,6 +94,9 @@ function logic any_above_high (
   return 1'b0;
 endfunction
 
+// helper function to check if all parallel samples are below the low threshold
+// needed to replicate the behavior of the DUT which stops saving samples
+// once the DUT receives a row of samples all below the low threshold
 function logic all_below_low (
   input logic [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] samples_in,
   input logic [SAMPLE_WIDTH-1:0] threshold_low
@@ -139,15 +117,16 @@ task check_results (
   inout logic [N_CHANNELS-1:0] is_high
 );
   for (int i = 0; i < N_CHANNELS; i++) begin
-    // process each channel
+    // process each channel, first check that we received an appropriate amount of data
     $display("data_sent[%0d].size() = %0d", i, data_sent[i].size());
     $display("data_received[%0d].size() = %0d", i, data_received[i].size());
     $display("timestamps_received[%0d].size() = %0d", i, timestamps_received[i].size());
-
     if (data_sent[i].size() < data_received[i].size()) begin
       $error("more data received than sent. this is not possible");
+      error_count = error_count + 1;
     end
 
+    // now process the sent/received data to check the timestamps and check for any mismatched data
     while (data_sent[i].size() > 0) begin
       if (any_above_high(data_sent[i][$], threshold_high[i])) begin
         if (!is_high[i]) begin
@@ -155,10 +134,12 @@ task check_results (
           if (timestamps_received[i].size() > 0) begin
             if (timestamps_received[i][$] != {timer[i], sample_index[i]}) begin
               $warning("mismatched timestamp: got %x, expected %x", timestamps_received[i][$], {timer[i], sample_index[i]});
+              error_count = error_count + 1;
             end
             timestamps_received[i].pop_back();
           end else begin
             $warning("expected a timestamp (with value %x), but no more timestamps left", {timer[i], sample_index[i]});
+            error_count = error_count + 1;
           end
         end
         is_high[i] = 1'b1;
@@ -168,6 +149,7 @@ task check_results (
       if (is_high[i]) begin
         if (data_sent[i][$] != data_received[i][$]) begin
           $warning("mismatched data: got %x, expected %x", data_received[i][$], data_sent[i][$]);
+          error_count = error_count + 1;
         end
         data_received[i].pop_back();
         sample_index[i] = sample_index[i] + 1'b1;
@@ -212,12 +194,13 @@ initial begin
   repeat (50) @(posedge clk);
 
   // send a bunch of data with discrimination disabled
-  send_samples(10, 1);
+  data_in.send_samples(clk, 10, 1'b1, 1'b1);
   repeat (50) @(posedge clk);
-  send_samples(10, 0);
+  data_in.send_samples(clk, 10, 1'b0, 1'b1);
   repeat (50) @(posedge clk);
   $display("######################################################");
   $display("# testing run with all data above thresholds         #");
+  $display("# first sample will be zero                          #");
   $display("######################################################");
   check_results(threshold_low, threshold_high, timer, sample_index, is_high);
   
@@ -231,9 +214,9 @@ initial begin
   @(posedge clk);
   config_in.valid <= 1'b0;
   repeat (50) @(posedge clk);
-  send_samples(100, 1);
+  data_in.send_samples(clk, 100, 1'b1, 1'b1);
   repeat (50) @(posedge clk);
-  send_samples(100, 0);
+  data_in.send_samples(clk, 100, 1'b0, 1'b1);
   repeat (50) @(posedge clk);
   $display("######################################################");
   $display("# testing run with channel 0 straddling thresholds   #");
@@ -252,9 +235,9 @@ initial begin
   @(posedge clk);
   config_in.valid <= 1'b0;
   repeat (50) @(posedge clk);
-  send_samples(400, 1);
+  data_in.send_samples(clk, 400, 1'b1, 1'b1);
   repeat (50) @(posedge clk);
-  send_samples(400, 0);
+  data_in.send_samples(clk, 400, 1'b0, 1'b1);
   repeat (50) @(posedge clk);
   $display("######################################################");
   $display("# testing run with all data below thresholds         #");
@@ -272,9 +255,9 @@ initial begin
   @(posedge clk);
   config_in.valid <= 1'b0;
   repeat (50) @(posedge clk);
-  send_samples(400, 1);
+  data_in.send_samples(clk, 400, 1'b1, 1'b1);
   repeat (50) @(posedge clk);
-  send_samples(400, 0);
+  data_in.send_samples(clk, 400, 1'b0, 1'b1);
   repeat (50) @(posedge clk);
   $display("######################################################");
   $display("# testing run with both channels straddling          #");
@@ -282,6 +265,14 @@ initial begin
   $display("######################################################");
   check_results(threshold_low, threshold_high, timer, sample_index, is_high);
 
+  $display("#################################################");
+  if (error_count == 0) begin
+    $display("# finished with zero errors");
+  end else begin
+    $error("# finished with %0d errors", error_count);
+    $display("#################################################");
+  end
+  $display("#################################################");
   $finish;
 end
 
