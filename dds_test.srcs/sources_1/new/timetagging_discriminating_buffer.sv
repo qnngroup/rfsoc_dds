@@ -102,22 +102,37 @@ banked_sample_buffer #(
 
 // merge both buffer outputs into a word that is AXI_MM_WIDTH bits
 // first step down/up the width of the outputs
+function int GCD(input int A, input int B);
+  if (B == 0) begin
+    return A;
+  end else begin
+    return GCD(B, A % B);
+  end
+endfunction
+
+localparam int DATA_AXI_MM_GCD = GCD(AXI_MM_WIDTH, SAMPLE_WIDTH*PARALLEL_SAMPLES);
+localparam int TIMESTAMP_AXI_MM_GCD = GCD(AXI_MM_WIDTH, TIMESTAMP_WIDTH);
+
+localparam int DATA_RESIZER_UP = AXI_MM_WIDTH / DATA_AXI_MM_GCD;
+localparam int DATA_RESIZER_DOWN = (SAMPLE_WIDTH*PARALLEL_SAMPLES) / DATA_AXI_MM_GCD;
+localparam int TIMESTAMP_RESIZER_UP = AXI_MM_WIDTH / TIMESTAMP_AXI_MM_GCD;
+localparam int TIMESTAMP_RESIZER_DOWN = TIMESTAMP_WIDTH / TIMESTAMP_AXI_MM_GCD;
 
 axis_width_converter #(
   .DWIDTH_IN(SAMPLE_WIDTH*PARALLEL_SAMPLES),
-  .UP(),
-  .DOWN()
+  .UP(DATA_RESIZER_UP),
+  .DOWN(DATA_RESIZER_DOWN)
 ) data_width_converter_i (
   .clk,
   .reset,
   .data_in(buf_data_out),
-  .data_out(buf_tstamp_out_resized)
+  .data_out(buf_data_out_resized)
 );
 
 axis_width_converter #(
   .DWIDTH_IN(TIMESTAMP_WIDTH),
-  .UP(),
-  .DOWN()
+  .UP(TIMESTAMP_RESIZER_UP),
+  .DOWN(TIMESTAMP_RESIZER_DOWN)
 ) timestamp_width_converter_i (
   .clk,
   .reset,
@@ -126,5 +141,38 @@ axis_width_converter #(
 );
 
 // mux the two outputs
+// state machine
+// first output all the timestamps, then all the data
+enum {TIMESTAMP, DATA} buffer_select;
+
+always_ff @(posedge clk) begin
+  if (reset) begin
+    buffer_select <= TIMESTAMP;
+  end else begin
+    unique case (buffer_select)
+      TIMESTAMP: if (buf_tstamp_out_resized.last && buf_tstamp_out_resized.ok) buffer_select <= DATA;
+      DATA: if (buf_data_out_resized.last && buf_data_out_resized.ok) buffer_select <= TIMESTAMP;
+    endcase
+  end
+end
+
+// mux data, valid, and last
+always_comb begin
+  unique case (buffer_select)
+    TIMESTAMP: begin
+      data_out.data = buf_tstamp_out_resized.data;
+      data_out.valid = buf_tstamp_out_resized.valid;
+      data_out.last = 1'b0; // don't send last for timestamp data
+    end
+    DATA: begin
+      data_out.data = buf_data_out_resized.data;
+      data_out.valid = buf_data_out_resized.valid;
+      data_out.last = buf_data_out_resized.last;
+    end
+  endcase
+end
+
+assign buf_tstamp_out_resized.ready = (buffer_select == TIMESTAMP) ? data_out.ready : 1'b0;
+assign buf_data_out_resized.ready = (buffer_select == DATA) ? data_out.ready : 1'b0;
 
 endmodule
