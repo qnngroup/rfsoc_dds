@@ -9,6 +9,7 @@ logic reset;
 
 int error_count = 0;
 
+localparam int BUFFER_DEPTH = 1024;
 localparam int N_CHANNELS = 8;
 localparam int PARALLEL_SAMPLES = 1;
 localparam int SAMPLE_WIDTH = 16;
@@ -24,7 +25,7 @@ Axis_If #(.DWIDTH(2+$clog2($clog2(N_CHANNELS)+1))) config_in ();
 
 banked_sample_buffer #(
   .N_CHANNELS(N_CHANNELS),
-  .BUFFER_DEPTH(1024),
+  .BUFFER_DEPTH(BUFFER_DEPTH),
   .PARALLEL_SAMPLES(PARALLEL_SAMPLES),
   .SAMPLE_WIDTH(SAMPLE_WIDTH)
 ) dut_i (
@@ -63,7 +64,7 @@ always @(posedge clk) begin
   end
 end
 
-task check_results(input int banking_mode);
+task check_results(input int banking_mode, input bit missing_ok);
   logic [SAMPLE_WIDTH*PARALLEL_SAMPLES:0] temp_sample;
   int current_channel, n_samples;
   for (int i = 0; i < N_CHANNELS; i++) begin
@@ -86,10 +87,13 @@ task check_results(input int banking_mode);
   for (int i = 0; i < (1 << banking_mode); i++) begin
     // make sure there are no remaining samples in data_sent queues
     // corresponding to channels which are enabled as per banking_mode
-    if (data_sent[i].size() > 0) begin
+    // caveat: if one of the channels filled up, then it's okay for there to
+    // be missing samples in the other channels
+    if ((data_sent[i].size() > 0) & (!missing_ok)) begin
       $warning("leftover samples in data_sent[%0d]: %0d", i, data_sent[i].size());
       error_count = error_count + 1;
     end
+    while (data_sent[i].size() > 0) data_sent[i].pop_back();
   end
   for (int i = (1 << banking_mode); i < N_CHANNELS; i++) begin
     // flush out any remaining samples in data_sent queue
@@ -135,107 +139,28 @@ initial begin
         start_acq_with_banking_mode(bank_mode);
         unique case (samp_count)
           0: samples_to_send = $urandom_range(4, 10); // a few samples
-          1: samples_to_send = (1024 / (1 << bank_mode))*7 + 24 / (1 << bank_mode);
-          2: samples_to_send = (1024 / (1 << bank_mode))*8; // fill all buffers
+          1: samples_to_send = ((BUFFER_DEPTH - $urandom_range(2,10)) / (1 << bank_mode))*N_CHANNELS;
+          2: samples_to_send = (BUFFER_DEPTH / (1 << bank_mode))*N_CHANNELS; // fill all buffers
         endcase
         data_in.send_samples(clk, samples_to_send, in_valid_rand & 1'b1, 1'b1);
         repeat (10) @(posedge clk);
         stop_acq();
         data_out.do_readout(clk, 1'b1, 100000);
         $display("######################################################");
-        $display("# checking results for test with %d samples", samples_to_send);
-        $display("# and banking mode %d", bank_mode);
+        $display("# checking results n_samples   = %d", samples_to_send);
+        $display("# banking mode                 = %d", bank_mode);
         $display("# samples sent with rand_valid = %d", in_valid_rand);
         $display("######################################################");
+        // The second argument of check_results is if it's okay for there to
+        // be missing samples that weren't stored.
+        // When data_in.valid is randomly toggled on and off and enough samples
+        // are sent to fill up all the banks, one of the banks will likely
+        // fill up before the others are done, triggering a stop condition for
+        // the other banks before they are full.
+        // This results in "missing" samples that aren't saved
+        check_results(bank_mode, (samp_count == 2) & (in_valid_rand == 1));
       end
     end
-    start_acq_with_banking_mode(0);
-    data_in.send_samples(clk, 37, i & 1'b1, 1'b1);
-    repeat (10) @(posedge clk);
-    stop_acq();
-    data_out.do_readout(clk, 1'b1, 100000);
-    $display("######################################################");
-    $display("# checking results for test with a few samples at    #");
-    $display("# full rate, with only channel 0 enabled             #");
-    $display("######################################################");
-    check_results(0);
-
-    start_acq_with_banking_mode(0);
-    data_in.send_samples(clk, 1024*7+24, i & 1'b1, 1'b1);
-    repeat (10) @(posedge clk);
-    stop_acq();
-    data_out.do_readout(clk, 1'b1, 100000);
-    $display("######################################################");
-    $display("# checking results for test with many samples at     #");
-    $display("# full rate, with only channel 0 enabled             #");
-    $display("######################################################");
-    check_results(0);
-
-    start_acq_with_banking_mode(1);
-    data_in.send_samples(clk, 25, i & 1'b1, 1'b1);
-    repeat (10) @(posedge clk);
-    stop_acq();
-    data_out.do_readout(clk, 1'b1, 100000);
-    $display("######################################################");
-    $display("# checking results for test with a few samples at    #");
-    $display("# full rate, with channels 0 and 1 enabled           #");
-    $display("######################################################");
-    check_results(1);
-
-    start_acq_with_banking_mode(1);
-    data_in.send_samples(clk, 512*7+12, i & 1'b1, 1'b1);
-    repeat (10) @(posedge clk);
-    stop_acq();
-    data_out.do_readout(clk, 1'b1, 100000);
-    $display("######################################################");
-    $display("# checking results for test with many samples at     #");
-    $display("# full rate, with channels 0 and 1 enabled           #");
-    $display("######################################################");
-    check_results(1);
-
-    start_acq_with_banking_mode(2);
-    data_in.send_samples(clk, 40, i & 1'b1, 1'b1);
-    repeat (10) @(posedge clk);
-    stop_acq();
-    data_out.do_readout(clk, 1'b1, 100000);
-    $display("######################################################");
-    $display("# checking results for test with a few samples at    #");
-    $display("# full rate, with channels 0-3 enabled               #");
-    $display("######################################################");
-    check_results(2);
-
-    start_acq_with_banking_mode(2);
-    data_in.send_samples(clk, 256*7+6, i & 1'b1, 1'b1);
-    repeat (10) @(posedge clk);
-    stop_acq();
-    data_out.do_readout(clk, 1'b1, 100000);
-    $display("######################################################");
-    $display("# checking results for test with many samples at     #");
-    $display("# full rate, with channels 0-3 enabled               #");
-    $display("######################################################");
-    check_results(2);
-
-    start_acq_with_banking_mode(3);
-    data_in.send_samples(clk, 49, i & 1'b1, 1'b1);
-    repeat (10) @(posedge clk);
-    stop_acq();
-    data_out.do_readout(clk, 1'b1, 100000);
-    $display("######################################################");
-    $display("# checking results for test with a few samples at    #");
-    $display("# full rate, with all channels enabled               #");
-    $display("######################################################");
-    check_results(3);
-
-    start_acq_with_banking_mode(3);
-    data_in.send_samples(clk, 128*7+3, i & 1'b1, 1'b1);
-    repeat (10) @(posedge clk);
-    stop_acq();
-    data_out.do_readout(clk, 1'b1, 100000);
-    $display("######################################################");
-    $display("# checking results for test with many samples at     #");
-    $display("# full rate, with all channels enabled               #");
-    $display("######################################################");
-    check_results(3);
   end
 
   $display("#################################################");
