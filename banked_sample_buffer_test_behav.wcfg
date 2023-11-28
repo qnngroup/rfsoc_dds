@@ -11,13 +11,13 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="101.245000 us"></ZoomStartTime>
-      <ZoomEndTime time="1,682.245001 us"></ZoomEndTime>
-      <Cursor1Time time="1,418.745000 us"></Cursor1Time>
+      <ZoomStartTime time="0.000 ns"></ZoomStartTime>
+      <ZoomEndTime time="158.501 ns"></ZoomEndTime>
+      <Cursor1Time time="0.000 ns"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="210"></NameColumnWidth>
-      <ValueColumnWidth column_width="77"></ValueColumnWidth>
+      <ValueColumnWidth column_width="73"></ValueColumnWidth>
    </column_width_setting>
    <WVObjectSize size="20" />
    <wvobject type="logic" fp_name="/banked_sample_buffer_test/clk">
@@ -75,11 +75,6 @@
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/banks_full">
          <obj_property name="ElementShortName">banks_full[7:0]</obj_property>
          <obj_property name="ObjectShortName">banks_full[7:0]</obj_property>
-         <obj_property name="isExpanded"></obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/first">
-         <obj_property name="ElementShortName">first</obj_property>
-         <obj_property name="ObjectShortName">first</obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/banks_first">
          <obj_property name="ElementShortName">banks_first[7:0]</obj_property>
@@ -157,6 +152,7 @@
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/data">
          <obj_property name="ElementShortName">data[7:0][15:0]</obj_property>
          <obj_property name="ObjectShortName">data[7:0][15:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/ready">
          <obj_property name="ElementShortName">ready[7:0]</obj_property>
@@ -165,15 +161,16 @@
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/valid">
          <obj_property name="ElementShortName">valid[7:0]</obj_property>
          <obj_property name="ObjectShortName">valid[7:0]</obj_property>
-         <obj_property name="isExpanded"></obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/last">
          <obj_property name="ElementShortName">last[7:0]</obj_property>
          <obj_property name="ObjectShortName">last[7:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/ok">
          <obj_property name="ElementShortName">ok[7:0]</obj_property>
          <obj_property name="ObjectShortName">ok[7:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/all_banks_out/DWIDTH">
          <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
@@ -200,7 +197,6 @@
       <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/valid">
          <obj_property name="ElementShortName">valid[7:0]</obj_property>
          <obj_property name="ObjectShortName">valid[7:0]</obj_property>
-         <obj_property name="isExpanded"></obj_property>
       </wvobject>
       <wvobject type="array" fp_name="/banked_sample_buffer_test/data_in/last">
          <obj_property name="ElementShortName">last[7:0]</obj_property>
@@ -300,6 +296,10 @@
          <obj_property name="ElementShortName">full</obj_property>
          <obj_property name="ObjectShortName">full</obj_property>
       </wvobject>
+      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /first">
+         <obj_property name="ElementShortName">first</obj_property>
+         <obj_property name="ObjectShortName">first</obj_property>
+      </wvobject>
       <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_i /state">
          <obj_property name="ElementShortName">state[31:0]</obj_property>
          <obj_property name="ObjectShortName">state[31:0]</obj_property>
@@ -352,67 +352,68 @@
          <obj_property name="ElementShortName">SAMPLE_WIDTH[31:0]</obj_property>
          <obj_property name="ObjectShortName">SAMPLE_WIDTH[31:0]</obj_property>
       </wvobject>
-      <wvobject fp_name="divider1548" type="divider">
-         <obj_property name="label">din</obj_property>
+      <wvobject type="group" fp_name="group3214">
+         <obj_property name="label">data_in</obj_property>
          <obj_property name="DisplayName">label</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /data">
+            <obj_property name="ElementShortName">data[15:0]</obj_property>
+            <obj_property name="ObjectShortName">data[15:0]</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /ready">
+            <obj_property name="ElementShortName">ready</obj_property>
+            <obj_property name="ObjectShortName">ready</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /valid">
+            <obj_property name="ElementShortName">valid</obj_property>
+            <obj_property name="ObjectShortName">valid</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /last">
+            <obj_property name="ElementShortName">last</obj_property>
+            <obj_property name="ObjectShortName">last</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /ok">
+            <obj_property name="ElementShortName">ok</obj_property>
+            <obj_property name="ObjectShortName">ok</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /DWIDTH">
+            <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+            <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+         </wvobject>
       </wvobject>
-      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /data">
-         <obj_property name="ElementShortName">data[15:0]</obj_property>
-         <obj_property name="ObjectShortName">data[15:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /ready">
-         <obj_property name="ElementShortName">ready</obj_property>
-         <obj_property name="ObjectShortName">ready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /valid">
-         <obj_property name="ElementShortName">valid</obj_property>
-         <obj_property name="ObjectShortName">valid</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /last">
-         <obj_property name="ElementShortName">last</obj_property>
-         <obj_property name="ObjectShortName">last</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /ok">
-         <obj_property name="ElementShortName">ok</obj_property>
-         <obj_property name="ObjectShortName">ok</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_in /DWIDTH">
-         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
-         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
-      </wvobject>
-      <wvobject fp_name="divider1547" type="divider">
-         <obj_property name="label">dout</obj_property>
+      <wvobject type="group" fp_name="group3221">
+         <obj_property name="label">data_out</obj_property>
          <obj_property name="DisplayName">label</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /data">
-         <obj_property name="ElementShortName">data[15:0]</obj_property>
-         <obj_property name="ObjectShortName">data[15:0]</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /ready">
-         <obj_property name="ElementShortName">ready</obj_property>
-         <obj_property name="ObjectShortName">ready</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /valid">
-         <obj_property name="ElementShortName">valid</obj_property>
-         <obj_property name="ObjectShortName">valid</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /last">
-         <obj_property name="ElementShortName">last</obj_property>
-         <obj_property name="ObjectShortName">last</obj_property>
-      </wvobject>
-      <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /ok">
-         <obj_property name="ElementShortName">ok</obj_property>
-         <obj_property name="ObjectShortName">ok</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /DWIDTH">
-         <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
-         <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+         <obj_property name="isExpanded"></obj_property>
+         <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /data">
+            <obj_property name="ElementShortName">data[15:0]</obj_property>
+            <obj_property name="ObjectShortName">data[15:0]</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /ready">
+            <obj_property name="ElementShortName">ready</obj_property>
+            <obj_property name="ObjectShortName">ready</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /valid">
+            <obj_property name="ElementShortName">valid</obj_property>
+            <obj_property name="ObjectShortName">valid</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /last">
+            <obj_property name="ElementShortName">last</obj_property>
+            <obj_property name="ObjectShortName">last</obj_property>
+         </wvobject>
+         <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /ok">
+            <obj_property name="ElementShortName">ok</obj_property>
+            <obj_property name="ObjectShortName">ok</obj_property>
+         </wvobject>
+         <wvobject type="array" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[0].bank_out /DWIDTH">
+            <obj_property name="ElementShortName">DWIDTH[31:0]</obj_property>
+            <obj_property name="ObjectShortName">DWIDTH[31:0]</obj_property>
+         </wvobject>
       </wvobject>
    </wvobject>
    <wvobject type="group" fp_name="group1546">
       <obj_property name="label">bank_1</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[1].bank_i /clk">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
@@ -579,7 +580,6 @@
    <wvobject type="group" fp_name="group1628">
       <obj_property name="label">bank_2</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[2].bank_i /clk">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
@@ -1124,7 +1124,6 @@
    <wvobject type="group" fp_name="group1764">
       <obj_property name="label">bank_6</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[6].bank_i /clk">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>
@@ -1261,7 +1260,6 @@
    <wvobject type="group" fp_name="group1798">
       <obj_property name="label">bank_7</obj_property>
       <obj_property name="DisplayName">label</obj_property>
-      <obj_property name="isExpanded"></obj_property>
       <wvobject type="logic" fp_name="/banked_sample_buffer_test/dut_i/\bank_i[7].bank_i /clk">
          <obj_property name="ElementShortName">clk</obj_property>
          <obj_property name="ObjectShortName">clk</obj_property>

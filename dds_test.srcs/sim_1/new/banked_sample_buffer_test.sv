@@ -35,11 +35,11 @@ banked_sample_buffer #(
   .config_in
 );
 
-
 int sample_count [N_CHANNELS];
 logic [PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_sent [N_CHANNELS][$];
 logic [PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_received [$];
 
+// send data to DUT and save sent/received data
 always @(posedge clk) begin
   for (int i = 0; i < N_CHANNELS; i++) begin
     if (reset) begin
@@ -63,61 +63,6 @@ always @(posedge clk) begin
   end
 end
 
-task send_samples(input int n_samples, input bit rand_arrivals);
-  int samples_sent [N_CHANNELS];
-  logic [N_CHANNELS-1:0] done;
-  if (rand_arrivals) begin
-    // reset
-    done = '0;
-    for (int i = 0; i < N_CHANNELS; i++) begin
-      samples_sent[i] = 0;
-    end
-    while (~done) begin
-      for (int i = 0; i < N_CHANNELS; i++) begin
-        if (data_in.valid[i]) begin
-          if (samples_sent[i] == n_samples - 1) begin
-            done[i] = 1'b1;
-          end else begin
-            samples_sent[i] = samples_sent[i] + 1'b1;
-          end
-        end
-      end
-      data_in.valid <= $urandom_range((1<<N_CHANNELS) - 1) & (~done);
-      @(posedge clk);
-    end
-    data_in.valid <= '0;
-    @(posedge clk);
-  end else begin
-    data_in.valid <= '1;
-    repeat (n_samples) begin
-      @(posedge clk);
-    end
-    data_in.valid <= '0;
-  end
-endtask
-
-task do_readout(input bit wait_for_last, input int wait_cycles);
-  data_out.ready <= 1'b0;
-  stop <= 1'b1;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  stop <= 1'b0;
-  config_in.valid <= 1'b0;
-  repeat (500) @(posedge clk);
-  data_out.ready <= 1'b1;
-  repeat ($urandom_range(2,4)) @(posedge clk);
-  data_out.ready <= 1'b0;
-  repeat ($urandom_range(1,3)) @(posedge clk);
-  data_out.ready <= 1'b1;
-  if (wait_for_last) begin
-    while (!data_out.last) @(posedge clk);
-  end else begin
-    repeat (wait_cycles) @(posedge clk);
-  end
-  @(posedge clk);
-  //data_out.ready <= 1'b0;
-endtask
-
 task check_results(input int banking_mode);
   logic [SAMPLE_WIDTH*PARALLEL_SAMPLES:0] temp_sample;
   int current_channel, n_samples;
@@ -128,12 +73,11 @@ task check_results(input int banking_mode);
   while (data_received.size() > 0) begin
     current_channel = data_received.pop_back();
     n_samples = data_received.pop_back();
-    //current_channel = temp_sample & 3'h7;
-    //n_samples = temp_sample >> 3;
     $display("processing new bank with %0d samples from channel %0d", n_samples, current_channel);
     for (int i = 0; i < n_samples; i++) begin
       if (data_sent[current_channel][$] != data_received[$]) begin
         $display("data mismatch error (channel = %0d, sample = %0d, received %x, sent %x)", current_channel, i, data_received[$], data_sent[current_channel][$]);
+        error_count = error_count + 1;
       end
       data_sent[current_channel].pop_back();
       data_received.pop_back();
@@ -144,6 +88,7 @@ task check_results(input int banking_mode);
     // corresponding to channels which are enabled as per banking_mode
     if (data_sent[i].size() > 0) begin
       $warning("leftover samples in data_sent[%0d]: %0d", i, data_sent[i].size());
+      error_count = error_count + 1;
     end
   end
   for (int i = (1 << banking_mode); i < N_CHANNELS; i++) begin
@@ -160,8 +105,19 @@ task start_acq_with_banking_mode(input int mode);
   @(posedge clk);
   start <= 1'b0;
   config_in.valid <= 1'b0;
-  repeat (100) @(posedge clk);
 endtask
+
+task stop_acq();
+  stop <= 1'b1;
+  start <= 1'b0;
+  config_in.valid <= 1'b1;
+  @(posedge clk);
+  config_in.valid <= 1'b0;
+  start <= 1'b0;
+  stop <= 1'b0;
+endtask
+
+int samples_to_send;
 
 initial begin
   reset <= 1'b1;
@@ -173,11 +129,31 @@ initial begin
   reset <= 1'b0;
   repeat (50) @(posedge clk);
 
-  for (int i = 0; i < 2; i++) begin
+  for (int in_valid_rand = 0; in_valid_rand < 2; in_valid_rand++) begin
+    for (int bank_mode = 0; bank_mode < 4; bank_mode++) begin
+      for (int samp_count = 0; samp_count < 3; samp_count++) begin
+        start_acq_with_banking_mode(bank_mode);
+        unique case (samp_count)
+          0: samples_to_send = $urandom_range(4, 10); // a few samples
+          1: samples_to_send = (1024 / (1 << bank_mode))*7 + 24 / (1 << bank_mode);
+          2: samples_to_send = (1024 / (1 << bank_mode))*8; // fill all buffers
+        endcase
+        data_in.send_samples(clk, samples_to_send, in_valid_rand & 1'b1, 1'b1);
+        repeat (10) @(posedge clk);
+        stop_acq();
+        data_out.do_readout(clk, 1'b1, 100000);
+        $display("######################################################");
+        $display("# checking results for test with %d samples", samples_to_send);
+        $display("# and banking mode %d", bank_mode);
+        $display("# samples sent with rand_valid = %d", in_valid_rand);
+        $display("######################################################");
+      end
+    end
     start_acq_with_banking_mode(0);
-    send_samples(37, i);
-    repeat (50) @(posedge clk);
-    do_readout(1'b1, 500);
+    data_in.send_samples(clk, 37, i & 1'b1, 1'b1);
+    repeat (10) @(posedge clk);
+    stop_acq();
+    data_out.do_readout(clk, 1'b1, 100000);
     $display("######################################################");
     $display("# checking results for test with a few samples at    #");
     $display("# full rate, with only channel 0 enabled             #");
@@ -185,9 +161,10 @@ initial begin
     check_results(0);
 
     start_acq_with_banking_mode(0);
-    send_samples(1024*7+24, i);
-    repeat (8000) @(posedge clk);
-    do_readout(1'b1, 500);
+    data_in.send_samples(clk, 1024*7+24, i & 1'b1, 1'b1);
+    repeat (10) @(posedge clk);
+    stop_acq();
+    data_out.do_readout(clk, 1'b1, 100000);
     $display("######################################################");
     $display("# checking results for test with many samples at     #");
     $display("# full rate, with only channel 0 enabled             #");
@@ -195,9 +172,10 @@ initial begin
     check_results(0);
 
     start_acq_with_banking_mode(1);
-    send_samples(25, i);
-    repeat (50) @(posedge clk);
-    do_readout(1'b1, 500);
+    data_in.send_samples(clk, 25, i & 1'b1, 1'b1);
+    repeat (10) @(posedge clk);
+    stop_acq();
+    data_out.do_readout(clk, 1'b1, 100000);
     $display("######################################################");
     $display("# checking results for test with a few samples at    #");
     $display("# full rate, with channels 0 and 1 enabled           #");
@@ -205,9 +183,10 @@ initial begin
     check_results(1);
 
     start_acq_with_banking_mode(1);
-    send_samples(512*7+12, i);
-    repeat (4000) @(posedge clk);
-    do_readout(1'b1, 500);
+    data_in.send_samples(clk, 512*7+12, i & 1'b1, 1'b1);
+    repeat (10) @(posedge clk);
+    stop_acq();
+    data_out.do_readout(clk, 1'b1, 100000);
     $display("######################################################");
     $display("# checking results for test with many samples at     #");
     $display("# full rate, with channels 0 and 1 enabled           #");
@@ -215,9 +194,10 @@ initial begin
     check_results(1);
 
     start_acq_with_banking_mode(2);
-    send_samples(40, i);
-    repeat (50) @(posedge clk);
-    do_readout(1'b1, 500);
+    data_in.send_samples(clk, 40, i & 1'b1, 1'b1);
+    repeat (10) @(posedge clk);
+    stop_acq();
+    data_out.do_readout(clk, 1'b1, 100000);
     $display("######################################################");
     $display("# checking results for test with a few samples at    #");
     $display("# full rate, with channels 0-3 enabled               #");
@@ -225,9 +205,10 @@ initial begin
     check_results(2);
 
     start_acq_with_banking_mode(2);
-    send_samples(256*7+6, i);
-    repeat (2000) @(posedge clk);
-    do_readout(1'b1, 500);
+    data_in.send_samples(clk, 256*7+6, i & 1'b1, 1'b1);
+    repeat (10) @(posedge clk);
+    stop_acq();
+    data_out.do_readout(clk, 1'b1, 100000);
     $display("######################################################");
     $display("# checking results for test with many samples at     #");
     $display("# full rate, with channels 0-3 enabled               #");
@@ -235,9 +216,10 @@ initial begin
     check_results(2);
 
     start_acq_with_banking_mode(3);
-    send_samples(49, i);
-    repeat (50) @(posedge clk);
-    do_readout(1'b1, 500);
+    data_in.send_samples(clk, 49, i & 1'b1, 1'b1);
+    repeat (10) @(posedge clk);
+    stop_acq();
+    data_out.do_readout(clk, 1'b1, 100000);
     $display("######################################################");
     $display("# checking results for test with a few samples at    #");
     $display("# full rate, with all channels enabled               #");
@@ -245,15 +227,25 @@ initial begin
     check_results(3);
 
     start_acq_with_banking_mode(3);
-    send_samples(128*7+3, i);
-    repeat (1000) @(posedge clk);
-    do_readout(1'b1, 500);
+    data_in.send_samples(clk, 128*7+3, i & 1'b1, 1'b1);
+    repeat (10) @(posedge clk);
+    stop_acq();
+    data_out.do_readout(clk, 1'b1, 100000);
     $display("######################################################");
     $display("# checking results for test with many samples at     #");
     $display("# full rate, with all channels enabled               #");
     $display("######################################################");
     check_results(3);
   end
+
+  $display("#################################################");
+  if (error_count == 0) begin
+    $display("# finished with zero errors");
+  end else begin
+    $error("# finished with %0d errors", error_count);
+    $display("#################################################");
+  end
+  $display("#################################################");
   $finish;
 end
 
@@ -325,27 +317,6 @@ task send_samples(input int n_samples, input int delay);
   end
 endtask
 
-task automatic do_readout(input bit rand_ready, input int timeout);
-  int cycle_count;
-  cycle_count = 0;
-  data_out.ready <= 1'b0;
-  stop <= 1'b1;
-  @(posedge clk);
-  stop <= 1'b0;
-  // wait a bit before actually doing the readout
-  repeat (500) @(posedge clk);
-  data_out.ready <= 1'b1;
-  // give up after timeout clock cycles if last is not achieved
-  while ((!(data_out.last & data_out.ok)) & (cycle_count < timeout)) begin
-    @(posedge clk);
-    cycle_count = cycle_count + 1;
-    if (rand_ready) begin
-      data_out.ready <= $urandom() & 1'b1;
-    end
-  end
-  @(posedge clk);
-  data_out.ready <= 1'b0;
-endtask
 
 // check that the DUT correctly saved everything
 task check_results();
@@ -392,7 +363,10 @@ initial begin
   data_in.send_samples(clk, 64, 1'b0, 1'b1);
   data_in.send_samples(clk, 32, 1'b1, 1'b1);
   repeat (50) @(posedge clk);
-  do_readout(1'b1, 100000);
+  stop <= 1'b1;
+  @(posedge clk);
+  stop <= 1'b0;
+  data_out.do_readout(clk, 1'b1, 100000);
   $display("######################################################");
   $display("# checking results for test with a few samples       #");
   $display("######################################################");
@@ -408,7 +382,10 @@ initial begin
   // send samples
   data_in.send_samples(clk, 1, 1'b0, 1'b1);
   repeat (50) @(posedge clk);
-  do_readout(1'b1, 1000);
+  stop <= 1'b1;
+  @(posedge clk);
+  stop <= 1'b0;
+  data_out.do_readout(clk, 1'b1, 1000);
   $display("######################################################");
   $display("# checking results for test with one sample          #");
   $display("######################################################");
@@ -422,7 +399,10 @@ initial begin
   repeat (100) @(posedge clk);
   // don't send samples
   repeat (50) @(posedge clk);
-  do_readout(1'b1, 1000);
+  stop <= 1'b1;
+  @(posedge clk);
+  stop <= 1'b0;
+  data_out.do_readout(clk, 1'b1, 1000);
   $display("######################################################");
   $display("# checking results for test with no samples          #");
   $display("######################################################");
@@ -439,7 +419,10 @@ initial begin
   data_in.send_samples(clk, 512, 1'b0, 1'b1);
   data_in.send_samples(clk, 256, 1'b1, 1'b1);
   repeat (50) @(posedge clk);
-  do_readout(1'b1, 100000);
+  stop <= 1'b1;
+  @(posedge clk);
+  stop <= 1'b0;
+  data_out.do_readout(clk, 1'b1, 100000);
   $display("######################################################");
   $display("# checking results for test with 1024 samples        #");
   $display("# (full buffer)                                      #");

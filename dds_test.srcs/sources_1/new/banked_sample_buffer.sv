@@ -88,58 +88,12 @@ always_ff @(posedge clk) begin
   end
 end
 
-// select which buffer we're actively reading out
-logic [$clog2(N_CHANNELS)-1:0] bank_select;
-logic [$clog2(N_CHANNELS)-1:0] active_channel_id;
-assign active_channel_id = bank_select % n_active_channels;
 
 // bundle of axistreams for each bank output
 Axis_Parallel_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES), .PARALLEL_CHANNELS(N_CHANNELS)) all_banks_out ();
 
-logic first;
-logic [PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_out_reg;
-
-// output the active channel id at the beginning of the transfer
-assign data_out.data = first ? active_channel_id : data_out_reg;
-// delay by a clock cycle to match latency of data_out_reg
-always_ff @(posedge clk) begin
-  if (reset) begin
-    first <= 1'b0;
-  end else begin
-    first <= banks_first[bank_select];
-  end
-end
-
-// mux outputs from banks
-always_ff @(posedge clk) begin
-  if (reset) begin
-    data_out_reg <= '0;
-    data_out.valid <= 1'b0;
-  end else begin
-    if (data_out.ready) begin
-      data_out_reg <= all_banks_out.data[bank_select];
-      data_out.valid <= all_banks_out.valid[bank_select];
-    end
-  end
-end
-
-// only take last signal from the final bank, and only when the final bank is selected
-always_ff @(posedge clk) begin
-  data_out.last <= (bank_select == N_CHANNELS - 1) && all_banks_out.last[bank_select];
-end
-
-// only supply a ready signal to the bank currently selected for readout
-always_comb begin
-  for (int i = 0; i < N_CHANNELS; i++) begin
-    if (i == bank_select) begin
-      all_banks_out.ready[i] = data_out.ready;
-    end else begin
-      all_banks_out.ready[i] = 1'b0; // stall all other banks until we're done reading out the current one
-    end
-  end
-end
-
-// update which bank is selected for the output
+// select which bank we're actively reading out
+logic [$clog2(N_CHANNELS)-1:0] bank_select;
 always_ff @(posedge clk) begin
   if (reset) begin
     bank_select <= '0;
@@ -156,6 +110,33 @@ always_ff @(posedge clk) begin
   end
 end
 
+// mux outputs from banks
+always_ff @(posedge clk) begin
+  if (reset) begin
+    data_out.data <= '0;
+    data_out.valid <= 1'b0;
+    data_out.last <= '0;
+  end else begin
+    if (data_out.ready) begin
+      data_out.data <= all_banks_out.data[bank_select];
+      data_out.valid <= all_banks_out.valid[bank_select];
+      // only take last signal from the final bank, and only when the final bank is selected
+      data_out.last <= (bank_select == N_CHANNELS - 1) && all_banks_out.last[bank_select];
+    end
+  end
+end
+
+// only supply a ready signal to the bank currently selected for readout
+always_comb begin
+  for (int i = 0; i < N_CHANNELS; i++) begin
+    if (i == bank_select) begin
+      all_banks_out.ready[i] = data_out.ready;
+    end else begin
+      all_banks_out.ready[i] = 1'b0; // stall all other banks until we're done reading out the current one
+    end
+  end
+end
+
 // generate banks
 genvar i;
 generate
@@ -166,7 +147,8 @@ generate
     Axis_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES)) bank_out ();
 
     // connect bank_out to all_banks_out
-    assign all_banks_out.data[i] = bank_out.data;
+    // mux first sample from the bank with the channel ID
+    assign all_banks_out.data[i] = banks_first[i] ? (i % n_active_channels) : bank_out.data;
     assign all_banks_out.valid[i] = bank_out.valid;
     assign all_banks_out.last[i] = bank_out.last;
     assign bank_out.ready = all_banks_out.ready[i];
@@ -332,7 +314,7 @@ always_ff @(posedge clk) begin
       end
       TRANSFER: begin
         first <= '0;
-        if (data_out.ready || (!data_out.valid)) begin
+        if (data_out.ok || (!data_out.valid)) begin
           // in case the entire buffer was filled, we would never read anything out if we don't add
           // the option to increment the address when readout hasn't been begun but the read/write
           // addresses are both zero

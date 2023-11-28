@@ -147,4 +147,27 @@ task automatic send_samples(
   end
 endtask
 
+task automatic do_readout(
+  ref clk,
+  input bit rand_ready,
+  input int timeout
+);
+  int cycle_count;
+  cycle_count = 0;
+  ready <= 1'b0;
+  // wait a bit before actually doing the readout
+  repeat (500) @(posedge clk);
+  ready <= 1'b1;
+  // give up after timeout clock cycles if last is not achieved
+  while ((!(last & ok)) & (cycle_count < timeout)) begin
+    @(posedge clk);
+    cycle_count = cycle_count + 1;
+    if (rand_ready) begin
+      ready <= $urandom() & 1'b1;
+    end
+  end
+  @(posedge clk);
+  ready <= 1'b0;
+endtask
+
 endinterface
