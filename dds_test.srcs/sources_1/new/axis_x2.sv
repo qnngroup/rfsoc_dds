@@ -10,27 +10,29 @@ module axis_x2 #(
   Axis_If.Master_Simple data_out
 );
 
-logic signed [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 0Q16
-logic signed [2*SAMPLE_WIDTH-1:0] product [PARALLEL_SAMPLES]; // 0Q32
-logic signed [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 0Q16
+// register signals to infer DSPs
+// can't do packed arrays because of signed type
+logic signed [SAMPLE_WIDTH-1:0] data_in_reg [PARALLEL_SAMPLES]; // 0Q16, 2Q14
+logic signed [2*SAMPLE_WIDTH-1:0] product [PARALLEL_SAMPLES]; // 0Q32, 4Q28
+logic signed [SAMPLE_WIDTH-1:0] product_d [PARALLEL_SAMPLES]; // 0Q16, 4Q12
 logic [3:0] valid_d;
 
 always_ff @(posedge clk) begin
   if (reset) begin
     valid_d <= '0;
   end else begin
-    if (data_in.valid && data_in.ready) begin
+    if (data_in.ok) begin
       for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
-        data_in_reg[i] <= data_in.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH]; // 0Q16
+        data_in_reg[i] <= data_in.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH]; // 0Q16, 2Q14
       end
     end
-    if (data_out.ready) begin
+    if (data_out.ready || (!data_out.valid)) begin
       for (int i = 0; i < PARALLEL_SAMPLES; i++) begin
-        product[i] <= data_in_reg[i]*data_in_reg[i]; // 0Q16*0Q16 = 0Q32
-        product_d[i] <= product[i][SAMPLE_WIDTH+SAMPLE_FRAC_BITS-1-:SAMPLE_WIDTH]; // 0Q16
+        product[i] <= data_in_reg[i]*data_in_reg[i]; // 0Q16*0Q16 = 0Q32, 2Q14*2Q14 = 4Q28
+        product_d[i] <= product[i][2*SAMPLE_WIDTH-1-:SAMPLE_WIDTH]; // 0Q16, 4Q12
         data_out.data[i*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= product_d[i];
       end
-      valid_d <= {valid_d[2:0], data_in.valid};
+      valid_d <= {valid_d[2:0], data_in.ok};
     end
   end
 end
