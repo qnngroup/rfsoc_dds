@@ -5,7 +5,7 @@
 // The timestamp also contains a count of saved samples up to the event that triggered
 // the creation of the timestamp.
 // This allows the samples to be associated with specific sample that was saved.
-// The sample count is reset every time a new capture is started.
+// The sample count and hysteresis is reset every time a new capture is started.
 module sample_discriminator #( 
   parameter int SAMPLE_WIDTH = 16,
   parameter int PARALLEL_SAMPLES = 16,
@@ -18,7 +18,7 @@ module sample_discriminator #(
   Axis_Parallel_If.Master_Simple data_out,
   Axis_Parallel_If.Master_Simple timestamps_out,
   Axis_If.Slave_Simple config_in, // {threshold_high, threshold_low} for each channel
-  input wire sample_index_reset
+  input wire reset_state
 );
 
 localparam int TIMESTAMP_WIDTH = SAMPLE_INDEX_WIDTH + CLOCK_WIDTH;
@@ -100,21 +100,29 @@ always_ff @(posedge clk) begin
     sample_index <= '0;
   end else begin
     for (int i = 0; i < N_CHANNELS; i++) begin
-      // update sample_index
-      if (sample_index_reset) begin
+      // update sample_index and is_high
+      // don't reset timer, since we want
+      // to be able to track the arrival time of
+      // samples between multiple captures
+      if (reset_state) begin
         sample_index[i] <= '0;
-      end else if (data_in_valid[i] && is_high[i]) begin
-        sample_index[i] <= sample_index[i] + 1'b1;
+        is_high[i] <= 1'b0;
+      end else begin
+        if (data_in_valid[i] && is_high[i]) begin
+          sample_index[i] <= sample_index[i] + 1'b1;
+        end
+        // update is_high only when we get a new sample
+        if (data_in.ok[i]) begin
+          if (any_above_high[i]) begin
+            is_high[i] <= 1'b1;
+          end else if (all_below_low[i]) begin
+            is_high[i] <= 1'b0;
+          end
+        end
       end
       // update timer
-      if (data_in.valid[i]) begin
+      if (data_in.ok[i]) begin
         timer[i] <= timer[i] + 1'b1;
-      end
-      // update is_high
-      if (any_above_high[i]) begin
-        is_high[i] <= 1'b1;
-      end else if (all_below_low[i]) begin
-        is_high[i] <= 1'b0;
       end
     end
   end

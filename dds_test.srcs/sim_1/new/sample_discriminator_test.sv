@@ -1,3 +1,5 @@
+import sim_util_pkg::*;
+
 `timescale 1ns / 1ps
 module sample_discriminator_test();
 
@@ -20,7 +22,6 @@ Axis_Parallel_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES), .PARALLEL_CHANNELS(N_
 Axis_Parallel_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES), .PARALLEL_CHANNELS(N_CHANNELS)) data_out();
 Axis_Parallel_If #(.DWIDTH(SAMPLE_INDEX_WIDTH+CLOCK_WIDTH), .PARALLEL_CHANNELS(N_CHANNELS)) timestamps_out();
 
-typedef logic signed [SAMPLE_WIDTH-1:0] signed_sample_t;
 logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_high, threshold_low;
 always_comb begin
   for (int i = 0; i < N_CHANNELS; i++) begin
@@ -28,7 +29,7 @@ always_comb begin
   end
 end
 
-logic sample_index_reset;
+logic reset_state;
 
 sample_discriminator #(
   .SAMPLE_WIDTH(SAMPLE_WIDTH),
@@ -43,7 +44,7 @@ sample_discriminator #(
   .data_out,
   .timestamps_out,
   .config_in,
-  .sample_index_reset
+  .reset_state
 );
 
 logic [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] data_sent [N_CHANNELS][$];
@@ -79,36 +80,6 @@ end
 assign data_out.ready = '1;
 assign timestamps_out.ready = '1;
 
-// helper function to check if any of the parallel samples are above the high threshold
-// needed to replicate the behavior of the DUT which starts saving samples as
-// soon as a sample arrives which is above the high threshold
-function logic any_above_high (
-  input logic [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] samples_in,
-  input logic [SAMPLE_WIDTH-1:0] threshold_high
-);
-  for (int j = 0; j < PARALLEL_SAMPLES; j++) begin
-    if (signed_sample_t'(samples_in[j*SAMPLE_WIDTH+:SAMPLE_WIDTH]) > signed_sample_t'(threshold_high)) begin
-      return 1'b1;
-    end
-  end
-  return 1'b0;
-endfunction
-
-// helper function to check if all parallel samples are below the low threshold
-// needed to replicate the behavior of the DUT which stops saving samples
-// once the DUT receives a row of samples all below the low threshold
-function logic all_below_low (
-  input logic [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] samples_in,
-  input logic [SAMPLE_WIDTH-1:0] threshold_low
-);
-  for (int j = 0; j < PARALLEL_SAMPLES; j++) begin
-    if (signed_sample_t'(samples_in[j*SAMPLE_WIDTH+:SAMPLE_WIDTH]) > signed_sample_t'(threshold_low)) begin
-      return 1'b0;
-    end
-  end
-  return 1'b1;
-endfunction
-
 task check_results (
   input logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_low,
   input logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_high,
@@ -116,6 +87,7 @@ task check_results (
   inout logic [N_CHANNELS-1:0][SAMPLE_INDEX_WIDTH-1:0] sample_index,
   inout logic [N_CHANNELS-1:0] is_high
 );
+  sim_util_pkg::sample_discriminator_util #(.SAMPLE_WIDTH(SAMPLE_WIDTH), .PARALLEL_SAMPLES(PARALLEL_SAMPLES)) util;
   for (int i = 0; i < N_CHANNELS; i++) begin
     // process each channel, first check that we received an appropriate amount of data
     $display("data_sent[%0d].size() = %0d", i, data_sent[i].size());
@@ -128,7 +100,7 @@ task check_results (
 
     // now process the sent/received data to check the timestamps and check for any mismatched data
     while (data_sent[i].size() > 0) begin
-      if (any_above_high(data_sent[i][$], threshold_high[i])) begin
+      if (util.any_above_high(data_sent[i][$], threshold_high[i])) begin
         if (!is_high[i]) begin
           // new high, we should get a timestamp
           if (timestamps_received[i].size() > 0) begin
@@ -143,7 +115,7 @@ task check_results (
           end
         end
         is_high[i] = 1'b1;
-      end else if (all_below_low(data_sent[i][$], threshold_low[i])) begin
+      end else if (util.all_below_low(data_sent[i][$], threshold_low[i])) begin
         is_high[i] = 1'b0;
       end
       if (is_high[i]) begin
@@ -178,92 +150,106 @@ initial begin
   threshold_high <= '0;
   data_in.valid <= '0;
   config_in.valid <= '0;
-  sample_index_reset <= '0;
+  reset_state <= '0;
   is_high <= '0;
   timer <= '0;
   sample_index <= '0;
   repeat (100) @(posedge clk);
   reset <= 1'b0;
-  sample_index_reset <= 1'b1;
+  reset_state <= 1'b1;
   @(posedge clk);
-  sample_index_reset <= '0;
+  reset_state <= '0;
   repeat (50) @(posedge clk);
   config_in.valid <= 1'b1;
   @(posedge clk);
   config_in.valid <= 1'b0;
   repeat (50) @(posedge clk);
 
-  // send a bunch of data with discrimination disabled
-  data_in.send_samples(clk, 10, 1'b1, 1'b1);
-  repeat (50) @(posedge clk);
-  data_in.send_samples(clk, 10, 1'b0, 1'b1);
-  repeat (50) @(posedge clk);
-  $display("######################################################");
-  $display("# testing run with all data above thresholds         #");
-  $display("# first sample will be zero                          #");
-  $display("######################################################");
-  check_results(threshold_low, threshold_high, timer, sample_index, is_high);
-  
-  // send a bunch of data, some below and some above the threshold on channel 0
-  // for channel 1, keep the same settings as before
-  data_range_low[0] <= 16'h0000;
-  data_range_high[0] <= 16'h04ff;
-  threshold_low[0] <= 16'h03c0;
-  threshold_high[0] <= 16'h0400;
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  config_in.valid <= 1'b0;
-  repeat (50) @(posedge clk);
-  data_in.send_samples(clk, 100, 1'b1, 1'b1);
-  repeat (50) @(posedge clk);
-  data_in.send_samples(clk, 100, 1'b0, 1'b1);
-  repeat (50) @(posedge clk);
-  $display("######################################################");
-  $display("# testing run with channel 0 straddling thresholds   #");
-  $display("# and channel 1 above thresholds                     #");
-  $display("######################################################");
-  check_results(threshold_low, threshold_high, timer, sample_index, is_high);
+  for (int i = 0; i < 3; i++) begin
+    // loop a couple times, resetting the state to make sure we get the
+    // correct behavior
+    // send a bunch of data with discrimination disabled
+    data_in.send_samples(clk, 10, 1'b1, 1'b1);
+    repeat (50) @(posedge clk);
+    data_in.send_samples(clk, 10, 1'b0, 1'b1);
+    repeat (50) @(posedge clk);
+    $display("######################################################");
+    $display("# testing run with all data above thresholds         #");
+    $display("# first sample will be zero                          #");
+    $display("######################################################");
+    check_results(threshold_low, threshold_high, timer, sample_index, is_high);
+    
+    // send a bunch of data, some below and some above the threshold on channel 0
+    // for channel 1, keep the same settings as before
+    data_range_low[0] <= 16'h0000;
+    data_range_high[0] <= 16'h04ff;
+    threshold_low[0] <= 16'h03c0;
+    threshold_high[0] <= 16'h0400;
+    config_in.valid <= 1'b1;
+    @(posedge clk);
+    config_in.valid <= 1'b0;
+    repeat (50) @(posedge clk);
+    data_in.send_samples(clk, 100, 1'b1, 1'b1);
+    repeat (50) @(posedge clk);
+    data_in.send_samples(clk, 100, 1'b0, 1'b1);
+    repeat (50) @(posedge clk);
+    $display("######################################################");
+    $display("# testing run with channel 0 straddling thresholds   #");
+    $display("# and channel 1 above thresholds                     #");
+    $display("######################################################");
+    check_results(threshold_low, threshold_high, timer, sample_index, is_high);
 
-  // send a bunch of data below the threshold
-  for (int i = 0; i < N_CHANNELS; i++) begin
-    data_range_low[i] <= 16'h0000;
-    data_range_high[i] <= 16'h00ff;
-    threshold_low[i] <= 16'h03ff;
-    threshold_high[i] <= 16'h0400;
+    // send a bunch of data below the threshold
+    for (int i = 0; i < N_CHANNELS; i++) begin
+      data_range_low[i] <= 16'h0000;
+      data_range_high[i] <= 16'h00ff;
+      threshold_low[i] <= 16'h03ff;
+      threshold_high[i] <= 16'h0400;
+    end
+    config_in.valid <= 1'b1;
+    @(posedge clk);
+    config_in.valid <= 1'b0;
+    repeat (50) @(posedge clk);
+    data_in.send_samples(clk, 400, 1'b1, 1'b1);
+    repeat (50) @(posedge clk);
+    data_in.send_samples(clk, 400, 1'b0, 1'b1);
+    repeat (50) @(posedge clk);
+    $display("######################################################");
+    $display("# testing run with all data below thresholds         #");
+    $display("######################################################");
+    check_results(threshold_low, threshold_high, timer, sample_index, is_high);
+
+    // send a bunch of data close to the threshold
+    for (int i = 0; i < N_CHANNELS; i++) begin
+      data_range_low[i] <= 16'h0000;
+      data_range_high[i] <= 16'h04ff;
+      threshold_low[i] <= 16'h03c0;
+      threshold_high[i] <= 16'h0400;
+    end
+    config_in.valid <= 1'b1;
+    @(posedge clk);
+    config_in.valid <= 1'b0;
+    repeat (50) @(posedge clk);
+    data_in.send_samples(clk, 400, 1'b1, 1'b1);
+    repeat (50) @(posedge clk);
+    data_in.send_samples(clk, 400, 1'b0, 1'b1);
+    repeat (50) @(posedge clk);
+    $display("######################################################");
+    $display("# testing run with both channels straddling          #");
+    $display("# thresholds                                         #");
+    $display("######################################################");
+    check_results(threshold_low, threshold_high, timer, sample_index, is_high);
+
+    // reset state of counter and is_high
+    repeat (10) @(posedge clk);
+    reset_state <= 1'b1;
+    @(posedge clk);
+    reset_state <= '0;
+    // need to make sure we keep track of this change
+    is_high <= '0;
+    sample_index <= '0;
+    repeat (10) @(posedge clk);
   end
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  config_in.valid <= 1'b0;
-  repeat (50) @(posedge clk);
-  data_in.send_samples(clk, 400, 1'b1, 1'b1);
-  repeat (50) @(posedge clk);
-  data_in.send_samples(clk, 400, 1'b0, 1'b1);
-  repeat (50) @(posedge clk);
-  $display("######################################################");
-  $display("# testing run with all data below thresholds         #");
-  $display("######################################################");
-  check_results(threshold_low, threshold_high, timer, sample_index, is_high);
-
-  // send a bunch of data close to the threshold
-  for (int i = 0; i < N_CHANNELS; i++) begin
-    data_range_low[i] <= 16'h0000;
-    data_range_high[i] <= 16'h04ff;
-    threshold_low[i] <= 16'h03c0;
-    threshold_high[i] <= 16'h0400;
-  end
-  config_in.valid <= 1'b1;
-  @(posedge clk);
-  config_in.valid <= 1'b0;
-  repeat (50) @(posedge clk);
-  data_in.send_samples(clk, 400, 1'b1, 1'b1);
-  repeat (50) @(posedge clk);
-  data_in.send_samples(clk, 400, 1'b0, 1'b1);
-  repeat (50) @(posedge clk);
-  $display("######################################################");
-  $display("# testing run with both channels straddling          #");
-  $display("# thresholds                                         #");
-  $display("######################################################");
-  check_results(threshold_low, threshold_high, timer, sample_index, is_high);
 
   $display("#################################################");
   if (error_count == 0) begin
