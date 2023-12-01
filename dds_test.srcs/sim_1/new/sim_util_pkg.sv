@@ -40,4 +40,16 @@ package sim_util_pkg;
   
   endclass
 
+  class generic #(type T=int);
+
+    function T max(input T A, input T B);
+      return (A > B) ? A : B;
+    endfunction
+
+    function T abs(input T x);
+      return (x < 0) ? -x : x;
+    endfunction
+
+  endclass
+
 endpackage

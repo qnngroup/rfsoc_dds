@@ -1,3 +1,5 @@
+import sim_util_pkg::*;
+
 `timescale 1ns / 1ps
 module axis_differentiator_test();
 
@@ -19,6 +21,8 @@ real d_in;
 int_t received[$];
 int_t expected[$];
 int_t sent[$];
+
+sim_util_pkg::generic #(int_t) util;
 
 always @(posedge clk) begin
   if (reset) begin
@@ -45,10 +49,6 @@ always @(posedge clk) begin
   end
 end
 
-function int_t abs(input int_t x);
-  return (x < 0) ? -x : x;
-endfunction
-
 task check_results();
   $display("received.size() = %0d", received.size());
   $display("expected.size() = %0d", expected.size());
@@ -59,7 +59,7 @@ task check_results();
   // check the values match, like with axis_x2_test, the rounding could lead
   // to an off-by-one error
   while (received.size() > 0 && expected.size() > 0) begin
-    if (abs(expected[$] - received[$]) > 1) begin
+    if (util.abs(expected[$] - received[$]) > 1) begin
       $warning("mismatch: got %x, expected %x", received[$], expected[$]);
       error_count = error_count + 1;
     end

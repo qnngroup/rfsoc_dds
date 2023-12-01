@@ -17,6 +17,8 @@ localparam int PARALLEL_SAMPLES = 4;
 localparam int SAMPLE_INDEX_WIDTH = 14;
 localparam int CLOCK_WIDTH = 50;
 
+sim_util_pkg::sample_discriminator_util #(.SAMPLE_WIDTH(SAMPLE_WIDTH), .PARALLEL_SAMPLES(PARALLEL_SAMPLES)) util;
+
 Axis_If #(.DWIDTH(N_CHANNELS*SAMPLE_WIDTH*2)) config_in();
 Axis_Parallel_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES), .PARALLEL_CHANNELS(N_CHANNELS)) data_in();
 Axis_Parallel_If #(.DWIDTH(SAMPLE_WIDTH*PARALLEL_SAMPLES), .PARALLEL_CHANNELS(N_CHANNELS)) data_out();
@@ -87,7 +89,6 @@ task check_results (
   inout logic [N_CHANNELS-1:0][SAMPLE_INDEX_WIDTH-1:0] sample_index,
   inout logic [N_CHANNELS-1:0] is_high
 );
-  sim_util_pkg::sample_discriminator_util #(.SAMPLE_WIDTH(SAMPLE_WIDTH), .PARALLEL_SAMPLES(PARALLEL_SAMPLES)) util;
   for (int i = 0; i < N_CHANNELS; i++) begin
     // process each channel, first check that we received an appropriate amount of data
     $display("data_sent[%0d].size() = %0d", i, data_sent[i].size());

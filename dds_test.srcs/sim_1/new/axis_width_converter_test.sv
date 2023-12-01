@@ -1,3 +1,5 @@
+import sim_util_pkg::*;
+
 `timescale 1ns / 1ps
 module axis_width_converter_test();
 
@@ -16,8 +18,8 @@ localparam int UP = 8;
 localparam int COMB_UP = 4;
 localparam int COMB_DOWN = 3;
 
-`define MAX(A,B) (A > B) ? A : B
-localparam int DWIDTH = `MAX(`MAX(`MAX(DWIDTH_DOWN_IN, DWIDTH_UP_IN*UP), (DWIDTH_COMB_IN*COMB_UP)/COMB_DOWN), DWIDTH_COMB_IN);
+sim_util_pkg::sample_discriminator_util util;
+localparam int DWIDTH = util.max(util.max(util.max(DWIDTH_DOWN_IN, DWIDTH_UP_IN*UP), (DWIDTH_COMB_IN*COMB_UP)/COMB_DOWN), DWIDTH_COMB_IN);
 
 Axis_If #(.DWIDTH(DWIDTH_DOWN_IN)) downsizer_in ();
 Axis_If #(.DWIDTH(DWIDTH_DOWN_IN/DOWN)) downsizer_out ();
@@ -107,7 +109,7 @@ localparam [2:0][31:0] WORD_SIZE = '{
   DWIDTH_DOWN_IN/DOWN       // downsizer
 };
 
-localparam MAX_WORD_SIZE = `MAX(`MAX(WORD_SIZE[0],WORD_SIZE[1]),WORD_SIZE[2]);
+localparam MAX_WORD_SIZE = util.max(util.max(WORD_SIZE[0],WORD_SIZE[1]),WORD_SIZE[2]);
 logic [MAX_WORD_SIZE-1:0] sent_word, received_word;
 
 // update data and track sent/received samples
