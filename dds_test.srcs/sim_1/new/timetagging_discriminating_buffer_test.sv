@@ -3,15 +3,14 @@ import sim_util_pkg::*;
 `timescale 1ns / 1ps
 module timetagging_discriminating_buffer_test ();
 
-sim_util_pkg::generic #(int) util;
+sim_util_pkg::generic #(int) util; // abs, max functions on integers
+sim_util_pkg::debug #(.VERBOSITY(DEFAULT)) dbg = new; // printing, error tracking
 
 logic clk = 0;
 localparam CLK_RATE_HZ = 100_000_000;
 always #(0.5s/CLK_RATE_HZ) clk = ~clk;
 
 logic reset;
-
-int error_count = 0;
 
 localparam int N_CHANNELS = 8;
 localparam int TSTAMP_BUFFER_DEPTH = 128;
@@ -126,9 +125,9 @@ task check_results(
 
   // first report the size of the buffers
   for (int i = 0; i < N_CHANNELS; i++) begin
-    $display("data_sent[%0d].size() = %0d", i, data_sent[i].size());
+    dbg.display($sformatf("data_sent[%0d].size() = %0d", i, data_sent[i].size()), DEFAULT);
   end
-  $display("data_received.size() = %0d", data_received.size());
+  dbg.display($sformatf("data_received.size() = %0d", data_received.size()), DEFAULT);
 
   ///////////////////////////////////////////////////////////////////
   // organize DMA output into data structures for easier analysis
@@ -207,27 +206,29 @@ task check_results(
   // first check that we didn't get any extra samples or timestamps
   for (int channel = 1 << banking_mode; channel < N_CHANNELS; channel++) begin
     if (timestamps[channel].size() > 0) begin
-      $warning(
+      dbg.error($sformatf(
         "received too many timestamps for channel %0d with banking mode %0d (got %0d, expected 0)",
         channel,
         banking_mode,
         timestamps[channel].size()
-      );
-      error_count = error_count + 1;
+      ));
     end
     while (timestamps[channel].size() > 0) timestamps[channel].pop_back();
     if (samples[channel].size() > 0) begin
-      $warning(
+      dbg.error($sformatf(
         "received too many samples for channel %0d with banking mode %0d (got %0d, expected 0)",
         channel,
         banking_mode,
         samples[channel].size()
-      );
-      error_count = error_count + 1;
+      ));
     end
     while (samples[channel].size() > 0) samples[channel].pop_back();
     // clean up data sent
-    $display("removing %0d samples from data_sent[%0d]", data_sent[channel].size(), channel);
+    dbg.display($sformatf(
+      "removing %0d samples from data_sent[%0d]",
+      data_sent[channel].size(),
+      channel
+    ), VERBOSE);
     while (data_sent[channel].size() > 0) begin
       data_sent[channel].pop_back();
       timer[channel] = timer[channel] + 1'b1;
@@ -236,17 +237,24 @@ task check_results(
 
   for (int channel = 0; channel < (1 << banking_mode); channel++) begin
     // report timestamp/sample queue sizes
-    $display("timestamps[%0d].size() = %0d", channel, timestamps[channel].size());
-    $display("samples[%0d].size() = %0d", channel, samples[channel].size());
+    dbg.display($sformatf(
+      "timestamps[%0d].size() = %0d",
+      channel,
+      timestamps[channel].size()
+    ), VERBOSE);
+    dbg.display($sformatf(
+      "samples[%0d].size() = %0d",
+      channel,
+      samples[channel].size()
+    ), VERBOSE);
     if (samples[channel].size() > data_sent[channel].size()) begin
-      $warning(
+      dbg.error($sformatf(
         "too many samples for channel %0d with banking mode %0d: got %0d, expected at most %0d",
         channel,
         banking_mode,
         samples[channel].size(),
         data_sent[channel].size()
-      );
-      error_count = error_count + 1;
+      ));
     end
     /////////////////////////////
     // check all the samples
@@ -256,37 +264,35 @@ task check_results(
     is_high = 0;
     sample_index = 0; // index of sample in received samples buffer
     while (data_sent[channel].size() > 0) begin
-      $display(
+      dbg.display($sformatf(
         "processing sample %0d from channel %0d: samp = %0x, timer = %0x",
         data_sent[channel].size(),
         channel,
         data_sent[channel][$],
         timer[channel]
-      );
+      ), DEBUG);
       if (disc_util.any_above_high(data_sent[channel][$], threshold_high[channel])) begin
-        $display(
+        dbg.display($sformatf(
           "%x contains a sample greater than %x",
           data_sent[channel][$],
           threshold_high[channel]
-        );
+        ), DEBUG);
         if (!is_high) begin
           // new sample, should get a timestamp
           if (timestamps[channel].size() > 0) begin
             if (timestamps[channel][$] !== {timer[channel], sample_index}) begin
-              $warning(
+              dbg.error($sformatf(
                 "mismatched timestamp: got %x, expected %x",
                 timestamps[channel][$],
                 {timer[channel], sample_index}
-              );
-              error_count = error_count + 1;
+              ));
             end
             timestamps[channel].pop_back();
           end else begin
-            $warning(
+            dbg.error($sformatf(
               "expected a timestamp (with value %x), but no more timestamps left",
               {timer[channel], sample_index}
-            );
-            error_count = error_count + 1;
+            ));
           end
         end
         is_high = 1'b1;
@@ -295,12 +301,11 @@ task check_results(
       end
       if (is_high) begin
         if (data_sent[channel][$] !== samples[channel][$]) begin
-          $warning(
+          dbg.error($sformatf(
             "mismatched data: got %x, expected %x",
             samples[channel][$],
             data_sent[channel][$]
-          );
-          error_count = error_count + 1;
+          ));
         end
         samples[channel].pop_back();
         sample_index = sample_index + 1'b1;
@@ -310,33 +315,46 @@ task check_results(
     end
     // check to make sure we didn't miss any data
     if (timestamps[channel].size() > 0) begin
-      $warning(
+      dbg.error($sformatf(
         "too many timestamps leftover for channel %0d with banking mode %0d (got %0d, expected 0)",
         channel,
         banking_mode,
         timestamps[channel].size()
-      );
-      error_count = error_count + 1;
+      ));
     end
     // flush out remaining timestamps
-    while (timestamps[channel].size() > 0) timestamps[channel].pop_back();
+    while (timestamps[channel].size() > 0) begin
+      dbg.display($sformatf(
+        "extra timestamp %x",
+        timestamps[channel].pop_back()
+      ), DEBUG);
+    end
     if (samples[channel].size() > 0) begin
-      $warning(
+      dbg.error($sformatf(
         "too many samples leftover for channel %0d with banking mode %0d (got %0d, expected 0)",
         channel,
         banking_mode,
         samples[channel].size()
-      );
-      error_count = error_count + 1;
+      ));
     end
     // flush out remaining samples
-    while (samples[channel].size() > 0) samples[channel].pop_back();
+    while (samples[channel].size() > 0) begin
+      dbg.display($sformatf(
+        "extra sample %x",
+        samples[channel].pop_back()
+      ), DEBUG);
+    end
     // should not be any leftover data_sent samples, since the while loop
     // won't terminate until data_sent[channel] is empty. therefore don't
     // bother checking
   end
   for (int channel = 0; channel < N_CHANNELS; channel++) begin
-    $display("timer[%0d] = %0d (0x%x)", channel, timer[channel], timer[channel]);
+    dbg.display($sformatf(
+      "timer[%0d] = %0d (0x%x)",
+      channel,
+      timer[channel],
+      timer[channel]
+    ), DEBUG);
   end
 
 endtask
@@ -413,7 +431,7 @@ initial begin
               threshold_high[i] <= 16'h0400;
             end
           end
-          5: begin
+          4: begin
             // send stuff that mostly gets filtered out
             for (int i = 0; i < N_CHANNELS; i++) begin
               data_range_low[i] <= 16'h0000;
@@ -432,31 +450,21 @@ initial begin
 
         repeat (10) @(posedge clk);
         start_acq_with_banking_mode(bank_mode);
-        repeat (10) @(posedge clk);
 
         data_in.send_samples(clk, $urandom_range(50,500), in_valid_rand & 1'b1, 1'b1);
         repeat (10) @(posedge clk);
         stop_acq();
         data_out.do_readout(clk, 1'b1, 100000);
-        $display("######################################################");
-        $display("# checking results amplitude_mode = %d", amplitude_mode);
-        $display("# banking mode                    = %d", bank_mode);
-        $display("# samples sent with rand_valid    = %d", in_valid_rand);
-        $display("######################################################");
+        dbg.display("######################################################", DEFAULT);
+        dbg.display($sformatf("# checking results amplitude_mode = %d", amplitude_mode), DEFAULT);
+        dbg.display($sformatf("# banking mode                    = %d", bank_mode), DEFAULT);
+        dbg.display($sformatf("# samples sent with rand_valid    = %d", in_valid_rand), DEFAULT);
+        dbg.display("######################################################", DEFAULT);
         check_results(bank_mode, threshold_high, threshold_low, timer);
       end
     end
   end
-
-  $display("#################################################");
-  if (error_count == 0) begin
-    $display("# finished with zero errors");
-  end else begin
-    $error("# finished with %0d errors", error_count);
-    $display("#################################################");
-  end
-  $display("#################################################");
-  $finish;
+  dbg.finish();
 end
 
 endmodule

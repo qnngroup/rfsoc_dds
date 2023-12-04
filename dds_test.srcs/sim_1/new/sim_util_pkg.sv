@@ -52,4 +52,37 @@ package sim_util_pkg;
 
   endclass
 
+  typedef enum {DEFAULT=0, VERBOSE=1, DEBUG=2} verbosity_t;
+
+  class debug #(
+    parameter verbosity_t VERBOSITY = DEFAULT
+  );
+    
+    int error_count = 0;
+
+    function display(input string message, input verbosity_t verbosity);
+      if (VERBOSITY >= verbosity) begin
+        $display(message);
+      end
+    endfunction
+
+    function error(input string message);
+      $warning(message);
+      error_count = error_count + 1;
+    endfunction
+
+    function finish();
+      $display("#################################################");
+      if (error_count == 0) begin
+        $display("# finished with zero errors");
+      end else begin
+        $error("# finished with %0d errors", error_count);
+        $display("#################################################");
+      end
+      $display("#################################################");
+      $finish;
+    endfunction
+
+  endclass
+
 endpackage

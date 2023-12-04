@@ -12,9 +12,9 @@
       </db_ref>
    </db_ref_list>
    <zoom_setting>
-      <ZoomStartTime time="14,959.150 ns"></ZoomStartTime>
-      <ZoomEndTime time="15,114.251 ns"></ZoomEndTime>
-      <Cursor1Time time="15,055.000 ns"></Cursor1Time>
+      <ZoomStartTime time="0.000000 us"></ZoomStartTime>
+      <ZoomEndTime time="1,551.000001 us"></ZoomEndTime>
+      <Cursor1Time time="1.000000 us"></Cursor1Time>
    </zoom_setting>
    <column_width_setting>
       <NameColumnWidth column_width="219"></NameColumnWidth>
@@ -31,10 +31,6 @@
       <wvobject type="logic" fp_name="/timetagging_discriminating_buffer_test/reset">
          <obj_property name="ElementShortName">reset</obj_property>
          <obj_property name="ObjectShortName">reset</obj_property>
-      </wvobject>
-      <wvobject type="array" fp_name="/timetagging_discriminating_buffer_test/error_count">
-         <obj_property name="ElementShortName">error_count[31:0]</obj_property>
-         <obj_property name="ObjectShortName">error_count[31:0]</obj_property>
       </wvobject>
       <wvobject type="logic" fp_name="/timetagging_discriminating_buffer_test/start">
          <obj_property name="ElementShortName">start</obj_property>
@@ -463,10 +459,12 @@
          <wvobject type="array" fp_name="/timetagging_discriminating_buffer_test/dut_i/disc_i/threshold_low">
             <obj_property name="ElementShortName">threshold_low[7:0][15:0]</obj_property>
             <obj_property name="ObjectShortName">threshold_low[7:0][15:0]</obj_property>
+            <obj_property name="isExpanded"></obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/timetagging_discriminating_buffer_test/dut_i/disc_i/threshold_high">
             <obj_property name="ElementShortName">threshold_high[7:0][15:0]</obj_property>
             <obj_property name="ObjectShortName">threshold_high[7:0][15:0]</obj_property>
+            <obj_property name="isExpanded"></obj_property>
          </wvobject>
          <wvobject type="array" fp_name="/timetagging_discriminating_buffer_test/dut_i/disc_i/data_in_reg">
             <obj_property name="ElementShortName">data_in_reg[7:0][15:0]</obj_property>

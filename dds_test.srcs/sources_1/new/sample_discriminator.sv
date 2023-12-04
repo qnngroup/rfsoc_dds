@@ -85,9 +85,6 @@ always_ff @(posedge clk) begin
   data_in_valid <= data_in.valid;
   data_in_reg <= data_in.data;
 
-  // is_high_d
-  is_high_d <= is_high;
-
   // match delay of sample_index
   data_out.data <= data_in_reg;
   data_out.valid <= data_in_valid & is_high;
@@ -99,19 +96,36 @@ always_ff @(posedge clk) begin
     timer <= '0;
     sample_index <= '0;
   end else begin
+    // update sample_index, timer and is_high for each channel
     for (int i = 0; i < N_CHANNELS; i++) begin
-      // update sample_index and is_high
-      // don't reset timer, since we want
-      // to be able to track the arrival time of
-      // samples between multiple captures
       if (reset_state) begin
+        // don't reset timer, since we want
+        // to be able to track the arrival time of
+        // samples between multiple captures
+        //
+        // reset is_high_d so that we can correctly capture a
+        // new sample if it arrives immediately after reset_state
+        // is deasserted
+        is_high_d[i] <= 1'b0;
+        // reset sample_index
         sample_index[i] <= '0;
-        is_high[i] <= 1'b0;
+        if (data_in.ok[i] && any_above_high[i]) begin
+          // keep is_high if input data is valid and above threshold
+          // that way we don't miss the first sample
+          is_high[i] <= 1'b1;
+        end else begin
+          // only reset is_high if the current data is not high
+          is_high[i] <= 1'b0;
+        end
       end else begin
+        // update is_high_d every cycle
+        is_high_d[i] <= is_high[i];
         if (data_in_valid[i] && is_high[i]) begin
+          // only update sample index when we send out a valid sample that has
+          // met the criteria of the discriminator
           sample_index[i] <= sample_index[i] + 1'b1;
         end
-        // update is_high only when we get a new sample
+        // update is_high only when we get a new, valid sample
         if (data_in.ok[i]) begin
           if (any_above_high[i]) begin
             is_high[i] <= 1'b1;
@@ -120,7 +134,7 @@ always_ff @(posedge clk) begin
           end
         end
       end
-      // update timer
+      // update timer (input sample counter)
       if (data_in.ok[i]) begin
         timer[i] <= timer[i] + 1'b1;
       end
