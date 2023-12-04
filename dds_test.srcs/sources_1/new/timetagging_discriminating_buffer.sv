@@ -10,7 +10,7 @@ module timetagging_discriminating_buffer #(
   parameter int APPROX_CLOCK_WIDTH = 48 // requested width of timestamp
 ) (
   input wire clk, reset,
-  output logic [31:0] timestamp_width,
+  output logic [31:0] timestamp_width, // output so that PS can correctly parse output data
   Axis_Parallel_If.Slave_Simple data_in, // all channels in parallel
   Axis_If.Master_Full data_out,
   Axis_If.Slave_Simple discriminator_config_in, // {threshold_high, threshold_low} for each channel
@@ -67,7 +67,7 @@ sample_discriminator #(
   .data_out(disc_data),
   .timestamps_out(disc_timestamps),
   .config_in(discriminator_config_in),
-  .sample_index_reset(start & ~start_d) // reset sample_index count whenever a new capture is started
+  .reset_state(start & ~start_d) // reset sample_index count and is_high whenever a new capture is started
 );
 
 banked_sample_buffer #(

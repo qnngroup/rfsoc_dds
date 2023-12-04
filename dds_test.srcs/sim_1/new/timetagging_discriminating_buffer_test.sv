@@ -27,6 +27,9 @@ localparam int TIMESTAMP_WIDTH = SAMPLE_WIDTH * ((SAMPLE_INDEX_WIDTH + APPROX_CL
 
 localparam int DMA_WORD_PARSE_WIDTH = util.max(2*TIMESTAMP_WIDTH, 2*PARALLEL_SAMPLES*SAMPLE_WIDTH);
 
+// util for functions any_above_high and all_below_low for comparing data to thresholds
+sim_util_pkg::sample_discriminator_util #(.SAMPLE_WIDTH(SAMPLE_WIDTH), .PARALLEL_SAMPLES(PARALLEL_SAMPLES)) disc_util;
+
 Axis_Parallel_If #(.DWIDTH(PARALLEL_SAMPLES*SAMPLE_WIDTH), .PARALLEL_CHANNELS(N_CHANNELS)) data_in ();
 Axis_If #(.DWIDTH(AXI_MM_WIDTH)) data_out ();
 Axis_If #(.DWIDTH(2+$clog2($clog2(N_CHANNELS)+1))) buffer_config_in ();
@@ -59,13 +62,14 @@ timetagging_discriminating_buffer #(
   .data_in,
   .data_out,
   .discriminator_config_in,
-  .buffer_cfg_in
+  .buffer_config_in
 );
 
 logic update_input_data;
 logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] data_range_low, data_range_high;
 logic [PARALLEL_SAMPLES*SAMPLE_WIDTH-1:0] data_sent [N_CHANNELS][$];
 logic [AXI_MM_WIDTH-1:0] data_received [$];
+logic [N_CHANNELS-1:0][TIMESTAMP_WIDTH-SAMPLE_INDEX_WIDTH-1:0] timer;
 
 // send data to DUT and save sent/received data
 always @(posedge clk) begin
@@ -74,16 +78,13 @@ always @(posedge clk) begin
       data_in.data[i] <= '0;
     end else begin
       if (data_in.ok[i]) begin
-        // send new data
-        for (int j = 0; j < PARALLEL_SAMPLES; j++) begin
-          data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= $urandom_range({SAMPLE_WIDTH{1'b1}});
-        end
         // save data that was sent
         data_sent[i].push_front(data_in.data[i]);
-      end else if (update_input_data) begin
+      end
+      if (data_in.ok[i] || update_input_data) begin
         // send new data
         for (int j = 0; j < PARALLEL_SAMPLES; j++) begin
-          data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= $urandom_range({SAMPLE_WIDTH{1'b1}});
+          data_in.data[i][j*SAMPLE_WIDTH+:SAMPLE_WIDTH] <= $urandom_range(data_range_low[i], data_range_high[i]);
         end
       end
     end
@@ -97,10 +98,10 @@ end
 task check_results(
   input int banking_mode,
   input logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_high,
-  input logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_low
+  input logic [N_CHANNELS-1:0][SAMPLE_WIDTH-1:0] threshold_low,
+  inout logic [N_CHANNELS-1:0][TIMESTAMP_WIDTH-SAMPLE_INDEX_WIDTH-1:0] timer
 );
   // checks that:
-  // - all data received belongs to the proper channels
   // - timestamps line up with when samples were sent
   // - all inputs > threshold_high were saved and all inputs < threshold_low
   //    were not
@@ -114,9 +115,14 @@ task check_results(
   int parsed_bank_count;
   int word_width;
   bit need_channel_id, need_word_count;
+  bit done_parsing;
   enum {TIMESTAMP, DATA} parse_mode;
   logic [TIMESTAMP_WIDTH-1:0] timestamps [N_CHANNELS][$];
   logic [SAMPLE_WIDTH*PARALLEL_SAMPLES-1:0] samples [N_CHANNELS][$];
+
+  // signals for checking correct operation of the DUT
+  logic is_high;
+  logic [SAMPLE_INDEX_WIDTH-1:0] sample_index;
 
   // first report the size of the buffers
   for (int i = 0; i < N_CHANNELS; i++) begin
@@ -124,7 +130,9 @@ task check_results(
   end
   $display("data_received.size() = %0d", data_received.size());
 
+  ///////////////////////////////////////////////////////////////////
   // organize DMA output into data structures for easier analysis
+  ///////////////////////////////////////////////////////////////////
   dma_word_leftover_bits = 0;
   word_width = TIMESTAMP_WIDTH;
   parse_mode = TIMESTAMP;
@@ -132,6 +140,7 @@ task check_results(
   need_channel_id = 1'b1;
   need_word_count = 1'b1;
   parsed_bank_count = 0;
+  done_parsing = 0;
   while (!done_parsing) begin
     // combine remaining bits with new word
     dma_word = (data_received.pop_back() << dma_word_leftover_bits) | dma_word;
@@ -161,6 +170,7 @@ task check_results(
               // mask lower bits based on data width
               samples[current_channel].push_front(dma_word & ((1'b1 << word_width) - 1));
             end
+          endcase
           words_remaining = words_remaining - 1;
         end
         // check if we have read all the timestamps or data
@@ -177,7 +187,7 @@ task check_results(
           word_width = SAMPLE_WIDTH*PARALLEL_SAMPLES;
           parse_mode = DATA;
         end else begin
-          done = 1;
+          done_parsing = 1;
         end
         // reset DMA word, the rest of the word is garbage; the data
         // information will come on the next word
@@ -191,64 +201,145 @@ task check_results(
     end
   end
 
-  // report the number of timestamps and samples for each channel
-  for (int i = 0; i < N_CHANNELS; i++) begin
-    $display("timestamps[%0d].size() = %0d", i, timestamps[i].size());
-    $display("samples[%0d].size() = %0d", i, samples[i].size());
+  /////////////////////////////
+  // process data
+  /////////////////////////////
+  // first check that we didn't get any extra samples or timestamps
+  for (int channel = 1 << banking_mode; channel < N_CHANNELS; channel++) begin
+    if (timestamps[channel].size() > 0) begin
+      $warning(
+        "received too many timestamps for channel %0d with banking mode %0d (got %0d, expected 0)",
+        channel,
+        banking_mode,
+        timestamps[channel].size()
+      );
+      error_count = error_count + 1;
+    end
+    while (timestamps[channel].size() > 0) timestamps[channel].pop_back();
+    if (samples[channel].size() > 0) begin
+      $warning(
+        "received too many samples for channel %0d with banking mode %0d (got %0d, expected 0)",
+        channel,
+        banking_mode,
+        samples[channel].size()
+      );
+      error_count = error_count + 1;
+    end
+    while (samples[channel].size() > 0) samples[channel].pop_back();
+    // clean up data sent
+    $display("removing %0d samples from data_sent[%0d]", data_sent[channel].size(), channel);
+    while (data_sent[channel].size() > 0) begin
+      data_sent[channel].pop_back();
+      timer[channel] = timer[channel] + 1'b1;
+    end
+  end
+
+  for (int channel = 0; channel < (1 << banking_mode); channel++) begin
+    // report timestamp/sample queue sizes
+    $display("timestamps[%0d].size() = %0d", channel, timestamps[channel].size());
+    $display("samples[%0d].size() = %0d", channel, samples[channel].size());
+    if (samples[channel].size() > data_sent[channel].size()) begin
+      $warning(
+        "too many samples for channel %0d with banking mode %0d: got %0d, expected at most %0d",
+        channel,
+        banking_mode,
+        samples[channel].size(),
+        data_sent[channel].size()
+      );
+      error_count = error_count + 1;
+    end
+    /////////////////////////////
+    // check all the samples
+    /////////////////////////////
+    // The sample counter and hysteresis tracking of the sample discriminator
+    // are reset before each trial. Therefore is_high is reset.
+    is_high = 0;
+    sample_index = 0; // index of sample in received samples buffer
+    while (data_sent[channel].size() > 0) begin
+      $display(
+        "processing sample %0d from channel %0d: samp = %0x, timer = %0x",
+        data_sent[channel].size(),
+        channel,
+        data_sent[channel][$],
+        timer[channel]
+      );
+      if (disc_util.any_above_high(data_sent[channel][$], threshold_high[channel])) begin
+        $display(
+          "%x contains a sample greater than %x",
+          data_sent[channel][$],
+          threshold_high[channel]
+        );
+        if (!is_high) begin
+          // new sample, should get a timestamp
+          if (timestamps[channel].size() > 0) begin
+            if (timestamps[channel][$] !== {timer[channel], sample_index}) begin
+              $warning(
+                "mismatched timestamp: got %x, expected %x",
+                timestamps[channel][$],
+                {timer[channel], sample_index}
+              );
+              error_count = error_count + 1;
+            end
+            timestamps[channel].pop_back();
+          end else begin
+            $warning(
+              "expected a timestamp (with value %x), but no more timestamps left",
+              {timer[channel], sample_index}
+            );
+            error_count = error_count + 1;
+          end
+        end
+        is_high = 1'b1;
+      end else if (disc_util.all_below_low(data_sent[channel][$], threshold_low[channel])) begin
+        is_high = 1'b0;
+      end
+      if (is_high) begin
+        if (data_sent[channel][$] !== samples[channel][$]) begin
+          $warning(
+            "mismatched data: got %x, expected %x",
+            samples[channel][$],
+            data_sent[channel][$]
+          );
+          error_count = error_count + 1;
+        end
+        samples[channel].pop_back();
+        sample_index = sample_index + 1'b1;
+      end
+      data_sent[channel].pop_back();
+      timer[channel] = timer[channel] + 1'b1;
+    end
+    // check to make sure we didn't miss any data
+    if (timestamps[channel].size() > 0) begin
+      $warning(
+        "too many timestamps leftover for channel %0d with banking mode %0d (got %0d, expected 0)",
+        channel,
+        banking_mode,
+        timestamps[channel].size()
+      );
+      error_count = error_count + 1;
+    end
+    // flush out remaining timestamps
+    while (timestamps[channel].size() > 0) timestamps[channel].pop_back();
+    if (samples[channel].size() > 0) begin
+      $warning(
+        "too many samples leftover for channel %0d with banking mode %0d (got %0d, expected 0)",
+        channel,
+        banking_mode,
+        samples[channel].size()
+      );
+      error_count = error_count + 1;
+    end
+    // flush out remaining samples
+    while (samples[channel].size() > 0) samples[channel].pop_back();
+    // should not be any leftover data_sent samples, since the while loop
+    // won't terminate until data_sent[channel] is empty. therefore don't
+    // bother checking
+  end
+  for (int channel = 0; channel < N_CHANNELS; channel++) begin
+    $display("timer[%0d] = %0d (0x%x)", channel, timer[channel], timer[channel]);
   end
 
 endtask
-
-
-
-//    current_channel = data_received.pop_back();
-//    // check if current_channel is valid for banking mode
-//    if (current_channel >= (1'b1 << banking_mode)) begin
-//      $warning(
-//        "invalid channel id (%d) for current banking mode (%d)",
-//        current_channel,
-//        banking_mode
-//      );
-//      error_count = error_count + 1;
-//    end
-//    n_samples = data_received.pop_back();
-//    $display(
-//      "processing new bank with %0d samples from channel %0d",
-//      n_samples,
-//      current_channel
-//    );
-//    for (int i = 0; i < n_samples; i++) begin
-//      if (data_sent[current_channel][$] != data_received[$]) begin
-//        $display(
-//          "data mismatch error (channel = %0d, sample = %0d, received %x, sent %x)",
-//          current_channel,
-//          i,
-//          data_received[$],
-//          data_sent[current_channel][$]
-//        );
-//        error_count = error_count + 1;
-//      end
-//      data_sent[current_channel].pop_back();
-//      data_received.pop_back();
-//    end
-//  end
-//  for (int i = 0; i < (1 << banking_mode); i++) begin
-//    // make sure there are no remaining samples in data_sent queues
-//    // corresponding to channels which are enabled as per banking_mode
-//    // caveat: if one of the channels filled up, then it's okay for there to
-//    // be missing samples in the other channels
-//    if (data_sent[i].size() > 0) begin
-//      $warning("leftover samples in data_sent[%0d]: %0d", i, data_sent[i].size());
-//      error_count = error_count + 1;
-//    end
-//    while (data_sent[i].size() > 0) data_sent[i].pop_back();
-//  end
-//  for (int i = (1 << banking_mode); i < N_CHANNELS; i++) begin
-//    // flush out any remaining samples in data_sent queue
-//    $display("removing %0d samples from data_sent[%0d]", data_sent[i].size(), i);
-//    while (data_sent[i].size() > 0) data_sent[i].pop_back();
-//  end
-//endtask
 
 task start_acq_with_banking_mode(input int mode);
   start <= 1'b1;
@@ -273,7 +364,9 @@ initial begin
   reset <= 1'b1;
   start <= 1'b0;
   stop <= 1'b0;
-  banking_mode <= '0; // only enable channel 0
+  timer <= '0; // reset timer for all channels
+  banking_mode <= '0; // only enable channel 0 to start
+  data_out.ready <= '0;
   data_in.valid <= '0;
   repeat (100) @(posedge clk);
   reset <= 1'b0;
@@ -281,16 +374,16 @@ initial begin
 
   for (int in_valid_rand = 0; in_valid_rand < 2; in_valid_rand++) begin
     for (int bank_mode = 0; bank_mode < 4; bank_mode++) begin
-      for (int amplitude_mode = 0; amplitude_mode < 4; amplitude_mode++) begin
+      for (int amplitude_mode = 0; amplitude_mode < 5; amplitude_mode++) begin
         repeat (10) @(posedge clk);
         unique case (amplitude_mode)
           0: begin
             // save everything
             for (int i = 0; i < N_CHANNELS; i++) begin
-              data_range_low[i] <= 16'h0000;
+              data_range_low[i] <= 16'h03c0;
               data_range_high[i] <= 16'h04ff;
-              threshold_low[i] <= 16'h03c0;
-              threshold_high[i] <= 16'h0400;
+              threshold_low[i] <= 16'h0000;
+              threshold_high[i] <= 16'h0100;
             end
           end
           1: begin
@@ -320,6 +413,15 @@ initial begin
               threshold_high[i] <= 16'h0400;
             end
           end
+          5: begin
+            // send stuff that mostly gets filtered out
+            for (int i = 0; i < N_CHANNELS; i++) begin
+              data_range_low[i] <= 16'h0000;
+              data_range_high[i] <= 16'h04ff;
+              threshold_low[i] <= 16'h03c0;
+              threshold_high[i] <= 16'h0400;
+            end
+          end
         endcase
         // write the new threshold to the discriminator and update the input data
         discriminator_config_in.valid <= 1'b1;
@@ -330,6 +432,7 @@ initial begin
 
         repeat (10) @(posedge clk);
         start_acq_with_banking_mode(bank_mode);
+        repeat (10) @(posedge clk);
 
         data_in.send_samples(clk, $urandom_range(50,500), in_valid_rand & 1'b1, 1'b1);
         repeat (10) @(posedge clk);
@@ -340,7 +443,7 @@ initial begin
         $display("# banking mode                    = %d", bank_mode);
         $display("# samples sent with rand_valid    = %d", in_valid_rand);
         $display("######################################################");
-        check_results(bank_mode, threshold_low, threshold_high);
+        check_results(bank_mode, threshold_high, threshold_low, timer);
       end
     end
   end

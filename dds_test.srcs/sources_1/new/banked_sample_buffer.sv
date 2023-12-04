@@ -32,7 +32,7 @@ always_ff @(posedge clk) begin
     banking_mode <= '0;
   end else begin
     if (config_in.ok) begin
-      banking_mode <= config_in.data[2+:N_BANKING_MODES];
+      banking_mode <= config_in.data[2+:$clog2(N_BANKING_MODES)];
       start <= config_in.data[1];
       stop <= config_in.data[0];
     end else begin
